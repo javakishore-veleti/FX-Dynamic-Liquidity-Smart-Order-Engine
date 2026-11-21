@@ -17,9 +17,9 @@ Stack: **Angular 21** · **Bootstrap 5** · **Bootstrap Icons** · standalone co
 ## Run one portal
 
 ```bash
-npm run run:portal:admin
-npm run run:portal:corporate
-npm run run:portal:retail
+npm run local:portal:admin
+npm run local:portal:corporate
+npm run local:portal:retail
 ```
 
 Or from each app directory: `npm start` (ports 4201 / 4202 / 4203).

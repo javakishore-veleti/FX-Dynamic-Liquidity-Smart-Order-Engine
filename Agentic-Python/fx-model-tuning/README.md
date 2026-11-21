@@ -26,6 +26,11 @@ Offline fine-tuning & model distillation pipeline for the FX Dynamic Liquidity &
 ## Run (local stub — no GPU/cloud required)
 
 ```bash
+# from repo root (preferred)
+npm run local:model-tuning -- --use-case FT-01 --provider LOCAL_OLLAMA
+npm run local:model-tuning:all
+
+# or directly
 cd Agentic-Python/fx-model-tuning
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt

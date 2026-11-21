@@ -167,7 +167,7 @@ npm run local:containers:all:stop
 # Build / run one Middleware service (H2 default — no Docker required)
 mvn -pl Middleware/fx-qualify-service clean package
 mvn -pl Middleware/fx-qualify-service spring-boot:run
-# or: npm run run:qualify
+# or: npm run local:middleware:qualify
 
 # Optional: Postgres + Redis profiles
 mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis
@@ -374,7 +374,7 @@ npm run local:containers:all:stop
 # Build / run one Middleware service (H2 default — no Docker required)
 mvn -pl Middleware/fx-qualify-service clean package
 mvn -pl Middleware/fx-qualify-service spring-boot:run
-# or: npm run run:qualify
+# or: npm run local:middleware:qualify
 
 # Optional: Postgres + Redis profiles
 mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis

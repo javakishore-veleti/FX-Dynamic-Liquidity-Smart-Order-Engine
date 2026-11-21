@@ -95,9 +95,20 @@ npm run local:portals:all:start
 
 ### 2.6 Python dual-stack (optional)
 
+Default (SQLite):
+
 ```bash
 npm run local:topology-mcp:python
 npm run local:agent-orchestrator:python
+```
+
+#### 2.6.1 Python with Postgres (optional)
+
+Requires containers (Postgres) already up. Uses `fx_sor` / `fx_sor` and dedicated DBs `fx_topology_mcp_db` / `fx_agent_orchestrator_db` (Alembic on startup).
+
+```bash
+npm run local:topology-mcp:python:postgres
+npm run local:agent-orchestrator:python:postgres
 ```
 
 ---

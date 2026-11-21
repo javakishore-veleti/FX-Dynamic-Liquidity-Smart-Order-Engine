@@ -36,7 +36,8 @@
     "run:topology:full": "mvn -pl Middleware/fx-topology-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
     "run:topology-mcp:full": "mvn -pl Middleware/fx-topology-mcp-server spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
     "run:agent-orchestrator:full": "mvn -pl Middleware/fx-agent-orchestrator-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
-    "run:topology-mcp:python": "cd Agentic-Python/fx-topology-mcp-server && uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8092"
+    "run:topology-mcp:python": "cd Agentic-Python/fx-topology-mcp-server && uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8191",
+    "run:agent-orchestrator:python": "cd Agentic-Python/fx-agent-orchestrator-service && uvicorn fx_agent_orchestrator.app:app --host 0.0.0.0 --port 8192"
   },
   "engines": {
     "node": ">=20"

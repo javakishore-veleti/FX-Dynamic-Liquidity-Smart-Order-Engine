@@ -27,10 +27,10 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 export TOPOLOGY_BASE_URL=http://localhost:8085
 export ADMIN_BASE_URL=http://localhost:8084
-uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8092 --reload
+uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8191 --reload
 ```
 
-Default port **8092** (Java sibling uses **8091**).
+Default port **8191** (Java sibling uses **8091**; Java agent orchestrator uses **8092**).
 
 ## Endpoints
 

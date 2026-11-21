@@ -113,6 +113,17 @@ th{
   color:var(--muted);
   font-size:0.9rem;
 }
+.term{margin:0 0 0.95rem}
+.term strong{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif}
+.term p{margin:0.25rem 0 0;color:var(--ink)}
+.example{
+  margin:0.55rem 0 0;
+  padding:0.7rem 0.8rem;
+  background:var(--soft);
+  border:1px solid var(--line);
+  border-radius:3px;
+  color:var(--ink);
+}
 </style>
 </head>
 <body>
@@ -120,11 +131,11 @@ th{
   <header class="hero" id="top">
     <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
     <h1>fx-quote-service<span class="badge">:8081</span></h1>
-    <p class="lead"><strong>Quote aggregator.</strong> Streams and serves indicative FX quotes with client-tier markup schedules for the SOR pricing path.</p>
+    <p class="lead"><strong>Quote aggregator.</strong> Publishes FX prices clients can see and act on, including a bank fee (markup) that depends on who the client is.</p>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>
-      <a href="#api">API endpoints</a>
+      <a href="#glossary">Plain-language glossary</a>
     </div>
   </header>
 
@@ -132,6 +143,7 @@ th{
     <h2>Table of contents</h2>
     <ol>
       <li><a href="#overview">Overview</a></li>
+      <li><a href="#glossary">Plain-language glossary</a></li>
       <li><a href="#features">Business features</a></li>
       <li><a href="#database">Database tables</a></li>
       <li><a href="#api">API endpoints</a></li>
@@ -142,30 +154,186 @@ th{
   <section class="section" id="overview">
     <h2>1. Overview</h2>
     <p class="meta">Service port <code>8081</code> · dedicated database <code>fx_quote_db (H2 default / Postgres with local-postgres)</code></p>
-    <p>Streams and serves indicative FX quotes with client-tier markup schedules for the SOR pricing path.</p>
+    <p>
+      In everyday terms: this service answers “What price can we show a customer right now for EUR/USD (or another pair)?”
+      It combines a market mid-price with the bank’s fee rules, then sends those prices to screens and APIs.
+    </p>
+  </section>
+
+  <section class="section" id="glossary">
+    <h2>2. Plain-language glossary</h2>
+
+    <div class="term">
+      <strong>Quote</strong>
+      <p>
+        A <em>quote</em> is a priced offer for exchanging one currency for another (for example EUR/USD).
+        In this codebase it is not a final trade yet — it is the rate the system is willing to show a client at that moment
+        (bid/ask or an indicative client rate), usually including the bank’s fee.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Markup</strong>
+      <p>
+        <em>Markup</em> is the bank’s fee added on top of the raw market price.
+        It is commonly measured in <em>basis points</em> (bps): 1 bps = 0.01%.
+        Example: if the market mid is 1.1000 and markup is 10 bps, the client may see a worse rate by about 0.0010 —
+        that gap is how the bank earns on the FX deal.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Client tier</strong>
+      <p>
+        Clients are grouped into pricing levels such as Tier 1 / Tier 2 (large corporates vs smaller clients).
+        Better tiers usually get a smaller fee.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Client-tier markup schedules</strong>
+      <p>
+        A lookup table that says: “For this client tier + currency pair + market session, charge this fee.”
+        Example row meaning: Tier 2, EURUSD, London/NY overlap → markup 1.5 bps.
+        That is what table <code>client_tier_spread_schedules</code> stores.
+      </p>
+      <p class="example">
+        Common-man picture: like airline fare classes. Same flight (same EUR/USD market), but Business vs Economy
+        (Tier 1 vs Tier 2) pay different add-ons. The schedule is the published price list by class, route, and time of day.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Indicative (indicative quote)</strong>
+      <p>
+        <em>Indicative</em> means “for guidance / estimate only” — not a firm, binding commitment to trade.
+        An <em>indicative quote</em> answers: “About what rate would we show you <strong>right now</strong> for this pair, amount, and client tier?”
+        The client can use it to decide, but the bank is not yet locked into executing at that exact rate.
+        Firm trading comes later (qualify → route-exec). In this API that is
+        <code>POST /api/v1/fx/quotes/indicative</code> — one request, one answer (unlike the continuous live stream).
+      </p>
+      <p class="example">
+        Common-man picture: asking a car dealer “roughly what would this model cost today?” before you sign a purchase contract.
+        Helpful and current, but not the final signed deal.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Corporate vs retail flows</strong>
+      <p>
+        Same quote engine underneath; different <em>who</em> and <em>how</em> in the UI:
+      </p>
+      <ul>
+        <li>
+          <strong>Corporate flow</strong> (Corporate portal <code>:4202</code>) —
+          company treasury / dealing-desk style: larger notionals, blotters, credit/qualify checks,
+          multi-LP execution language, often better tiers / tighter markup.
+        </li>
+        <li>
+          <strong>Retail flow</strong> (Retail portal <code>:4203</code>) —
+          consumer / small-business style: convert money, planner, simpler screens,
+          usually smaller amounts and a wider retail markup.
+        </li>
+      </ul>
+      <p class="example">
+        So “indicative quote API for corporate/retail flows” means:
+        both portals can call the same “give me an estimated FX price” API; each flow just wraps it in a different user journey.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Live quote</strong>
+      <p>
+        A price that is current <em>right now</em>, not a stale printed rate from earlier.
+        FX prices move continuously; a live quote is the latest tick the service has for a pair (and tier).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Live quote stream</strong>
+      <p>
+        A continuous feed of live quotes over time (tick, tick, tick…), so a screen can update without the user
+        clicking Refresh. In this service that feed is exposed as <code>GET /api/v1/fx/quotes/stream</code>.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>SSE (Server-Sent Events)</strong>
+      <p>
+        A simple web technology where the <em>server pushes</em> updates to the browser over one HTTP connection.
+        Think of it like a one-way live news ticker from server → browser.
+        It is lighter than WebSockets when you only need the server to talk and the client to listen.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Portal</strong>
+      <p>
+        In this project, a <em>portal</em> is a web UI people use in the browser:
+        Admin (<code>:4201</code>), Corporate (<code>:4202</code>), or Retail (<code>:4203</code>).
+        Portals call middleware APIs (like this quote service) and display the results.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Blotter</strong>
+      <p>
+        A trading/operations screen that shows a list of live market or order activity in rows —
+        pairs, prices, sizes, status — similar to a live spreadsheet for the desk.
+        Historically a “blotter” was the paper pad traders wrote deals on; digitally it is that live list UI.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Portal blotter</strong>
+      <p>
+        The blotter screen inside one of the portals. Example: the Corporate portal blotter page listens to the
+        SSE live quote stream so currency rows update automatically as new quotes arrive.
+      </p>
+      <p class="example">
+        Putting the phrase together: <em>“SSE live quote stream for portal blotters”</em> means
+        “a server-pushed feed of current FX prices that the web trading screens use to keep their price tables up to date.”
+      </p>
+    </div>
   </section>
 
   <section class="section" id="features">
-    <h2>2. Business features</h2>
-    <ul><li>SSE live quote stream for portal blotters</li><li>Indicative quote API for corporate/retail flows</li><li>Per-tier / session-regime spread schedules (L1 cacheable)</li><li>Spot mid lookup by currency pair</li></ul>
+    <h2>3. Business features</h2>
+    <ul>
+      <li>Push current FX prices to web screens (portal blotters) over SSE</li>
+      <li>On-demand indicative (non-binding estimate) quote used by both Corporate and Retail portals</li>
+      <li>Fee rules by client tier, pair, and market session (cached for speed)</li>
+      <li>Spot mid-rate lookup by currency pair</li>
+    </ul>
   </section>
 
   <section class="section" id="database">
-    <h2>3. Database tables</h2>
+    <h2>4. Database tables</h2>
     <p class="meta">Database: <code>fx_quote_db (H2 default / Postgres with local-postgres)</code></p>
-    <ul><li><code>client_tier_spread_schedules</code></li></ul>
+    <ul>
+      <li>
+        <code>client_tier_spread_schedules</code> —
+        the fee price list: which markup (in bps) applies for a given client tier, currency pair, and session.
+      </li>
+    </ul>
   </section>
 
   <section class="section" id="api">
-    <h2>4. API endpoints</h2>
+    <h2>5. API endpoints</h2>
     <table>
       <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
-      <tbody><tr><td><code>GET</code></td><td><code>/api/v1/fx/quotes/stream</code></td><td>Server-sent quote stream</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/fx/quotes/indicative</code></td><td>Indicative quote request</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/fx/rates/{ccyPair}</code></td><td>Latest mid/rate for pair</td></tr><tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
+      <tbody>
+        <tr><td><code>GET</code></td><td><code>/api/v1/fx/quotes/stream</code></td><td>Live quote stream (SSE) for portal blotters</td></tr>
+        <tr><td><code>POST</code></td><td><code>/api/v1/fx/quotes/indicative</code></td><td>One-shot indicative quote for a request</td></tr>
+        <tr><td><code>GET</code></td><td><code>/api/v1/fx/rates/{ccyPair}</code></td><td>Latest mid/rate for a pair</td></tr>
+        <tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr>
+        <tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr>
+      </tbody>
     </table>
   </section>
 
   <section class="section" id="ops">
-    <h2>5. Operations links</h2>
+    <h2>6. Operations links</h2>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>

@@ -71,29 +71,7 @@ The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Archi
 > * **Closed Layers** enforce strict top-down isolation so presentation concerns never leak into business logic, and business rules remain decoupled from underlying storage engines.  
 > * **An Open Services Layer** enables specialized business tasks to invoke shared cross-cutting domain services or bypass directly to the persistence tier for ultra-low-latency reference lookups.
 
-\+-------------------------------------------------------------------------------+  
-\| \[CLOSED\] Presentation Layer                                                   \|  
-\|          External API Gateways, FIX Protocol Adapters, Schema Validation      \|  
-\+---------------------------------------+---------------------------------------+  
-                                        \| (Strict Top-Down Isolation)  
-\+---------------------------------------v---------------------------------------+  
-\| \[CLOSED\] Business Orchestration Layer                                         \|  
-\|          Order Routing Facades \-\> Ordered Qualification Task Pipelines        \|  
-\|          (Enrichment \-\> Knock-Out \-\> Composite Scoring \-\> Routing \-\> Audit)   \|  
-\+---------------------------+-------------------------------+-------------------+  
-                            \|                               \|  
-                            \| (Open Layer Bypass)           \| (Standard Flow)  
-                            \|                               v  
-                            \|   \+-----------------------------------------------+  
-                            \|   \| \[OPEN\] Shared Domain & Integration Services   \|  
-                            \|   \|        Policy/Rules Engine Wrapper, TCA       \|  
-                            \|   \|        Scoring, External LP Venue Adapters    \|  
-                            \|   \+-----------------------+-----------------------+  
-                            \|                           \|  
-\+---------------------------v---------------------------v-----------------------+  
-\| \[CLOSED\] Persistence & Distributed State Layer                                \|  
-\|          In-Memory Hot Rule Cache \-\> Distributed Credit State \-\> Audit Stream \|  
-\+-------------------------------------------------------------------------------+
+![Neal Ford Closed-Layer Microservice Architecture](Docs/Architecture/neal-ford-closed-layer-architecture.png)
 
 **4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
 
@@ -242,29 +220,7 @@ The platform adheres strictly to **Neal Ford's Closed-Layer Microservice Archite
 > * **Closed Layers** enforce strict top-down isolation so presentation concerns never leak into business logic, and business rules remain decoupled from underlying storage engines.  
 > * **An Open Services Layer** enables specialized business tasks to invoke shared cross-cutting domain services or bypass directly to the persistence tier for ultra-low-latency reference lookups.
 
-\+-------------------------------------------------------------------------------+  
-\| \[CLOSED\] Presentation Layer                                                   \|  
-\| External API Gateways, FIX Protocol Adapters, Schema Validation               \|  
-\+---------------------------------------+---------------------------------------+  
-                                        \| (Strict Top-Down Isolation)  
-\+---------------------------------------v---------------------------------------+  
-\| \[CLOSED\] Business Orchestration Layer                                         \|  
-\| Order Routing Facades \-\> Ordered Qualification Task Pipelines                 \|  
-\| (Enrichment \-\> Knock-Out \-\> Composite Scoring \-\> Routing \-\> Audit)            \|  
-\+---------------------------+-------------------------------+-------------------+  
-                            \|                               \|  
-                            \| (Open Layer Bypass)           \| (Standard Flow)  
-                            \|                               v  
-                            \|   \+-----------------------------------------------+  
-                            \|   \| \[OPEN\] Shared Domain & Integration Services   \|  
-                            \|   \| Policy/Rules Engine Wrapper, TCA              \|  
-                            \|   \| Scoring, External LP Venue Adapters           \|  
-                            \|   \+-----------------------+-----------------------+  
-                            \|                           \|  
-\+---------------------------v---------------------------v-----------------------+  
-\| \[CLOSED\] Persistence & Distributed State Layer                                \|  
-\| In-Memory Hot Rule Cache \-\> Distributed Credit State \-\> Audit Stream          \|  
-\+-------------------------------------------------------------------------------+
+![Neal Ford Closed-Layer Microservice Architecture](Docs/Architecture/neal-ford-closed-layer-architecture.png)
 
 ## **4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
 

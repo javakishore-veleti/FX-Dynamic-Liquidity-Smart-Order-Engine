@@ -54,7 +54,7 @@ resilience4j:
 logging:
   level:
     root: INFO
-    com.jk.apps.banking.fx.sor.qualify: INFO
+    com.jk.apps.banking.fx.sor.qual: INFO
 
 ---
 # Activate with: --spring.profiles.active=postgres

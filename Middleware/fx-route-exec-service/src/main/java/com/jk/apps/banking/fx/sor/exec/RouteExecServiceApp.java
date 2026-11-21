@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RouteExecServiceApplication {
+public class RouteExecServiceApp {
 
     public static void main(String[] args) {
-        SpringApplication.run(RouteExecServiceApplication.class, args);
+        SpringApplication.run(RouteExecServiceApp.class, args);
     }
 }

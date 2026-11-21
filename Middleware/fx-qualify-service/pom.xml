@@ -15,9 +15,8 @@
     <packaging>jar</packaging>
     <name>FX Qualification Engine Service</name>
     <description>
-        Self-contained Spring Boot microservice for deterministic LP knock-out
-        qualification and composite scoring (Drools / DMN). Zero shared source
-        with sibling modules — owns its own DTOs and contracts.
+        Self-contained Spring Boot microservice with dedicated database schema and Liquibase changelog.
+        Cross-service data access is via HTTP APIs only — no shared DB schema.
     </description>
 
     <dependencies>
@@ -47,6 +46,24 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.liquibase</groupId>
+            <artifactId>liquibase-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-otlp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
@@ -63,6 +80,7 @@
             <groupId>org.drools</groupId>
             <artifactId>drools-xml-support</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>

@@ -4,9 +4,9 @@ spring:
   threads:
     virtual:
       enabled: true
-  # Local default: embedded H2 (no external DB required)
+  # Dedicated DB per microservice (no shared schema). Cross-service data via API only.
   datasource:
-    url: jdbc:h2:mem:fx_route_exec;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    url: jdbc:h2:mem:fx_route_exec_db;DB_CLOSE_DELAY=-1;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;DEFAULT_NULL_ORDERING=HIGH
     driver-class-name: org.h2.Driver
     username: sa
     password:
@@ -16,18 +16,27 @@ spring:
       path: /h2-console
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.H2Dialect
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
       - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
 
 server:
   port: ${SERVER_PORT:8083}
+
+fx:
+  features:
+    redis-enabled: false
+    kafka-enabled: false
 
 management:
   endpoints:
@@ -38,34 +47,30 @@ management:
     health:
       probes:
         enabled: true
-
-resilience4j:
-  circuitbreaker:
-    instances:
-      lpExecution:
-        slidingWindowSize: 20
-        failureRateThreshold: 40
-        waitDurationInOpenState: 3s
-  bulkhead:
-    instances:
-      lpExecution:
-        maxConcurrentCalls: 200
-        maxWaitDuration: 0
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      service: fx-route-exec-service
+  otlp:
+    metrics:
+      export:
+        enabled: ${OTEL_METRICS_ENABLED:false}
+        url: ${OTEL_EXPORTER_OTLP_ENDPOINT:http://localhost:4318/v1/metrics}
 
 logging:
   level:
     root: INFO
     com.jk.apps.banking.fx.sor.exec: INFO
+    liquibase: INFO
 
 ---
-# Activate with: --spring.profiles.active=postgres
-# Requires: CICD/Local/Postgres (docker-all-up.sh)
+# Dedicated PostgreSQL database for this service only
 spring:
   config:
     activate:
-      on-profile: postgres
+      on-profile: local-postgres
   datasource:
-    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:fx_sor}
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/fx_route_exec_db
     driver-class-name: org.postgresql.Driver
     username: ${POSTGRES_USER:fx_sor}
     password: ${POSTGRES_PASSWORD:fx_sor}
@@ -78,15 +83,34 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
 ---
-# Activate with: --spring.profiles.active=redis (or postgres,redis)
-# Requires: CICD/Local/Redis (docker-all-up.sh)
+# Enable Redis L2 (feature toggle ON). Aliases: local-redis, load-redis
 spring:
   config:
     activate:
-      on-profile: redis
+      on-profile: local-redis | load-redis
   autoconfigure:
-    exclude: []
+    exclude:
+      - org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration
   data:
     redis:
       host: ${REDIS_HOST:localhost}
       port: ${REDIS_PORT:6379}
+fx:
+  features:
+    redis-enabled: true
+
+---
+# Enable Kafka provenance/events (feature toggle ON). Aliases: local-kafka, load-kafka
+spring:
+  config:
+    activate:
+      on-profile: local-kafka | load-kafka
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+fx:
+  features:
+    kafka-enabled: true
+

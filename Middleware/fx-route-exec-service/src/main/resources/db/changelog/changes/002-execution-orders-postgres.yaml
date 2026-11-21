@@ -1,0 +1,43 @@
+databaseChangeLog:
+  - changeSet:
+      id: route-exec-002-execution-orders-postgres
+      author: fx-sor
+      dbms: postgresql
+      comment: PostgreSQL range-partitioned execution tables (by trade_date)
+      changes:
+        - sql:
+            splitStatements: false
+            sql: |
+              CREATE TABLE fx_execution_orders (
+                  trade_date          DATE          NOT NULL,
+                  order_id            UUID          NOT NULL,
+                  client_order_id     VARCHAR(64)   NOT NULL,
+                  client_id           VARCHAR(50)   NOT NULL,
+                  ccy_pair            VARCHAR(10)   NOT NULL,
+                  side                VARCHAR(4)    NOT NULL,
+                  requested_notional  NUMERIC(18,2) NOT NULL,
+                  executed_rate       NUMERIC(18,8) NOT NULL,
+                  slippage_bps        NUMERIC(8,4)  NOT NULL,
+                  execution_mode      VARCHAR(20)   NOT NULL,
+                  status              VARCHAR(20)   NOT NULL,
+                  created_at          TIMESTAMPTZ   NOT NULL DEFAULT NOW(),
+                  PRIMARY KEY (trade_date, order_id)
+              ) PARTITION BY RANGE (trade_date);
+
+              CREATE TABLE child_venue_splits (
+                  trade_date          DATE          NOT NULL,
+                  split_id            UUID          NOT NULL,
+                  order_id            UUID          NOT NULL,
+                  lp_id               VARCHAR(30)   NOT NULL,
+                  allocated_notional  NUMERIC(18,2) NOT NULL,
+                  fill_rate           NUMERIC(18,8) NULL,
+                  hold_latency_ms     INTEGER       NOT NULL,
+                  lp_status           VARCHAR(20)   NOT NULL,
+                  PRIMARY KEY (trade_date, split_id)
+              ) PARTITION BY RANGE (trade_date);
+
+              CREATE TABLE fx_execution_orders_default PARTITION OF fx_execution_orders DEFAULT;
+              CREATE TABLE child_venue_splits_default PARTITION OF child_venue_splits DEFAULT;
+
+              CREATE INDEX idx_fx_execution_orders_client_order_id
+                  ON fx_execution_orders (client_order_id);

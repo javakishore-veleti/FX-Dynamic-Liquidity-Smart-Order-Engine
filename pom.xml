@@ -20,6 +20,7 @@
         <module>Middleware/fx-quote-service</module>
         <module>Middleware/fx-qualify-service</module>
         <module>Middleware/fx-route-exec-service</module>
+        <module>Middleware/fx-admin-service</module>
     </modules>
 
     <properties>
@@ -31,6 +32,7 @@
         <spring-boot.version>3.4.0</spring-boot.version>
         <resilience4j.version>2.2.0</resilience4j.version>
         <drools.version>10.0.0</drools.version>
+        <liquibase.version>4.29.2</liquibase.version>
     </properties>
 
     <!-- Version alignment only — no concrete dependencies at the root -->

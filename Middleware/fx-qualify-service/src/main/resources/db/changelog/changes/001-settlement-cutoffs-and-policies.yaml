@@ -1,0 +1,50 @@
+databaseChangeLog:
+  - changeSet:
+      id: qualify-001-settlement-cutoffs-and-policies
+      author: fx-sor
+      comment: Settlement cutoffs and knock-out policies owned by fx-qualify-service
+      changes:
+        - createTable:
+            tableName: settlement_cutoffs_and_policies
+            columns:
+              - column:
+                  name: ccy_pair
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: tenor
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cls_eligible
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: cutoff_time_utc
+                  type: time
+                  constraints:
+                    nullable: false
+              - column:
+                  name: min_clip_usd
+                  type: numeric(18,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: max_clip_usd
+                  type: numeric(18,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: restricted_flag
+                  type: boolean
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: settlement_cutoffs_and_policies
+            columnNames: ccy_pair, tenor
+            constraintName: pk_settlement_cutoffs_and_policies

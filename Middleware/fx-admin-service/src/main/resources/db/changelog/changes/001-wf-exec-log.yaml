@@ -1,0 +1,126 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-001-wf-exec-log
+      author: fx-sor
+      comment: Control-plane workflow execution log for dlp_sor_system_db (fx-admin-service only)
+      changes:
+        - createTable:
+            tableName: wf_exec_log
+            columns:
+              - column:
+                  name: wf_exec_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_wf_exec_log
+                    nullable: false
+              - column:
+                  name: workflow_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dataset_types
+                  type: clob
+              - column:
+                  name: num_batches
+                  type: int
+                  defaultValueNumeric: 10
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batch_size
+                  type: int
+                  defaultValueNumeric: 1000
+                  constraints:
+                    nullable: false
+              - column:
+                  name: batches_completed
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: records_inserted
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: request_params
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: execution_summary
+                  type: clob
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: started_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed_at
+                  type: timestamp with time zone
+              - column:
+                  name: duration_ms
+                  type: bigint
+              - column:
+                  name: triggered_by
+                  type: varchar(100)
+                  defaultValue: ADMIN_API
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error_details
+                  type: clob
+  - changeSet:
+      id: admin-001b-wf-exec-log-indexes
+      author: fx-sor
+      changes:
+        - createIndex:
+            tableName: wf_exec_log
+            indexName: idx_wf_exec_log_status_started
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: started_at
+                  descending: true
+        - createIndex:
+            tableName: wf_exec_log
+            indexName: idx_wf_exec_log_type_started
+            columns:
+              - column:
+                  name: workflow_type
+              - column:
+                  name: started_at
+                  descending: true
+  - changeSet:
+      id: admin-001c-wf-exec-log-jsonb-postgres
+      author: fx-sor
+      dbms: postgresql
+      comment: Promote JSON columns to native JSONB on PostgreSQL
+      changes:
+        - sql:
+            sql: |
+              ALTER TABLE wf_exec_log
+                ALTER COLUMN dataset_types TYPE jsonb USING CASE
+                  WHEN dataset_types IS NULL OR dataset_types = '' THEN NULL
+                  ELSE dataset_types::jsonb END,
+                ALTER COLUMN request_params TYPE jsonb USING request_params::jsonb,
+                ALTER COLUMN execution_summary TYPE jsonb USING CASE
+                  WHEN execution_summary IS NULL OR execution_summary = '' THEN NULL
+                  ELSE execution_summary::jsonb END;

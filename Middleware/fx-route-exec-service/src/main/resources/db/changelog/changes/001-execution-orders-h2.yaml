@@ -1,0 +1,126 @@
+databaseChangeLog:
+  - changeSet:
+      id: route-exec-001-execution-orders-h2
+      author: fx-sor
+      dbms: h2
+      comment: H2-compatible execution order tables (no native range partitions)
+      changes:
+        - createTable:
+            tableName: fx_execution_orders
+            columns:
+              - column:
+                  name: trade_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_order_id
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_id
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ccy_pair
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: side
+                  type: varchar(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: requested_notional
+                  type: numeric(18,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: executed_rate
+                  type: numeric(18,8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: slippage_bps
+                  type: numeric(8,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: execution_mode
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: fx_execution_orders
+            columnNames: trade_date, order_id
+            constraintName: pk_fx_execution_orders
+        - createTable:
+            tableName: child_venue_splits
+            columns:
+              - column:
+                  name: trade_date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: split_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lp_id
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: allocated_notional
+                  type: numeric(18,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fill_rate
+                  type: numeric(18,8)
+              - column:
+                  name: hold_latency_ms
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: lp_status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: child_venue_splits
+            columnNames: trade_date, split_id
+            constraintName: pk_child_venue_splits
+        - createIndex:
+            tableName: fx_execution_orders
+            indexName: idx_fx_execution_orders_client_order_id
+            columns:
+              - column:
+                  name: client_order_id

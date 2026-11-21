@@ -1,0 +1,49 @@
+databaseChangeLog:
+  - changeSet:
+      id: quote-001-client-tier-spread-schedules
+      author: fx-sor
+      comment: Client tier markup schedules owned by fx-quote-service (cached to Caffeine L1; zero hot-path SQL)
+      changes:
+        - createTable:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: tier_id
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ccy_pair
+                  type: varchar(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: session_regime
+                  type: varchar(30)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: markup_bps
+                  type: numeric(8,4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: news_multiplier
+                  type: numeric(6,2)
+                  defaultValueNumeric: 1.00
+                  constraints:
+                    nullable: false
+              - column:
+                  name: effective_from
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: approved_by
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: client_tier_spread_schedules
+            columnNames: tier_id, ccy_pair, session_regime
+            constraintName: pk_client_tier_spread_schedules

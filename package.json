@@ -11,12 +11,19 @@
     "build:quote": "mvn -pl Middleware/fx-quote-service -am -DskipTests package",
     "build:qualify": "mvn -pl Middleware/fx-qualify-service -am -DskipTests package",
     "build:route-exec": "mvn -pl Middleware/fx-route-exec-service -am -DskipTests package",
+    "build:admin": "mvn -pl Middleware/fx-admin-service -am -DskipTests package",
     "run:quote": "mvn -pl Middleware/fx-quote-service spring-boot:run",
     "run:qualify": "mvn -pl Middleware/fx-qualify-service spring-boot:run",
     "run:route-exec": "mvn -pl Middleware/fx-route-exec-service spring-boot:run",
-    "run:quote:full": "mvn -pl Middleware/fx-quote-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis",
-    "run:qualify:full": "mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis",
-    "run:route-exec:full": "mvn -pl Middleware/fx-route-exec-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis"
+    "run:admin": "mvn -pl Middleware/fx-admin-service spring-boot:run",
+    "run:quote:postgres": "mvn -pl Middleware/fx-quote-service spring-boot:run -Dspring-boot.run.profiles=local-postgres",
+    "run:qualify:postgres": "mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=local-postgres",
+    "run:route-exec:postgres": "mvn -pl Middleware/fx-route-exec-service spring-boot:run -Dspring-boot.run.profiles=local-postgres",
+    "run:admin:postgres": "mvn -pl Middleware/fx-admin-service spring-boot:run -Dspring-boot.run.profiles=local-postgres",
+    "run:quote:full": "mvn -pl Middleware/fx-quote-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
+    "run:qualify:full": "mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
+    "run:route-exec:full": "mvn -pl Middleware/fx-route-exec-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
+    "run:admin:full": "mvn -pl Middleware/fx-admin-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka"
   },
   "engines": {
     "node": ">=20"

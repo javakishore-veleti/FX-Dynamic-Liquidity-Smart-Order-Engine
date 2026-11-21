@@ -267,6 +267,28 @@ th{
     </div>
 
     <div class="term">
+      <strong>Resolution when there is an LP outage</strong>
+      <p>
+        In this codebase the operational fix is <strong>failover</strong>, not waiting forever on the dead LP:
+      </p>
+      <ol>
+        <li>Detect fail on the child (e.g. status <code>LAST_LOOK_REJECTED</code> / timeout / outage signal).</li>
+        <li>Call <code>POST /api/v1/fx/orders/{orderId}/failover</code> with the rejected LP id.</li>
+        <li>Service marks that LP’s split as rejected and creates a <strong>new child split</strong> on the next ranked LP (waterfall: Citi → JPM → GS).</li>
+        <li>Parent may move to <code>MULTI_LP_SWEEP</code> so remaining size can complete elsewhere.</li>
+        <li>Trace/TCA later shows both the failed path and the successful failover path.</li>
+      </ol>
+      <p>
+        If <em>every</em> LP in the path is in outage / rejects, there is no further automatic resolution in this service —
+        the parent cannot fully fill until an LP recovers, credit/qualify is re-run, or ops escalates (e.g. halt venue via admin, wait, or cancel).
+      </p>
+      <p class="example">
+        Resolution picture: primary road closed → divert traffic to the backup road (failover).
+        If all roads are closed → stop / escalate; you cannot invent a new city.
+      </p>
+    </div>
+
+    <div class="term">
       <strong>Path / failover path</strong>
       <p>
         A <em>path</em> is a planned route of venues (e.g. try Citi first, then JPM, then GS).

@@ -202,7 +202,7 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 
 > * **Product Requirements & Domain Knowledge Base:** See `PRD-FX-SOR-001.md` for functional specifications, session matrices, regulatory provenance rules, and the institutional FX glossary.  
 > * **Architecture & API Specs:** See `Docs/Specs/` and `Docs/Architecture/` (including Chief Architect ADRs and topology/MCP extensions).  
-> * **Local run order:** See `Apps_Runbook.md` (stop → start → URLs).
+> * **Operations:** `Apps_Runbook.md`
 > * **Industry SOR primer:** [What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/) (external knowledge-base framing for multi-venue execution).  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.
 
@@ -418,7 +418,7 @@ To sustain 1M aggregate RPS reliably while protecting the **\< 5 ms (p99)** inte
 
 > * **Product Requirements & Domain Knowledge Base:** See `PRD-FX-SOR-001.md` for functional specifications, session matrices, regulatory provenance rules, and the institutional FX glossary.  
 > * **Architecture & API Specs:** See `Docs/Specs/` and `Docs/Architecture/` (including Chief Architect ADRs and topology/MCP extensions).  
-> * **Local run order:** See `Apps_Runbook.md` (stop → start → URLs).
+> * **Operations:** `Apps_Runbook.md`
 > * **Industry SOR primer:** [What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/) (external knowledge-base framing for multi-venue execution).  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.
 

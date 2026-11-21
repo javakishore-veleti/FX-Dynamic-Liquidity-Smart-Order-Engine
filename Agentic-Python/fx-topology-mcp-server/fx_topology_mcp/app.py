@@ -9,6 +9,7 @@ from fx_topology_mcp.business.facades.mcp_tool_facade import McpToolFacade
 from fx_topology_mcp.persistence.repositories.mcp_invocation_repository import McpInvocationRepository
 from fx_topology_mcp.presentation.controllers.mcp_catalog_controller import McpCatalogController
 from fx_topology_mcp.presentation.controllers.mcp_tools_controller import McpToolsController
+from fx_topology_mcp.observability.otel_setup import ObservabilitySetup
 from fx_topology_mcp.services.adapters.admin_service_adapter import AdminServiceAdapter
 from fx_topology_mcp.services.adapters.topology_service_adapter import TopologyServiceAdapter
 
@@ -41,6 +42,9 @@ class TopologyMcpServerApp:
             version="1.0.0",
             description="Dual-stack MCP tool server (Python / ADR-033)",
         )
+        observability = ObservabilitySetup("fx-topology-mcp-server")
+        observability.configure(self._app)
+        observability.instrument_app(self._app)
         catalog_controller = McpCatalogController(catalog)
         tools_controller = McpToolsController(facade)
         self._app.include_router(catalog_controller.router)

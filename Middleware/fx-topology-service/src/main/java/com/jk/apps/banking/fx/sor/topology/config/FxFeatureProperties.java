@@ -7,6 +7,7 @@ public class FxFeatureProperties {
 
     private boolean redisEnabled;
     private boolean kafkaEnabled;
+    private boolean liquibaseOnStartup = true;
 
     public boolean isRedisEnabled() {
         return redisEnabled;
@@ -22,5 +23,13 @@ public class FxFeatureProperties {
 
     public void setKafkaEnabled(boolean kafkaEnabled) {
         this.kafkaEnabled = kafkaEnabled;
+    }
+
+    public boolean isLiquibaseOnStartup() {
+        return liquibaseOnStartup;
+    }
+
+    public void setLiquibaseOnStartup(boolean liquibaseOnStartup) {
+        this.liquibaseOnStartup = liquibaseOnStartup;
     }
 }

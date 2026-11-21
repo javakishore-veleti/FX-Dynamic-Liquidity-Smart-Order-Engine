@@ -16,6 +16,7 @@ from fx_agent_orchestrator.persistence.repositories.agent_run_repository import 
 from fx_agent_orchestrator.presentation.controllers.agent_orchestrator_controller import (
     AgentOrchestratorController,
 )
+from fx_agent_orchestrator.observability.otel_setup import ObservabilitySetup
 from fx_agent_orchestrator.services.adapters.topology_mcp_client import TopologyMcpClient
 
 
@@ -47,12 +48,19 @@ class AgentOrchestratorAppFactory:
             version="1.0.0",
             description="Python LangGraph dual-stack agent orchestrator (ADR-032/034)",
         )
+        observability = ObservabilitySetup("fx-agent-orchestrator-service")
+        observability.configure(application)
+        observability.instrument_app(application)
         application.include_router(controller.router)
 
         @application.get("/.well-known/agent.json")
         def agent_card() -> JSONResponse:
             payload = json.loads(self._agent_card_path.read_text(encoding="utf-8"))
             return JSONResponse(payload)
+
+        @application.get("/health")
+        def health() -> dict:
+            return {"status": "UP", "service": "fx-agent-orchestrator-service"}
 
         return application
 

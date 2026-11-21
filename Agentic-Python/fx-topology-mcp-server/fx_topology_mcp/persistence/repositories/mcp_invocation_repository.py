@@ -12,15 +12,16 @@ from fx_topology_mcp.persistence.dtos.audit_record_dtos import (
     PersistFailDto,
     PersistInvocationDto,
 )
-from fx_topology_mcp.persistence.entities.mcp_tool_invocation_log import Base, McpToolInvocationLog
+from fx_topology_mcp.persistence.db_migration import AlembicMigrationRunner
+from fx_topology_mcp.persistence.entities.mcp_tool_invocation_log import McpToolInvocationLog
 
 
 class McpInvocationRepository:
     """Dedicated local audit store (SQLite by default; mirrors fx_topology_mcp_db table)."""
 
     def __init__(self, database_url: str) -> None:
+        AlembicMigrationRunner(database_url).upgrade_to_head()
         self._engine = create_engine(database_url, future=True)
-        Base.metadata.create_all(self._engine)
         self._session_factory = sessionmaker(bind=self._engine, expire_on_commit=False)
 
     def begin_invocation(self, dto: PersistInvocationDto) -> InvocationIdDto:

@@ -12,15 +12,16 @@ from fx_agent_orchestrator.persistence.dtos.run_record_dtos import (
     PersistRunCompleteDto,
     PersistRunFailDto,
 )
-from fx_agent_orchestrator.persistence.entities.agent_run_log import AgentRunLog, Base
+from fx_agent_orchestrator.persistence.db_migration import AlembicMigrationRunner
+from fx_agent_orchestrator.persistence.entities.agent_run_log import AgentRunLog
 
 
 class AgentRunRepository:
     """Dedicated local audit store (SQLite by default; mirrors fx_agent_orchestrator_db.agent_run_log)."""
 
     def __init__(self, database_url: str) -> None:
+        AlembicMigrationRunner(database_url).upgrade_to_head()
         self._engine = create_engine(database_url, future=True)
-        Base.metadata.create_all(self._engine)
         self._session_factory = sessionmaker(bind=self._engine, expire_on_commit=False)
 
     def begin_run(self, dto: PersistAgentRunDto) -> AgentRunIdDto:

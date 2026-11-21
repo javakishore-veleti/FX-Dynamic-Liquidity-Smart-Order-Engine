@@ -36,6 +36,7 @@
         <resilience4j.version>2.2.0</resilience4j.version>
         <drools.version>10.0.0</drools.version>
         <liquibase.version>4.29.2</liquibase.version>
+        <springdoc.version>2.7.0</springdoc.version>
     </properties>
 
     <!-- Version alignment only — no concrete dependencies at the root -->
@@ -61,6 +62,11 @@
                 <version>${drools.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>${springdoc.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

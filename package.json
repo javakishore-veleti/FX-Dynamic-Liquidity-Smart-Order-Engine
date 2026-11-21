@@ -55,7 +55,9 @@
     "local:llm-gateway:status": "bash CICD/Local/llm-gateway-status.sh",
     "local:aiops:start": "bash CICD/Local/aiops-start.sh",
     "local:aiops:stop": "bash CICD/Local/aiops-stop.sh",
-    "local:aiops:status": "bash CICD/Local/aiops-status.sh"
+    "local:aiops:status": "bash CICD/Local/aiops-status.sh",
+    "local:middleware:liquibase:all:start": "bash CICD/Local/Liquibase/liquibase-all-start.sh",
+    "local:middleware:liquibase:all:status": "bash CICD/Local/Liquibase/liquibase-all-status.sh"
   },
   "engines": {
     "node": ">=20"

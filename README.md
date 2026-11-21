@@ -12,8 +12,9 @@
 > * [2\. Strategic Value & Business Outcomes](#bookmark=id.t0bam69r4fwv)  
 > * [3\. Core Domain Capabilities](#bookmark=id.1plpw3kv7eil)  
 > * [4\. Enterprise Architecture Blueprint](#bookmark=id.yr40gh4s6wxt)  
-> * [5\. Technology & Resilience Pillars](#bookmark=id.w8py2shsa0yh)  
-> * [6\. Governance & Documentation](#bookmark=id.k82zljo3w3e9)
+> * [5\. Technology & Resilience Pillars](#bookmark=id.w8py2shsa0yh)
+> * [6\. High-Throughput Runtime & Kubernetes Topology](#bookmark=id.w8py2shsa0yh)  
+> * [7\. Governance & Documentation](#bookmark=id.k82zljo3w3e9)
 
 **Understanding the Dynamic Liquidity Provider & FX Routing Domain**
 
@@ -102,7 +103,23 @@ The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Archi
   * *L2 Distributed State (Redis / Lettuce):* Atomic, consistent tracking of real-time bilateral credit utilization, rolling LP fill telemetry, and idempotency keys.  
 > * **Fault Isolation & Circuit Breaking (Resilience4j):** Protects the routing core from degraded external venues using semaphore bulkheads, strict latency budgets, and automated circuit breakers.
 
-**6\. Governance & Documentation**
+**6\. High-Throughput Runtime & Kubernetes Topology**
+
+To sustain institutional peak volumes (targeting up to **1M aggregate RPS** across edge quote streaming and order routing without tail-latency spikes), the runtime topology is engineered around horizontal pod scaling, zero-pause memory management, and kernel-level network efficiency:
+
+- **Horizontal Pod Scaling & Headroom Sizing:** Rather than packing extreme concurrency onto a small number of oversized containers (which risks cascading failures during node drains or traffic bursts), workloads scale horizontally across **50–150+ Kubernetes pods** (sized at **7,000–15,000 RPS per pod**). This preserves CPU headroom for JSON/FIX serialization, JWT validation, and deterministic rule evaluation while surviving single-node failures with zero degradation.
+- **Pauseless Garbage Collection (ZGC / Shenandoah):** Trading pods run generational **ZGC** (or Shenandoah) on Java 21 to eliminate multi-millisecond Stop-The-World (STW) GC pauses, protecting the **< 5 ms (p99)** internal decisioning SLA under heavy allocation rates.
+- **eBPF Kernel Networking (Cilium):** Kubernetes clusters bypass legacy `iptables` and `kube-proxy` overhead in favor of **eBPF-based networking (Cilium)**, preventing Linux `conntrack` table exhaustion and ephemeral port starvation during sub-second market data bursts.
+- **Edge Traffic Shedding & Async Ingestion:** API Gateways and edge caches absorb repetitive rate-card and public quote reads before they reach the routing core, while immutable regulatory audit traces are streamed asynchronously via **Apache Kafka** so blocking relational database writes never sit on the critical execution path.
+
+| Runtime Layer | Architectural Choice | Institutional SLA Rationale |
+| :--- | :--- | :--- |
+| **Compute Topology** | **50–150+ K8s Pods** (7k–15k RPS/pod) | Eliminates single-node blast radius and CPU starvation during FOMC/NFP volatility spikes |
+| **JVM Garbage Collector** | **Generational ZGC** | Sub-millisecond pause times regardless of heap size; prevents p99 latency outliers |
+| **Cluster Networking** | **eBPF (Cilium)** | Bypasses `iptables` sequential rule traversal and `conntrack` bottlenecks at high socket churn |
+| **Audit & Provenance** | **Non-Blocking Kafka Stream** | Decouples mandatory regulatory logging (FX Global Code / MiFID II) from sub-10 ms order execution |
+
+**7\. Governance & Documentation**
 
 > * **Product Requirements & Domain Knowledge Base:** See PRD-FX-SOR-001.md for full functional specifications, market session matrices, regulatory provenance rules, and an institutional FX glossary.  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.

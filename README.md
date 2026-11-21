@@ -5,8 +5,6 @@
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  
 *A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and guarantee regulatory best execution in sub-10 milliseconds.*
 
-## ---
-
 **Table of Contents**
 
 > * [Understanding the Dynamic Liquidity Provider & FX Routing Domain](#bookmark=id.863vjn2fswql)  
@@ -16,8 +14,6 @@
 > * [4\. Enterprise Architecture Blueprint](#bookmark=id.yr40gh4s6wxt)  
 > * [5\. Technology & Resilience Pillars](#bookmark=id.w8py2shsa0yh)  
 > * [6\. Governance & Documentation](#bookmark=id.k82zljo3w3e9)
-
-## ---
 
 **Understanding the Dynamic Liquidity Provider & FX Routing Domain**
 

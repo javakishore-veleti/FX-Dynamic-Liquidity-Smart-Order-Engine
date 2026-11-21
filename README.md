@@ -419,3 +419,9 @@ To sustain 1M aggregate RPS reliably while protecting the **\< 5 ms (p99)** inte
 > * **Architecture & API Specs:** See `Docs/Specs/` and `Docs/Architecture/` (including Chief Architect ADRs and topology/MCP extensions).  
 > * **Industry SOR primer:** [What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/) (external knowledge-base framing for multi-venue execution).  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.
+
+## **8\. References**
+
+This codebase’s service-topology, blast-radius, and multi-layer dependency modeling (Network / IPC / Trace) are informed by Netflix’s published experience operating topology at scale:
+
+- [Building Service Topology at Scale: Architecture, Challenges, and Lessons Learned](https://netflixtechblog.com/building-service-topology-at-scale-architecture-challenges-and-lessons-learned-f4b792f3f0d8) — Netflix Technology Blog

@@ -41,10 +41,62 @@ class StubChatModelClient:
         )
 
 
+class OpenAiCompatibleChatModelClient:
+    """LiteLLM / OpenAI-compatible gateway client (httpx)."""
+
+    def __init__(self, config: ModelProviderConfigDto) -> None:
+        self._config = config
+
+    def complete(self, request: LlmCompletionRequestDto) -> LlmCompletionResultDto:
+        try:
+            import httpx
+        except Exception:  # noqa: BLE001
+            return StubChatModelClient(self._config).complete(request)
+
+        base = (self._config.base_url or "http://localhost:4000").rstrip("/")
+        payload = {
+            "model": self._config.model_id,
+            "temperature": request.temperature,
+            "messages": [
+                {"role": "system", "content": request.system_prompt},
+                {"role": "user", "content": request.user_prompt},
+            ],
+        }
+        headers = {
+            "Authorization": f"Bearer {self._config.api_key or 'sk-local-fx-sor'}",
+            "Content-Type": "application/json",
+        }
+        try:
+            with httpx.Client(timeout=60.0) as client:
+                response = client.post(f"{base}/v1/chat/completions", json=payload, headers=headers)
+                response.raise_for_status()
+                data = response.json()
+            content = (
+                data.get("choices", [{}])[0].get("message", {}).get("content")
+                or json.dumps(data)
+            )
+            try:
+                structured = json.loads(content) if isinstance(content, str) else {"raw": content}
+            except json.JSONDecodeError:
+                structured = {"text": content}
+            return LlmCompletionResultDto(
+                content=content if isinstance(content, str) else str(content),
+                provider="OPENAI_COMPAT",
+                model_id=self._config.model_id,
+                structured=structured if isinstance(structured, dict) else {"raw": structured},
+                stubbed=False,
+            )
+        except Exception as exc:  # noqa: BLE001
+            logger.warning("LiteLLM gateway call failed: %s", exc)
+            return StubChatModelClient(self._config).complete(request)
+
+
 class ModelGatewayFactory:
     """Closed-layer factory: routes chat models by provider without agent graph changes."""
 
     def create_chat_model(self, config_dto: ModelProviderConfigDto) -> ChatModelClient:
+        if config_dto.provider == "OPENAI_COMPAT":
+            return OpenAiCompatibleChatModelClient(config_dto)
         if config_dto.provider == "BEDROCK":
             client = self._try_bedrock(config_dto)
             if client is not None:

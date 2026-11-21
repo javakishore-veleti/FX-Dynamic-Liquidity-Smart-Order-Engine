@@ -10,8 +10,14 @@ class LlmSettings:
 
     def __init__(self) -> None:
         self.provider: ModelProvider = self._provider(
-            os.getenv("LLM_PROVIDER", "LOCAL_OLLAMA")
+            os.getenv("LLM_PROVIDER", "OPENAI_COMPAT")
         )
+        self.gateway_url = os.getenv("LLM_GATEWAY_URL", "http://localhost:4000")
+        self.gateway_key = os.getenv("LLM_GATEWAY_KEY", "sk-local-fx-sor")
+        self.gateway_reasoning = os.getenv("LLM_REASONING_MODEL", "fx-reasoning-tier")
+        self.gateway_fast = os.getenv("LLM_FAST_MODEL", "fx-fast-triage-tier")
+        self.gateway_graph = os.getenv("LLM_GRAPH_MODEL", "fx-graph-tier")
+        self.gateway_embedding = os.getenv("LLM_EMBEDDING_MODEL", "fx-embedding-tier")
         self.bedrock_region = os.getenv("BEDROCK_REGION", "us-east-1")
         self.bedrock_reasoning = os.getenv(
             "BEDROCK_REASONING_MODEL",
@@ -56,6 +62,19 @@ class LlmSettings:
         self.ollama_volume = os.getenv("LOCAL_VOLUME_MODEL", "mistral:7b")
 
     def config_for_tier(self, tier: ModelTier) -> ModelProviderConfigDto:
+        if self.provider == "OPENAI_COMPAT":
+            model_id = {
+                "REASONING": self.gateway_reasoning,
+                "FAST": self.gateway_fast,
+                "VOLUME": self.gateway_fast,
+                "EMBEDDING": self.gateway_embedding,
+            }[tier]
+            return ModelProviderConfigDto(
+                provider="OPENAI_COMPAT",
+                model_id=model_id,
+                base_url=self.gateway_url,
+                api_key=self.gateway_key,
+            )
         if self.provider == "BEDROCK":
             model_id = {
                 "REASONING": self.bedrock_reasoning,
@@ -96,6 +115,8 @@ class LlmSettings:
     @staticmethod
     def _provider(raw: str) -> ModelProvider:
         value = raw.strip().upper()
+        if value in {"LITELLM", "OPENAI_COMPAT"}:
+            return "OPENAI_COMPAT"
         if value in {"BEDROCK", "HUGGINGFACE", "LOCAL_OLLAMA"}:
             return value  # type: ignore[return-value]
-        return "LOCAL_OLLAMA"
+        return "OPENAI_COMPAT"

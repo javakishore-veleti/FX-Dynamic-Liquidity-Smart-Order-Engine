@@ -4,7 +4,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-ModelProvider = Literal["BEDROCK", "HUGGINGFACE", "LOCAL_OLLAMA"]
+ModelProvider = Literal["OPENAI_COMPAT", "BEDROCK", "HUGGINGFACE", "LOCAL_OLLAMA"]
 ModelTier = Literal["REASONING", "FAST", "VOLUME", "EMBEDDING"]
 
 
@@ -15,6 +15,7 @@ class ModelProviderConfigDto(BaseModel):
     model_id: str
     region: str = "us-east-1"
     base_url: str | None = None
+    api_key: str | None = None
     temperature: float = 0.0
     guardrail_id: str | None = None
 

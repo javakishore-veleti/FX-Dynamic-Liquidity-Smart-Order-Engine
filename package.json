@@ -2,7 +2,7 @@
   "name": "fx-dynamic-liquidity-smart-order-engine",
   "version": "1.0.0",
   "private": true,
-  "description": "FX Dynamic Liquidity & Smart Order Routing Engine — monorepo scripts for Middleware services and Portals UIs",
+  "description": "FX Dynamic Liquidity & Smart Order Routing Engine \u2014 monorepo scripts for Middleware services and Portals UIs",
   "scripts": {
     "local:containers:all:start": "bash CICD/Local/docker-all-up.sh",
     "local:containers:all:stop": "bash CICD/Local/docker-all-down.sh",
@@ -49,7 +49,13 @@
     "build:admin": "mvn -pl Middleware/fx-admin-service -am -DskipTests package",
     "build:topology": "mvn -pl Middleware/fx-topology-service -am -DskipTests package",
     "build:topology-mcp": "mvn -pl Middleware/fx-topology-mcp-server -am -DskipTests package",
-    "build:agent-orchestrator": "mvn -pl Middleware/fx-agent-orchestrator-service -am -DskipTests package"
+    "build:agent-orchestrator": "mvn -pl Middleware/fx-agent-orchestrator-service -am -DskipTests package",
+    "local:llm-gateway:start": "bash CICD/Local/llm-gateway-start.sh",
+    "local:llm-gateway:stop": "bash CICD/Local/llm-gateway-stop.sh",
+    "local:llm-gateway:status": "bash CICD/Local/llm-gateway-status.sh",
+    "local:aiops:start": "bash CICD/Local/aiops-start.sh",
+    "local:aiops:stop": "bash CICD/Local/aiops-stop.sh",
+    "local:aiops:status": "bash CICD/Local/aiops-status.sh"
   },
   "engines": {
     "node": ">=20"

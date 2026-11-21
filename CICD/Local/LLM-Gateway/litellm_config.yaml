@@ -1,0 +1,55 @@
+# LiteLLM Proxy — polyglot FX SOR model router
+# Spring AI + LangGraph both call OpenAI-compatible http://fx-llm-gateway:4000
+# Fallback order for a given model_name is list order (Bedrock → HF → Ollama).
+
+model_list:
+  # --- Reasoning tier (RCA, DMN policy, treasury hedge) ---
+  - model_name: fx-reasoning-tier
+    litellm_params:
+      model: bedrock/us.anthropic.claude-3-7-sonnet-20250219-v1:0
+      aws_region_name: us-east-1
+  - model_name: fx-reasoning-tier
+    litellm_params:
+      model: huggingface/Qwen/Qwen2.5-72B-Instruct
+  - model_name: fx-reasoning-tier
+    litellm_params:
+      model: ollama/qwen2.5:14b
+      api_base: http://host.docker.internal:11434
+
+  # --- Fast triage (backpressure, TCA, chaos, macro) ---
+  - model_name: fx-fast-triage-tier
+    litellm_params:
+      model: bedrock/us.amazon.nova-lite-v1:0
+      aws_region_name: us-east-1
+  - model_name: fx-fast-triage-tier
+    litellm_params:
+      model: ollama/phi4:14b
+      api_base: http://host.docker.internal:11434
+
+  # --- Graph / blast-radius ---
+  - model_name: fx-graph-tier
+    litellm_params:
+      model: bedrock/us.amazon.nova-pro-v1:0
+      aws_region_name: us-east-1
+  - model_name: fx-graph-tier
+    litellm_params:
+      model: ollama/llama3.3:8b
+      api_base: http://host.docker.internal:11434
+
+  # --- Embeddings (RAG) ---
+  - model_name: fx-embedding-tier
+    litellm_params:
+      model: bedrock/amazon.titan-embed-text-v2:0
+      aws_region_name: us-east-1
+  - model_name: fx-embedding-tier
+    litellm_params:
+      model: huggingface/BAAI/bge-m3
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+  request_timeout: 120
+  num_retries: 2
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY

@@ -40,7 +40,15 @@ fx:
   mcp:
     base-url: ${FX_MCP_BASE_URL:http://localhost:8091}
   llm:
-    provider: ${LLM_PROVIDER:LOCAL_OLLAMA}
+    # OPENAI_COMPAT = LiteLLM fx-llm-gateway (recommended polyglot router)
+    provider: ${LLM_PROVIDER:OPENAI_COMPAT}
+    openai-compatible:
+      base-url: ${LLM_GATEWAY_URL:http://localhost:4000}
+      api-key: ${LLM_GATEWAY_KEY:sk-local-fx-sor}
+      reasoning-model: ${LLM_REASONING_MODEL:fx-reasoning-tier}
+      fast-model: ${LLM_FAST_MODEL:fx-fast-triage-tier}
+      graph-model: ${LLM_GRAPH_MODEL:fx-graph-tier}
+      embedding-model: ${LLM_EMBEDDING_MODEL:fx-embedding-tier}
     bedrock:
       region: ${BEDROCK_REGION:us-east-1}
       reasoning-model: ${BEDROCK_REASONING_MODEL:us.anthropic.claude-3-7-sonnet-20250219-v1:0}
@@ -54,6 +62,9 @@ fx:
     local-ollama:
       base-url: ${LOCAL_OLLAMA_BASE_URL:http://localhost:11434}
       reasoning-model: ${LOCAL_REASONING_MODEL:qwen2.5:14b}
+  a2a:
+    agent-card-path: /.well-known/agent.json
+    peer-python-card-url: ${A2A_PEER_PYTHON_CARD_URL:http://localhost:8192/.well-known/agent.json}
 
 management:
   endpoints:

@@ -6,13 +6,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class LlmProviderProperties {
 
     /**
-     * Active provider: BEDROCK | HUGGINGFACE | LOCAL_OLLAMA
+     * Active provider: OPENAI_COMPAT (LiteLLM) | BEDROCK | HUGGINGFACE | LOCAL_OLLAMA
      */
-    private String provider = "LOCAL_OLLAMA";
+    private String provider = "OPENAI_COMPAT";
 
     private Bedrock bedrock = new Bedrock();
     private HuggingFace huggingface = new HuggingFace();
     private LocalOllama localOllama = new LocalOllama();
+    private OpenaiCompatible openaiCompatible = new OpenaiCompatible();
 
     public String getProvider() {
         return provider;
@@ -44,6 +45,71 @@ public class LlmProviderProperties {
 
     public void setLocalOllama(LocalOllama localOllama) {
         this.localOllama = localOllama;
+    }
+
+    public OpenaiCompatible getOpenaiCompatible() {
+        return openaiCompatible;
+    }
+
+    public void setOpenaiCompatible(OpenaiCompatible openaiCompatible) {
+        this.openaiCompatible = openaiCompatible;
+    }
+
+    public static class OpenaiCompatible {
+        private String baseUrl = "http://localhost:4000";
+        private String apiKey = "sk-local-fx-sor";
+        private String reasoningModel = "fx-reasoning-tier";
+        private String fastModel = "fx-fast-triage-tier";
+        private String graphModel = "fx-graph-tier";
+        private String embeddingModel = "fx-embedding-tier";
+
+        public String getBaseUrl() {
+            return baseUrl;
+        }
+
+        public void setBaseUrl(String baseUrl) {
+            this.baseUrl = baseUrl;
+        }
+
+        public String getApiKey() {
+            return apiKey;
+        }
+
+        public void setApiKey(String apiKey) {
+            this.apiKey = apiKey;
+        }
+
+        public String getReasoningModel() {
+            return reasoningModel;
+        }
+
+        public void setReasoningModel(String reasoningModel) {
+            this.reasoningModel = reasoningModel;
+        }
+
+        public String getFastModel() {
+            return fastModel;
+        }
+
+        public void setFastModel(String fastModel) {
+            this.fastModel = fastModel;
+        }
+
+        public String getGraphModel() {
+            return graphModel;
+        }
+
+        public void setGraphModel(String graphModel) {
+            this.graphModel = graphModel;
+        }
+
+        public String getEmbeddingModel() {
+            return embeddingModel;
+        }
+
+        public void setEmbeddingModel(String embeddingModel) {
+            this.embeddingModel = embeddingModel;
+        }
     }
 
     public static class Bedrock {

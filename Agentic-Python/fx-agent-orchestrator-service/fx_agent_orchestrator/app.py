@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import json
 import os
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 
 from fx_agent_orchestrator.business.facades.agent_orchestrator_facade import AgentOrchestratorFacade
 from fx_agent_orchestrator.business.workflows.backpressure_workflow import BackpressureWorkflow
@@ -25,6 +28,7 @@ class AgentOrchestratorAppFactory:
             "FX_AGENT_ORCHESTRATOR_DB_URL",
             "sqlite:///./fx_agent_orchestrator.db",
         )
+        self._agent_card_path = Path(__file__).resolve().parent / "a2a" / "agent.json"
 
     def create(self) -> FastAPI:
         repository = AgentRunRepository(self._database_url)
@@ -44,6 +48,12 @@ class AgentOrchestratorAppFactory:
             description="Python LangGraph dual-stack agent orchestrator (ADR-032/034)",
         )
         application.include_router(controller.router)
+
+        @application.get("/.well-known/agent.json")
+        def agent_card() -> JSONResponse:
+            payload = json.loads(self._agent_card_path.read_text(encoding="utf-8"))
+            return JSONResponse(payload)
+
         return application
 
 

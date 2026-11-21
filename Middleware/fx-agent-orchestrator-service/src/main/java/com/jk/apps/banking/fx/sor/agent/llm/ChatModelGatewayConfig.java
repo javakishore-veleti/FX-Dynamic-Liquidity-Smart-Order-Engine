@@ -16,6 +16,7 @@ public class ChatModelGatewayConfig {
         String provider = properties.getProvider() == null ? "LOCAL_OLLAMA" : properties.getProvider().trim().toUpperCase();
         log.info("Configuring ChatModelGateway for provider={}", provider);
         return switch (provider) {
+            case "OPENAI_COMPAT", "LITELLM" -> new OpenAiCompatibleChatModelGateway(properties, restClientBuilder);
             case "BEDROCK" -> new BedrockChatModelGateway(properties);
             case "HUGGINGFACE" -> new HuggingFaceChatModelGateway(properties, restClientBuilder);
             case "LOCAL_OLLAMA" -> new OllamaChatModelGateway(properties, restClientBuilder);

@@ -1,0 +1,104 @@
+{
+  "name": "fx-agent-orchestrator",
+  "description": "Institutional FX SOR multi-agent orchestrator (Spring AI + dual-stack Python). Publishes A2A skills for RCA, blast-radius, remediation, and treasury copilots.",
+  "url": "http://localhost:8092",
+  "provider": {
+    "organization": "FX-Dynamic-Liquidity-Smart-Order-Engine",
+    "url": "https://github.com/javakishore-veleti/FX-Dynamic-Liquidity-Smart-Order-Engine"
+  },
+  "version": "1.0.0",
+  "documentationUrl": "Docs/Architecture/LLM-Router-A2A-and-Local-AIOps-Spec.md",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "stateTransitionHistory": true
+  },
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "incident-rca",
+      "name": "Incident RCA",
+      "description": "3:00 AM time-travel RCA using topology diffs and outlier traces.",
+      "tags": ["sre", "rca"],
+      "examples": ["Investigate p99 spike on route-exec after last-look rejects"],
+      "inputModes": ["application/json"],
+      "outputModes": ["application/json"],
+      "endpoint": "POST /api/v1/agents/incident-rca/investigate"
+    },
+    {
+      "id": "blast-radius",
+      "name": "Blast Radius",
+      "description": "Pre-change / failure blast-radius across service and LP graph.",
+      "tags": ["topology", "risk"],
+      "endpoint": "POST /api/v1/agents/blast-radius/analyze"
+    },
+    {
+      "id": "backpressure",
+      "name": "Backpressure Remediation",
+      "description": "Kafka lag / ZGC / HPA remediation triage.",
+      "tags": ["ops"],
+      "endpoint": "POST /api/v1/agents/backpressure/assess"
+    },
+    {
+      "id": "policy-authoring",
+      "name": "DMN Policy Authoring",
+      "description": "Natural-language → Drools/DMN decision tables.",
+      "tags": ["policy"],
+      "endpoint": "POST /api/v1/agents/policy-authoring/generate"
+    },
+    {
+      "id": "lp-toxicity",
+      "name": "LP Toxicity Detective",
+      "description": "Last-look anomaly and toxicity detection.",
+      "tags": ["liquidity"],
+      "endpoint": "POST /api/v1/agents/lp-toxicity/detect"
+    },
+    {
+      "id": "best-execution",
+      "name": "Best Execution Explainer",
+      "description": "MiFID II / FX Global Code TCA plain-English summary.",
+      "tags": ["compliance"],
+      "endpoint": "POST /api/v1/agents/best-execution/explain"
+    },
+    {
+      "id": "treasury-hedge",
+      "name": "Treasury Hedge Copilot",
+      "description": "Corporate block-splitting and hedge recommendations.",
+      "tags": ["corporate"],
+      "endpoint": "POST /api/v1/agents/treasury-hedge/copilot"
+    },
+    {
+      "id": "regulatory-rag",
+      "name": "Regulatory RAG",
+      "description": "ADR / FX Global Code conversational knowledge agent.",
+      "tags": ["rag"],
+      "endpoint": "POST /api/v1/agents/regulatory-rag/ask"
+    },
+    {
+      "id": "chaos-sim",
+      "name": "Synthetic Chaos",
+      "description": "Skewed load / synthetic dataset generation.",
+      "tags": ["qa"],
+      "endpoint": "POST /api/v1/agents/chaos-sim/execute"
+    },
+    {
+      "id": "macro-guard",
+      "name": "Macro Volatility Guard",
+      "description": "FOMC/NFP/ECB headline regime classification and spread multipliers.",
+      "tags": ["macro"],
+      "endpoint": "POST /api/v1/agents/macro-guard/assess"
+    }
+  ],
+  "authentication": {
+    "schemes": ["bearer"],
+    "credentials": "Maker-Checker approvalToken required when dryRun=false"
+  },
+  "llmGateway": {
+    "baseUrl": "http://fx-llm-gateway:4000",
+    "models": ["fx-reasoning-tier", "fx-fast-triage-tier", "fx-graph-tier", "fx-embedding-tier"]
+  },
+  "mcpServers": [
+    { "name": "fx-topology-mcp-server", "url": "http://localhost:8091/mcp" }
+  ]
+}

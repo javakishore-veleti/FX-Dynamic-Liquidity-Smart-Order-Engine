@@ -1,0 +1,50 @@
+{
+  "name": "fx-agent-orchestrator-python",
+  "description": "Python LangGraph dual-stack agent orchestrator (port 8192). A2A peer of the Java orchestrator for polyglot handoffs.",
+  "url": "http://localhost:8192",
+  "version": "1.0.0",
+  "capabilities": {
+    "streaming": true,
+    "pushNotifications": false,
+    "stateTransitionHistory": true
+  },
+  "defaultInputModes": ["application/json"],
+  "defaultOutputModes": ["application/json"],
+  "skills": [
+    {
+      "id": "incident-rca",
+      "name": "Incident RCA (LangGraph)",
+      "endpoint": "POST /api/v1/agents/incident-rca/investigate",
+      "tags": ["sre", "langgraph"]
+    },
+    {
+      "id": "blast-radius",
+      "name": "Blast Radius (LangGraph)",
+      "endpoint": "POST /api/v1/agents/blast-radius/analyze",
+      "tags": ["topology", "langgraph"]
+    },
+    {
+      "id": "backpressure",
+      "name": "Backpressure (LangGraph)",
+      "endpoint": "POST /api/v1/agents/backpressure/assess",
+      "tags": ["ops", "langgraph"]
+    },
+    {
+      "id": "chaos-sim",
+      "name": "Chaos Sim (LangGraph)",
+      "endpoint": "POST /api/v1/agents/chaos-sim/execute",
+      "tags": ["qa", "langgraph"]
+    }
+  ],
+  "peers": [
+    {
+      "name": "fx-agent-orchestrator",
+      "agentCard": "http://localhost:8092/.well-known/agent.json",
+      "protocol": "a2a-jsonrpc-http"
+    }
+  ],
+  "llmGateway": {
+    "baseUrl": "http://localhost:4000",
+    "models": ["fx-reasoning-tier", "fx-fast-triage-tier", "fx-graph-tier"]
+  }
+}

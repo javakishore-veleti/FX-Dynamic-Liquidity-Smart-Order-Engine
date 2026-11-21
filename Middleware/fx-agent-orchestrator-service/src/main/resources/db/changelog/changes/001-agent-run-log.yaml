@@ -1,0 +1,111 @@
+databaseChangeLog:
+  - changeSet:
+      id: agent-001-agent-run-log
+      author: fx-sor
+      comment: Agent orchestration run audit log for fx_agent_orchestrator_db (ADR-032)
+      changes:
+        - createTable:
+            tableName: agent_run_log
+            columns:
+              - column:
+                  name: run_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_agent_run_log
+                    nullable: false
+              - column:
+                  name: agent_type
+                  type: varchar(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dry_run
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: request_params
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: mcp_tools_invoked
+                  type: clob
+              - column:
+                  name: result_summary
+                  type: clob
+              - column:
+                  name: approval_token
+                  type: varchar(200)
+              - column:
+                  name: triggered_by
+                  type: varchar(100)
+                  defaultValue: SPRING_AI_AGENT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: started_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed_at
+                  type: timestamp with time zone
+              - column:
+                  name: duration_ms
+                  type: bigint
+              - column:
+                  name: error_details
+                  type: clob
+  - changeSet:
+      id: agent-001b-agent-run-log-indexes
+      author: fx-sor
+      changes:
+        - createIndex:
+            tableName: agent_run_log
+            indexName: idx_agent_run_log_status_started
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: started_at
+                  descending: true
+        - createIndex:
+            tableName: agent_run_log
+            indexName: idx_agent_run_log_type_started
+            columns:
+              - column:
+                  name: agent_type
+              - column:
+                  name: started_at
+                  descending: true
+  - changeSet:
+      id: agent-001c-agent-run-log-jsonb-postgres
+      author: fx-sor
+      dbms: postgresql
+      comment: Promote JSON columns to native JSONB on PostgreSQL
+      changes:
+        - sql:
+            sql: |
+              ALTER TABLE agent_run_log
+                ALTER COLUMN request_params TYPE jsonb USING request_params::jsonb,
+                ALTER COLUMN mcp_tools_invoked TYPE jsonb USING CASE
+                  WHEN mcp_tools_invoked IS NULL OR mcp_tools_invoked = '' THEN NULL
+                  ELSE mcp_tools_invoked::jsonb END,
+                ALTER COLUMN result_summary TYPE jsonb USING CASE
+                  WHEN result_summary IS NULL OR result_summary = '' THEN NULL
+                  ELSE result_summary::jsonb END;

@@ -1,0 +1,21 @@
+[importlinter]
+root_packages =
+    fx_agent_orchestrator
+
+[importlinter:contract:closed-layers]
+name = Neal Ford closed-layer hierarchy (presentation → business → services → persistence)
+type = layers
+layers =
+    fx_agent_orchestrator.presentation
+    fx_agent_orchestrator.business
+    fx_agent_orchestrator.services
+    fx_agent_orchestrator.persistence
+
+[importlinter:contract:no-persistence-to-presentation]
+name = Persistence must not import presentation
+type = forbidden
+source_modules =
+    fx_agent_orchestrator.persistence
+forbidden_modules =
+    fx_agent_orchestrator.presentation
+    fx_agent_orchestrator.business

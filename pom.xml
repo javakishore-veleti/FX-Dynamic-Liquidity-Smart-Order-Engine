@@ -22,6 +22,7 @@
         <module>Middleware/fx-route-exec-service</module>
         <module>Middleware/fx-admin-service</module>
         <module>Middleware/fx-topology-service</module>
+        <module>Middleware/fx-topology-mcp-server</module>
         <module>Middleware/fx-agent-orchestrator-service</module>
     </modules>
 

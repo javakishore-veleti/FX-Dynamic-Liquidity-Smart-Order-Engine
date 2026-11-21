@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stop all local shared infrastructure: Redis, Postgres, Kafka
+# Stop local shared infrastructure and remove named volumes (Redis, Postgres, Kafka)
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -11,14 +11,14 @@ COMPOSE_STACKS=(
   "${LOCAL_DIR}/Redis/docker-compose.yaml"
 )
 
-echo "==> Stopping FX SOR local infrastructure"
+echo "==> Stopping FX SOR local infrastructure (containers + volumes)"
 for compose_file in "${COMPOSE_STACKS[@]}"; do
   if [[ ! -f "${compose_file}" ]]; then
     echo "WARN: missing compose file (skipping): ${compose_file}" >&2
     continue
   fi
-  echo "--> down: ${compose_file}"
-  docker compose -f "${compose_file}" down
+  echo "--> down -v: ${compose_file}"
+  docker compose -f "${compose_file}" down -v
 done
 
 echo

@@ -15,6 +15,8 @@
 
 ## 1. Stop
 
+Docker stop scripts remove containers and named volumes (`down -v`).
+
 ```bash
 npm run local:portals:all:stop
 npm run local:middleware:all:stop

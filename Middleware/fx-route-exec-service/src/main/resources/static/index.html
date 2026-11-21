@@ -113,6 +113,17 @@ th{
   color:var(--muted);
   font-size:0.9rem;
 }
+.term{margin:0 0 0.95rem}
+.term strong{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif}
+.term p{margin:0.25rem 0 0;color:var(--ink)}
+.example{
+  margin:0.55rem 0 0;
+  padding:0.7rem 0.8rem;
+  background:var(--soft);
+  border:1px solid var(--line);
+  border-radius:3px;
+  color:var(--ink);
+}
 </style>
 </head>
 <body>
@@ -120,11 +131,11 @@ th{
   <header class="hero" id="top">
     <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
     <h1>fx-route-exec-service<span class="badge">:8083</span></h1>
-    <p class="lead"><strong>Smart order routing and execution.</strong> Routes qualified FX orders across LPs, records parent/child fills, and exposes execution provenance.</p>
+    <p class="lead"><strong>Send and record the trade.</strong> After qualify picks allowed LPs, this service chooses where to send size, writes the parent order and child LP slices, can failover if an LP rejects, and keeps a trace of what happened.</p>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>
-      <a href="#api">API endpoints</a>
+      <a href="#glossary">Plain-language glossary</a>
     </div>
   </header>
 
@@ -132,6 +143,7 @@ th{
     <h2>Table of contents</h2>
     <ol>
       <li><a href="#overview">Overview</a></li>
+      <li><a href="#glossary">Plain-language glossary</a></li>
       <li><a href="#features">Business features</a></li>
       <li><a href="#database">Database tables</a></li>
       <li><a href="#api">API endpoints</a></li>
@@ -142,30 +154,166 @@ th{
   <section class="section" id="overview">
     <h2>1. Overview</h2>
     <p class="meta">Service port <code>8083</code> · dedicated database <code>fx_route_exec_db</code></p>
-    <p>Routes qualified FX orders across LPs, records parent/child fills, and exposes execution provenance.</p>
+    <p>
+      Plain rewrite of the hard sentence:
+      “Take a qualified FX order, send pieces of it to one or more liquidity providers (LPs),
+      save the big order and each LP slice, and later show a full history of how it was filled.”
+    </p>
+  </section>
+
+  <section class="section" id="glossary">
+    <h2>2. Plain-language glossary</h2>
+
+    <div class="term">
+      <strong>Route / route-and-execute</strong>
+      <p>
+        <em>Route</em> = decide <em>where</em> the order (or slices of it) should go among LPs.
+        <em>Execute</em> = actually attempt the fill and record the result.
+        API: <code>POST /api/v1/fx/orders/route-execute</code>.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>LP (liquidity provider)</strong>
+      <p>
+        A bank or market-maker that can take the other side of the FX trade.
+        In this repo the ranked demo LPs are <code>LP_CITI</code>, <code>LP_JPM</code>, <code>LP_GS</code>
+        (plus <code>INTERNAL_BOOK</code> when the bank fills from its own book).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Venue</strong>
+      <p>
+        Same idea as in qualify: a trading destination — here, an LP (or internal book).
+        “Child venue split” = one slice of the parent order aimed at one venue/LP.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Parent order</strong>
+      <p>
+        The client’s whole order as one record in <code>fx_execution_orders</code>
+        (total notional, pair, side, overall status, executed rate, slippage, mode).
+        One parent can have many children.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Child / split / child venue split</strong>
+      <p>
+        A <em>split</em> is one piece of the parent size assigned to one LP.
+        Stored in <code>child_venue_splits</code> with <code>allocatedNotional</code>, fill rate, hold latency, LP status.
+      </p>
+      <p class="example">
+        Parent wants $10M. Child A: $5M to Citi. Child B: $5M to JPM. Those are two child venue splits.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>LP allocation</strong>
+      <p>
+        How much notional each LP gets. Modes in this service include:
+      </p>
+      <ul>
+        <li><strong>Single LP</strong> — all size to the top-ranked LP</li>
+        <li><strong>MULTI_LP_SWEEP</strong> — size split across multiple LPs (e.g. half / half)</li>
+        <li><strong>INTERNAL_BOOK</strong> — filled inside the bank, not external LP</li>
+      </ul>
+      <p>
+        Allocations differ by strategy, LP rank, available size, and later failover decisions —
+        not every LP always gets the same amount.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>TCA (not “TCI”)</strong>
+      <p>
+        <em>Transaction Cost Analysis</em> — after-the-fact review of how good the fill was
+        (rate, slippage in bps, which LPs, latency). In this API the “trace” endpoint is the provenance/TCA view:
+        <code>GET /api/v1/fx/orders/{clientOrderId}/trace</code>.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Provenance / trace</strong>
+      <p>
+        The audit story of the order: parent status, execution mode, child splits, evaluated LPs, rule version.
+        Answers “what happened to client order CO-123?”
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>When do we say a fail?</strong>
+      <p>
+        A <em>fail</em> (rejection) on a child means that LP did <strong>not</strong> accept/fill that slice —
+        common demo status: <code>LAST_LOOK_REJECTED</code> (LP looked at the order at the last moment and said no).
+        The parent order may still succeed overall if another LP takes the size via failover.
+        Full parent failure is when no path remains to fill the required notional.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Outage (LP outage)</strong>
+      <p>
+        From this repo’s perspective: the LP is temporarily unusable for fills —
+        down, rejecting, timing out, or last-look refusing. Not necessarily the whole bank offline;
+        it means “this venue cannot take our child order right now.”
+      </p>
+      <p>
+        <strong>Impact:</strong> that child’s size is at risk; without failover the client may get a partial fill or delay;
+        with failover, size is moved to the next LP so the parent can still complete, possibly with different rate/latency/slippage.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Path / failover path</strong>
+      <p>
+        A <em>path</em> is a planned route of venues (e.g. try Citi first, then JPM, then GS).
+        A <em>failover path</em> is the backup route used when the primary LP fails/outages.
+        API: <code>POST /api/v1/fx/orders/{orderId}/failover</code> — mark the rejected LP, create a new child split on an alternate LP, switch mode toward multi-LP sweep as needed.
+      </p>
+      <p class="example">
+        Elevator picture: primary elevator (Citi) breaks → take the stairs/next elevator (JPM). Failover path = the backup route you planned for outages.
+      </p>
+    </div>
   </section>
 
   <section class="section" id="features">
-    <h2>2. Business features</h2>
-    <ul><li>Route-and-execute parent orders</li><li>Child venue splits / LP allocations</li><li>Failover path for LP outages</li><li>TCA / provenance trace by client order id</li></ul>
+    <h2>3. Business features</h2>
+    <ul>
+      <li>Route-and-execute the parent order after qualify</li>
+      <li>Create child venue splits (LP allocations)</li>
+      <li>Failover to another LP when one rejects / is in outage</li>
+      <li>TCA / provenance trace by client order id</li>
+    </ul>
   </section>
 
   <section class="section" id="database">
-    <h2>3. Database tables</h2>
+    <h2>4. Database tables</h2>
     <p class="meta">Database: <code>fx_route_exec_db</code></p>
-    <ul><li><code>fx_execution_orders</code></li><li><code>child_venue_splits</code></li></ul>
+    <ul>
+      <li><code>fx_execution_orders</code> — parent order (transactional execution record)</li>
+      <li><code>child_venue_splits</code> — per-LP allocation / fill slices</li>
+    </ul>
   </section>
 
   <section class="section" id="api">
-    <h2>4. API endpoints</h2>
+    <h2>5. API endpoints</h2>
     <table>
       <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
-      <tbody><tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/route-execute</code></td><td>Route and execute order</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/{orderId}/failover</code></td><td>Failover to alternate LP</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/fx/orders/{clientOrderId}/trace</code></td><td>Execution trace / TCA</td></tr><tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
+      <tbody>
+        <tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/route-execute</code></td><td>Route and execute parent + child splits</td></tr>
+        <tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/{orderId}/failover</code></td><td>Failover path after LP reject/outage</td></tr>
+        <tr><td><code>GET</code></td><td><code>/api/v1/fx/orders/{clientOrderId}/trace</code></td><td>TCA / provenance trace</td></tr>
+        <tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr>
+        <tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr>
+      </tbody>
     </table>
   </section>
 
   <section class="section" id="ops">
-    <h2>5. Operations links</h2>
+    <h2>6. Operations links</h2>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>

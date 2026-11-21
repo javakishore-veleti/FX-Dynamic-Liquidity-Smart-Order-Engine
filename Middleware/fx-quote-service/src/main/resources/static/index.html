@@ -191,15 +191,100 @@ th{
     </div>
 
     <div class="term">
-      <strong>Client-tier markup schedules</strong>
+      <strong>Per-tier</strong>
       <p>
-        A lookup table that says: “For this client tier + currency pair + market session, charge this fee.”
-        Example row meaning: Tier 2, EURUSD, London/NY overlap → markup 1.5 bps.
-        That is what table <code>client_tier_spread_schedules</code> stores.
+        Means “priced differently for each client tier.” Tier 1 and Tier 2 do not always pay the same bank fee.
+        “Per-tier …” = rules that are looked up using the client’s tier id (for example <code>TIER_1</code>).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Session-regime (market session)</strong>
+      <p>
+        FX liquidity changes by time of day as major centers open/overlap/close.
+        In this service, session-regime is a label for that market “mood,” derived from UTC hour, for example:
+      </p>
+      <ul>
+        <li><code>TOKYO</code> — Asia hours</li>
+        <li><code>LONDON_NY_OVERLAP</code> — typically deepest liquidity</li>
+        <li><code>NY_ROLLOVER</code> — late NY / day-roll window</li>
+      </ul>
+      <p>
+        Fees can be higher in thin or risky sessions (and a <code>news_multiplier</code> can scale them further).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Spread</strong>
+      <p>
+        In market language, <em>spread</em> is the gap between buy and sell prices (ask − bid).
+        In this service’s fee table, “spread / markup” is used for the bank’s add-on in <em>basis points</em>
+        (<code>markup_bps</code>) applied on top of the LP mid/top-of-book when building a client rate.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Spread schedules (client-tier markup schedules)</strong>
+      <p>
+        The published fee price list stored in <code>client_tier_spread_schedules</code>.
+        Each row answers: for this <strong>tier</strong> + <strong>currency pair</strong> + <strong>session-regime</strong>,
+        what <code>markup_bps</code> (and optional news multiplier) applies.
       </p>
       <p class="example">
-        Common-man picture: like airline fare classes. Same flight (same EUR/USD market), but Business vs Economy
-        (Tier 1 vs Tier 2) pay different add-ons. The schedule is the published price list by class, route, and time of day.
+        Example row meaning: Tier 2 + EURUSD + London/NY overlap → markup 1.5 bps.
+        Common-man picture: airline fare classes by route and time of day — same market, different add-on by class and clock.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>What “L1 cacheable” means here (and what is actually cached)</strong>
+      <p>
+        <em>L1</em> means a fast cache <strong>inside this service’s JVM process</strong> (local memory), as opposed to
+        a shared remote cache like Redis (often called L2 in this stack).
+      </p>
+      <p>
+        <strong>What is stored in the L1 quote-book cache today:</strong>
+        live LP quote ticks — for each currency pair and liquidity provider (LP), the latest
+        bid, ask, available size, quote timestamp, and TTL.
+        Example keys conceptually: <code>EURUSD → { LP_CITI, LP_JPM, LP_GS }</code>.
+      </p>
+      <p>
+        <strong>Why:</strong> pricing must be very fast. Hitting remote LPs or rebuilding a book on every portal tick
+        would be too slow. The service reads the local book, filters stale ticks, then applies markup from the schedule table.
+      </p>
+      <p>
+        <strong>What is <em>not</em> in that L1 book:</strong>
+        the markup schedule rows themselves are read from the database via
+        <code>ClientTierSpreadScheduleRepository</code> when resolving fees
+        (the older “Caffeine L1 for schedules / zero hot-path SQL” note is design intent; the implemented hot cache is the LP quote book).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Eviction / freshness policies (as coded)</strong>
+      <ul>
+        <li>
+          <strong>In-memory (default, Redis off):</strong>
+          <code>ConcurrentHashMap</code> keyed by pair → LP.
+          Entries are <em>not</em> auto-deleted by a background TTL sweeper.
+          Freshness is checked with <code>isStale()</code>: if <code>now - quoteTs &gt; ttlMs</code>, the tick is stale.
+          Default <code>ttlMs</code> is <strong>2000 ms (2 seconds)</strong>.
+          Stale ticks are filtered out of pricing and, in local demo mode, refreshed/overwritten with a new timestamp.
+        </li>
+        <li>
+          <strong>Redis (when <code>fx.features.redis-enabled=true</code>):</strong>
+          each stored quote key gets a Redis <code>EXPIRE</code> of at least 1 second, typically matching the quote’s
+          <code>ttlMs</code> (so Redis can drop dead keys).
+        </li>
+        <li>
+          <strong>Indicative response TTL:</strong>
+          responses also advertise <code>DEFAULT_TTL_MS = 2000</code> so callers know the estimate ages out quickly.
+        </li>
+      </ul>
+      <p class="example">
+        Plain picture: the service keeps a whiteboard of “what Citi/JPM/GS are showing for EURUSD right now.”
+        Numbers older than ~2 seconds are treated as outdated; Redis can also throw the sticky-note away after that TTL.
+        The fee price list (tier/session markup) lives in the database table, not on that whiteboard.
       </p>
     </div>
 
@@ -302,7 +387,7 @@ th{
     <ul>
       <li>Push current FX prices to web screens (portal blotters) over SSE</li>
       <li>On-demand indicative (non-binding estimate) quote used by both Corporate and Retail portals</li>
-      <li>Fee rules by client tier, pair, and market session (cached for speed)</li>
+      <li>Fee rules by client tier, pair, and market session (DB schedule); LP top-of-book held in local quote-book cache (~2s TTL)</li>
       <li>Spot mid-rate lookup by currency pair</li>
     </ul>
   </section>

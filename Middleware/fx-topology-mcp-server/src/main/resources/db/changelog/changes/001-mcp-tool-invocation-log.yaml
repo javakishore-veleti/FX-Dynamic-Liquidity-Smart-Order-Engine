@@ -1,0 +1,101 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-mcp-001-mcp-tool-invocation-log
+      author: fx-sor
+      comment: MCP tool invocation audit log for fx_topology_mcp_db (fx-topology-mcp-server only)
+      changes:
+        - createTable:
+            tableName: mcp_tool_invocation_log
+            columns:
+              - column:
+                  name: invocation_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_mcp_tool_invocation_log
+                    nullable: false
+              - column:
+                  name: tool_name
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: request_payload
+                  type: clob
+                  constraints:
+                    nullable: false
+              - column:
+                  name: response_payload
+                  type: clob
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: safety_tier
+                  type: varchar(40)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dry_run
+                  type: boolean
+                  defaultValueBoolean: true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: error_details
+                  type: clob
+              - column:
+                  name: duration_ms
+                  type: bigint
+              - column:
+                  name: triggered_by
+                  type: varchar(100)
+                  defaultValue: MCP_CLIENT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: started_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: completed_at
+                  type: timestamp with time zone
+  - changeSet:
+      id: topology-mcp-001b-mcp-tool-invocation-log-indexes
+      author: fx-sor
+      changes:
+        - createIndex:
+            tableName: mcp_tool_invocation_log
+            indexName: idx_mcp_inv_tool_started
+            columns:
+              - column:
+                  name: tool_name
+              - column:
+                  name: started_at
+                  descending: true
+        - createIndex:
+            tableName: mcp_tool_invocation_log
+            indexName: idx_mcp_inv_status_started
+            columns:
+              - column:
+                  name: status
+              - column:
+                  name: started_at
+                  descending: true
+  - changeSet:
+      id: topology-mcp-001c-mcp-tool-invocation-log-jsonb-postgres
+      author: fx-sor
+      dbms: postgresql
+      comment: Promote JSON columns to native JSONB on PostgreSQL
+      changes:
+        - sql:
+            sql: |
+              ALTER TABLE mcp_tool_invocation_log
+                ALTER COLUMN request_payload TYPE jsonb USING request_payload::jsonb,
+                ALTER COLUMN response_payload TYPE jsonb USING CASE
+                  WHEN response_payload IS NULL OR response_payload = '' THEN NULL
+                  ELSE response_payload::jsonb END;

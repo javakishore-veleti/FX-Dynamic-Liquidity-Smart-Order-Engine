@@ -1,0 +1,21 @@
+[importlinter]
+root_packages =
+    fx_topology_mcp
+
+[importlinter:contract:closed-layers]
+name = Neal Ford closed-layer hierarchy (presentation → business → services → persistence)
+type = layers
+layers =
+    fx_topology_mcp.presentation
+    fx_topology_mcp.business
+    fx_topology_mcp.services
+    fx_topology_mcp.persistence
+
+[importlinter:contract:no-persistence-to-presentation]
+name = Persistence must not import presentation
+type = forbidden
+source_modules =
+    fx_topology_mcp.persistence
+forbidden_modules =
+    fx_topology_mcp.presentation
+    fx_topology_mcp.business

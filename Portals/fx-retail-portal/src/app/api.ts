@@ -1,6 +1,11 @@
-/** Middleware service base URLs (demo constants). */
+/** Middleware base URLs — same host as the portal (any interface / remote host). */
+const host =
+  typeof window !== 'undefined' && window.location?.hostname
+    ? window.location.hostname
+    : 'localhost';
+
 export const API = {
-  quote: 'http://localhost:8081',
-  qualify: 'http://localhost:8082',
-  routeExec: 'http://localhost:8083',
+  quote: `http://${host}:8081`,
+  qualify: `http://${host}:8082`,
+  routeExec: `http://${host}:8083`,
 } as const;

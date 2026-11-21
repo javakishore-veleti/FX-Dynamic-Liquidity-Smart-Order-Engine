@@ -45,14 +45,14 @@ for entry in "${PORTALS[@]}"; do
     continue
   fi
 
-  echo "  [START] ${name} → http://localhost:${port}/  (log: ${log_file})"
+  echo "  [START] ${name} → http://0.0.0.0:${port}/  (log: ${log_file})"
   (
     cd "${ROOT_DIR}"
     if command -v setsid >/dev/null 2>&1; then
-      setsid npx --prefix "${app_dir}" ng serve --port "${port}" --host 127.0.0.1 >"${log_file}" 2>&1 &
+      setsid npx --prefix "${app_dir}" ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
       echo $! >"${pid_file}"
     else
-      nohup npx --prefix "${app_dir}" ng serve --port "${port}" --host 127.0.0.1 >"${log_file}" 2>&1 &
+      nohup npx --prefix "${app_dir}" ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
       echo $! >"${pid_file}"
     fi
   )

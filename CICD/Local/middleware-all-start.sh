@@ -20,8 +20,10 @@ SERVICES=(
 )
 
 PROFILES="${FX_SOR_SPRING_PROFILES:-}"
+# Bind all interfaces so services are reachable from any host (override with SERVER_ADDRESS)
+export SERVER_ADDRESS="${SERVER_ADDRESS:-0.0.0.0}"
 
-echo "==> Starting FX SOR middleware services (cwd=${ROOT_DIR})"
+echo "==> Starting FX SOR middleware services (cwd=${ROOT_DIR}, bind=${SERVER_ADDRESS})"
 if [[ -n "${PROFILES}" ]]; then
   echo "    spring profiles: ${PROFILES}"
 fi
@@ -43,8 +45,8 @@ for entry in "${SERVICES[@]}"; do
     continue
   fi
 
-  echo "  [START] ${name} → :${port}  (log: ${log_file})"
-  mvn_args=(-pl "${module}" spring-boot:run)
+  echo "  [START] ${name} → ${SERVER_ADDRESS}:${port}  (log: ${log_file})"
+  mvn_args=(-pl "${module}" spring-boot:run "-Dspring-boot.run.arguments=--server.address=${SERVER_ADDRESS}")
   if [[ -n "${PROFILES}" ]]; then
     mvn_args+=("-Dspring-boot.run.profiles=${PROFILES}")
   fi

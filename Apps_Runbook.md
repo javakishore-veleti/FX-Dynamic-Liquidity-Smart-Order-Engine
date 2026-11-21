@@ -2,9 +2,9 @@
 
 ## Contents
 
-1. [Stop](#1-stop)
-2. [Start](#2-start)
-3. [Status](#3-status)
+1. [Stop](#1-stop) — Portals · Middleware · LLM Gateway · AIOps · Containers
+2. [Start](#2-start) — Containers · LLM Gateway · AIOps · Middleware · Portals · Python dual-stack
+3. [Status](#3-status) — Containers · LLM Gateway · AIOps · Middleware · Portals
 4. [External Liquibase](#4-external-liquibase)
 5. [API endpoints](#5-api-endpoints)
 6. [OpenAPI](#6-openapi)
@@ -17,40 +17,114 @@
 
 Docker stop scripts remove containers and named volumes (`down -v`).
 
+### 1.1 Portals
+
 ```bash
 npm run local:portals:all:stop
+```
+
+### 1.2 Middleware
+
+```bash
 npm run local:middleware:all:stop
+```
+
+### 1.3 LLM Gateway
+
+```bash
 npm run local:llm-gateway:stop
+```
+
+### 1.4 AIOps
+
+```bash
 npm run local:aiops:stop
+```
+
+### 1.5 Containers
+
+```bash
 npm run local:containers:all:stop
 ```
 
+---
+
 ## 2. Start
+
+Run in order.
+
+### 2.1 Containers
 
 ```bash
 npm run local:containers:all:start
+```
+
+### 2.2 LLM Gateway
+
+```bash
 npm run local:llm-gateway:start
+```
+
+### 2.3 AIOps
+
+```bash
 npm run local:aiops:start
+```
+
+### 2.4 Middleware
+
+```bash
 npm run local:middleware:all:start
+```
+
+### 2.5 Portals
+
+```bash
 npm run local:portals:all:start
 ```
 
-Python dual-stack (optional):
+### 2.6 Python dual-stack (optional)
 
 ```bash
 npm run local:topology-mcp:python
 npm run local:agent-orchestrator:python
 ```
 
+---
+
 ## 3. Status
+
+### 3.1 Containers
 
 ```bash
 npm run local:containers:all:status
+```
+
+### 3.2 LLM Gateway
+
+```bash
 npm run local:llm-gateway:status
+```
+
+### 3.3 AIOps
+
+```bash
 npm run local:aiops:status
+```
+
+### 3.4 Middleware
+
+```bash
 npm run local:middleware:all:status
+```
+
+### 3.5 Portals
+
+```bash
 npm run local:portals:all:status
 ```
+
+---
 
 ## 4. External Liquibase
 
@@ -65,7 +139,11 @@ LIQUIBASE_ON_STARTUP=false npm run local:middleware:all:start
 npm run local:middleware:liquibase:all:status
 ```
 
+---
+
 ## 5. API endpoints
+
+Services bind `0.0.0.0` (reachable from any host). Replace `localhost` with the machine hostname or IP when calling remotely.
 
 | Service | URL |
 |---------|-----|
@@ -87,12 +165,16 @@ npm run local:middleware:liquibase:all:status
 | Metrics (Python) | `http://localhost:<port>/metrics` |
 | AgentCard | http://localhost:8092/.well-known/agent.json · http://localhost:8192/.well-known/agent.json |
 
+---
+
 ## 6. OpenAPI
 
 | Service | UI | Spec |
 |---------|----|------|
 | :8081–:8092 (Java) | `http://localhost:<port>/swagger-ui.html` | `http://localhost:<port>/v3/api-docs` |
 | :8191 / :8192 (Python) | `http://localhost:<port>/docs` | `http://localhost:<port>/openapi.json` |
+
+---
 
 ## 7. Portals
 
@@ -101,6 +183,8 @@ npm run local:middleware:liquibase:all:status
 | Admin | http://localhost:4201 |
 | Corporate | http://localhost:4202 |
 | Retail | http://localhost:4203 |
+
+---
 
 ## 8. Infrastructure UIs
 

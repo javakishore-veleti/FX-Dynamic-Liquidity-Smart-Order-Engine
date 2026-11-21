@@ -33,6 +33,7 @@ spring:
 
 server:
   port: ${SERVER_PORT:8084}
+  address: ${SERVER_ADDRESS:0.0.0.0}
 
 fx:
   features:

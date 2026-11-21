@@ -113,6 +113,17 @@ th{
   color:var(--muted);
   font-size:0.9rem;
 }
+.term{margin:0 0 0.95rem}
+.term strong{font-family:"Avenir Next","Segoe UI",system-ui,sans-serif}
+.term p{margin:0.25rem 0 0;color:var(--ink)}
+.example{
+  margin:0.55rem 0 0;
+  padding:0.7rem 0.8rem;
+  background:var(--soft);
+  border:1px solid var(--line);
+  border-radius:3px;
+  color:var(--ink);
+}
 </style>
 </head>
 <body>
@@ -120,11 +131,11 @@ th{
   <header class="hero" id="top">
     <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
     <h1>fx-qualify-service<span class="badge">:8082</span></h1>
-    <p class="lead"><strong>Qualification and credit engine.</strong> Validates settlement eligibility, credit utilization, and venue knock-out rules before route-exec.</p>
+    <p class="lead"><strong>Gatekeeper before trading.</strong> Checks whether a deal is allowed to settle, whether the client still has credit room with each bank/LP, and which LPs are knocked out — before <code>fx-route-exec-service</code> sends the order.</p>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>
-      <a href="#api">API endpoints</a>
+      <a href="#glossary">Plain-language glossary</a>
     </div>
   </header>
 
@@ -132,6 +143,8 @@ th{
     <h2>Table of contents</h2>
     <ol>
       <li><a href="#overview">Overview</a></li>
+      <li><a href="#glossary">Plain-language glossary</a></li>
+      <li><a href="#validations">What gets validated</a></li>
       <li><a href="#features">Business features</a></li>
       <li><a href="#database">Database tables</a></li>
       <li><a href="#api">API endpoints</a></li>
@@ -142,30 +155,223 @@ th{
   <section class="section" id="overview">
     <h2>1. Overview</h2>
     <p class="meta">Service port <code>8082</code> · dedicated database <code>fx_qualify_db</code></p>
-    <p>Validates settlement eligibility, credit utilization, and venue knock-out rules before route-exec.</p>
+    <p>
+      After quote, before execution: this service answers
+      “May we trade this size/pair/tenor with which liquidity providers?”
+      Failures become <em>knock-outs</em>; survivors become <em>eligible LPs</em> for route-exec.
+    </p>
+  </section>
+
+  <section class="section" id="glossary">
+    <h2>2. Plain-language glossary</h2>
+
+    <div class="term">
+      <strong>Order (what it looks like here)</strong>
+      <p>
+        An FX order is a client request to buy or sell a currency pair for a size and tenor — not yet a completed trade.
+        In qualify, the request typically carries fields like:
+        <code>clientOrderId</code>, <code>clientId</code>, <code>ccyPair</code> (e.g. EURUSD),
+        <code>tenor</code> (SPOT / TOM / 1M), <code>notionalUsd</code>, and side when provided upstream.
+        After qualify succeeds, route-exec turns survivors into a parent execution order plus child LP splits.
+      </p>
+      <p class="example">
+        Everyday picture: “Client CORP_88 wants to BUY about $5M of EURUSD spot under order id CO-123.”
+        That packet is the order; this service decides if/where it is allowed to go.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Qualification / order qualification</strong>
+      <p>
+        <em>Qualification</em> means running pass/fail checks <strong>before</strong> sending the order to LPs for execution.
+        <em>Order qualification</em> is that whole gate for one order: settlement policy + credit headroom →
+        either <code>qualified=true</code> with eligible LPs (and a credit reservation token), or
+        <code>qualified=false</code> with knock-out reasons.
+        API: <code>POST /api/v1/fx/orders/qualify</code>.
+      </p>
+      <p>
+        How it differs from nearby steps:
+      </p>
+      <ul>
+        <li><strong>Quote</strong> — “What price might we show?” (no commitment to trade)</li>
+        <li><strong>Qualify</strong> — “Are we allowed to trade this, and with whom?”</li>
+        <li><strong>Route-exec</strong> — “Send/fill and record the trade with those LPs”</li>
+      </ul>
+    </div>
+
+    <div class="term">
+      <strong>Settlement</strong>
+      <p>
+        The actual exchange of currencies after a trade is agreed — “you give me euros, I give you dollars” on the value date.
+        Pricing can happen now; settlement is when money really moves (spot is often about T+2).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Cutoff (settlement cutoff)</strong>
+      <p>
+        A clock deadline after which you should not treat the deal as eligible for that settlement path today.
+        Stored as <code>cutoff_time_utc</code> on the policy row. If the pair/tenor is CLS-eligible and
+        current UTC time is after the cutoff → knock-out <code>PAST_CLS_CUTOFF</code>.
+      </p>
+      <p class="example">
+        Like “last boarding time.” Miss it and that flight (today’s CLS settlement window) is closed;
+        seeded example: EURUSD SPOT cutoff <code>23:55:00</code> UTC vs EURUSD TOM <code>16:00:00</code> UTC.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Settlement eligibility / “against settlement cutoffs”</strong>
+      <p>
+        Whether this order is <em>allowed to go to settlement</em> under bank policy for that pair and tenor.
+        “Order qualification against settlement cutoffs” means: look up the policy for the order’s pair+tenor,
+        then fail if past cutoff (when CLS applies), outside min/max clip, restricted, or unsupported.
+      </p>
+      <p class="example">
+        Differs per row: EURUSD SPOT vs EURUSD 1M can have different cutoffs, clip sizes, and CLS flags.
+        Same client, different tenor → different pass/fail.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Credit</strong>
+      <p>
+        A bilateral risk limit: how much FX exposure the bank will allow for a <strong>client</strong> trading with a given
+        <strong>LP</strong> (liquidity provider), measured in USD notional.
+        Like a credit-card limit, but between institutions for FX.
+        Stored in the in-memory/Redis credit store as <code>maxCreditUsd</code> per <code>clientId</code> + <code>lpId</code>.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Utilization</strong>
+      <p>
+        How much of that limit is already used up.
+        Here: <code>utilizedUsd</code> (already on the books) plus <code>reservedUsd</code> (held for in-flight qualifies).
+        <em>Headroom</em> = limit − utilized − reserved (room left to take a new order).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Credit utilization</strong>
+      <p>
+        The combined picture: limit vs used vs reserved vs headroom for a client/LP pair.
+        API: <code>GET /api/v1/fx/credit/utilization/{clientId}</code>.
+        During qualify, if reserving the new notional would exceed headroom → knock-out <code>INSUFFICIENT_CREDIT</code> for that LP.
+        Warnings fire around 85% / hard signals around 95% utilization.
+      </p>
+      <p class="example">
+        Limit $25M, used $2.5M, reserved $0 → headroom $22.5M. A $30M order fails credit for that LP even if settlement policy passes.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Venue (in this repo)</strong>
+      <p>
+        A place you can send the FX order to be filled — here, a <strong>liquidity provider (LP)</strong> such as
+        <code>LP_CITI</code>, <code>LP_JPM</code>, <code>LP_GS</code>.
+        “Venue” ≈ “which bank/market-maker counterparty.”
+        It is not the Angular portal; portals are UIs, venues are trading destinations.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Knock-out</strong>
+      <p>
+        A hard “no” that removes a venue from the eligible list for this order.
+        The LP is knocked out of contention; route-exec should not send size there (for that attempt).
+        Examples from code: <code>PAIR_TENOR_UNSUPPORTED</code>, <code>RESTRICTED_CCY</code>,
+        <code>BELOW_MIN_CLIP</code>, <code>ABOVE_MAX_CLIP</code>, <code>PAST_CLS_CUTOFF</code>,
+        <code>INSUFFICIENT_CREDIT</code>.
+      </p>
+      <p class="example">
+        Sports picture: a team is disqualified from the matchup. Other teams (LPs) may still play.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Venue knock-out rules</strong>
+      <p>
+        The checklist that decides pass/fail per LP: settlement policy rules (often apply to all LPs the same)
+        plus per-LP credit headroom. See <code>POST /api/v1/fx/venues/knockout-check</code> and the knockouts list on qualify.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Route-exec (fx-route-exec-service :8083)</strong>
+      <p>
+        The next microservice after qualify. It <em>routes</em> the order to surviving LPs and <em>executes</em>
+        (records parent order + child venue splits, failover, TCA trace).
+        Qualify decides who is allowed; route-exec does the send/fill bookkeeping.
+      </p>
+      <p class="example">
+        Airport security (qualify) then boarding/flight ops (route-exec). You only board airlines that passed security.
+      </p>
+    </div>
+  </section>
+
+  <section class="section" id="validations">
+    <h2>3. What gets validated (the three buckets)</h2>
+    <table>
+      <thead><tr><th>Bucket</th><th>Plain meaning</th><th>How it differs</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Settlement eligibility</td>
+          <td>Is this pair/tenor/size/time allowed to settle?</td>
+          <td>Varies by <strong>ccy_pair + tenor</strong> policy row (cutoff, clips, CLS, restricted)</td>
+        </tr>
+        <tr>
+          <td>Credit utilization</td>
+          <td>Does this client still have limit room with that LP?</td>
+          <td>Varies by <strong>clientId + lpId</strong> credit line</td>
+        </tr>
+        <tr>
+          <td>Venue knock-outs</td>
+          <td>Which LPs are eliminated for this order?</td>
+          <td>Policy fails often knock out all LPs; credit fails knock out one LP at a time</td>
+        </tr>
+      </tbody>
+    </table>
   </section>
 
   <section class="section" id="features">
-    <h2>2. Business features</h2>
-    <ul><li>Order qualification against settlement cutoffs</li><li>Client credit utilization checks</li><li>Venue knock-out evaluation (CLS, restricted pairs, clip limits)</li><li>Policy tables for tenor / pair constraints</li></ul>
+    <h2>4. Business features</h2>
+    <ul>
+      <li>Order qualification: pass/fail gate before route-exec</li>
+      <li>Settlement cutoff / clip / CLS / restricted checks per pair+tenor</li>
+      <li>Credit utilization / headroom per client and LP</li>
+      <li>Venue knock-outs with reason codes; eligible LP list for survivors</li>
+    </ul>
   </section>
 
   <section class="section" id="database">
-    <h2>3. Database tables</h2>
+    <h2>5. Database tables</h2>
     <p class="meta">Database: <code>fx_qualify_db</code></p>
-    <ul><li><code>settlement_cutoffs_and_policies</code></li></ul>
+    <ul>
+      <li>
+        <code>settlement_cutoffs_and_policies</code> —
+        config/master pricing-ops rules per pair+tenor (CLS flag, cutoff UTC, min/max clip, restricted).
+        Credit lines live in the credit store (memory/Redis), not this table.
+      </li>
+    </ul>
   </section>
 
   <section class="section" id="api">
-    <h2>4. API endpoints</h2>
+    <h2>6. API endpoints</h2>
     <table>
       <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
-      <tbody><tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/qualify</code></td><td>Qualify an order for routing</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/fx/credit/utilization/{clientId}</code></td><td>Credit utilization</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/fx/venues/knockout-check</code></td><td>Venue knock-out check</td></tr><tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
+      <tbody>
+        <tr><td><code>POST</code></td><td><code>/api/v1/fx/orders/qualify</code></td><td>Full qualify: settlement + credit → eligible LPs / knock-outs</td></tr>
+        <tr><td><code>GET</code></td><td><code>/api/v1/fx/credit/utilization/{clientId}</code></td><td>Credit utilization for a client (optional LP)</td></tr>
+        <tr><td><code>POST</code></td><td><code>/api/v1/fx/venues/knockout-check</code></td><td>Policy knock-out check per venue</td></tr>
+        <tr><td><code>GET</code></td><td><code>/actuator/health</code></td><td>Liveness / readiness</td></tr>
+        <tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr>
+      </tbody>
     </table>
   </section>
 
   <section class="section" id="ops">
-    <h2>5. Operations links</h2>
+    <h2>7. Operations links</h2>
     <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>

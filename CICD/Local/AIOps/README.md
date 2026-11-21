@@ -9,7 +9,7 @@ npm run local:aiops:status
 npm run local:aiops:stop
 ```
 
-- Grafana http://localhost:3000 (admin / fxsor)
+- Grafana http://localhost:3000 (admin / admin)
 - Prometheus http://localhost:9090
 - OpenSearch http://localhost:9200
 - OTLP :4317 / :4318

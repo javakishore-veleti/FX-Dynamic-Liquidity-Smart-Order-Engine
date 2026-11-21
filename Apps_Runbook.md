@@ -216,7 +216,7 @@ Services bind `0.0.0.0` (reachable from any host). Replace `localhost` with the 
 | Redis | localhost:6379 |
 | Kafka | localhost:9092 |
 | LiteLLM | http://localhost:4000 |
-| Grafana | http://localhost:3000 (`admin` / `fxsor`) |
+| Grafana | http://localhost:3000 (`admin` / `admin`) |
 | Prometheus | http://localhost:9090 |
 | OpenSearch | http://localhost:9200 |
 | OpenSearch Dashboards | http://localhost:5601 |

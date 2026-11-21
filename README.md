@@ -29,8 +29,6 @@ This platform is architected for a **major U.S. Tier-1 Commercial & Investment B
 | **Slippage** | The negative price difference between the exchange rate available when a client order arrives and the actual rate achieved after routing delays, last-look rejections, or market movement across fragmented venues. |
 | **Smart Order Routing (SOR)** | An automated, policy-driven decision engine that acts like an electronic chief dealer—filtering out ineligible or credit-capped LPs, penalizing LPs with high rejection rates, checking if the bank can match the trade internally against opposing client flow, and splitting large institutional orders across multiple LPs to achieve the best all-in execution. |
 
-## ---
-
 **1\. Business Context & Problem Statement**
 
 As a **major U.S. Tier-1 Commercial & Investment Bank**, our electronic FX (eFX) franchise processes tens of billions of dollars in daily client volume—ranging from automated corporate treasury hedging and cross-border payroll settlements to institutional block executions.  
@@ -42,8 +40,6 @@ Relying on static routing tables—where orders for a given currency pair are al
 
 The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenges by evaluating every incoming order in real time against market microstructure regimes, bilateral credit limits, historical LP fill quality, and client tiering policies before executing on the optimal venue(s).
 
-## ---
-
 **2\. Strategic Value & Business Outcomes**
 
 | Strategic Pillar | Business Impact for the Bank | Target Operational Benchmark |
@@ -53,8 +49,6 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
 | **Low-Latency Decisioning** | Real-time rule qualification and composite LP ranking without blocking I/O | **\< 5 ms** internal decisioning (p99); **\< 15 ms** end-to-end |
 | **Business Agility** | New York & London eFX desks adjust weights and session guardrails declaratively | **\< 5 minutes** zero-downtime policy updates (vs. multi-week release cycles) |
 | **Regulatory Provenance** | Captures an immutable explainability trace for every routing decision | **100%** compliance with **FX Global Code**, **Dodd-Frank**, and **MiFID II RTS-27/28** |
-
-## ---
 
 **3\. Core Domain Capabilities**
 
@@ -67,8 +61,6 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
   * *Deterministic Failover:* Automatically cascades unfilled or rejected remainders to backup LPs within the order's slippage budget.  
 > * **Internalization vs. External Hedging:** Qualifies whether incoming client flow can be safely internalized against the bank's own principal inventory book before hedging externally in the interbank market.  
 > * **STP vs. Dealing Desk Escalation:** Routes compliant flow straight through while escalating fat-finger orders, restricted emerging-market currencies, or zero-liquidity exceptions to human dealers with full diagnostic context.
-
-## ---
 
 **4\. Enterprise Architecture Blueprint**
 
@@ -101,8 +93,6 @@ The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Archi
 \|          In-Memory Hot Rule Cache \-\> Distributed Credit State \-\> Audit Stream \|  
 \+-------------------------------------------------------------------------------+
 
-## ---
-
 **5\. Technology & Resilience Pillars**
 
 > * **High-Throughput Concurrency (Java 21 Virtual Threads):** Combines imperative, readable business task pipelines with non-blocking I/O scalability for parallel market-data and credit-limit enrichment.  
@@ -111,8 +101,6 @@ The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Archi
   * *L1 Local Memory (Caffeine):* Sub-microsecond access to compiled rule sets, session calendars, and client tier schedules with event-driven cross-node invalidation.  
   * *L2 Distributed State (Redis / Lettuce):* Atomic, consistent tracking of real-time bilateral credit utilization, rolling LP fill telemetry, and idempotency keys.  
 > * **Fault Isolation & Circuit Breaking (Resilience4j):** Protects the routing core from degraded external venues using semaphore bulkheads, strict latency budgets, and automated circuit breakers.
-
-## ---
 
 **6\. Governance & Documentation**
 

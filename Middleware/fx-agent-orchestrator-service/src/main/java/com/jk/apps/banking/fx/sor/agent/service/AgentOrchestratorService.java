@@ -4,17 +4,29 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.agent.dto.AgentAcceptedResponse;
 import com.jk.apps.banking.fx.sor.agent.dto.BackpressureAssessRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.BestExecutionExplainRequest;
 import com.jk.apps.banking.fx.sor.agent.dto.BlastRadiusAnalyzeRequest;
 import com.jk.apps.banking.fx.sor.agent.dto.ChaosSimExecuteRequest;
 import com.jk.apps.banking.fx.sor.agent.dto.IncidentRcaInvestigateRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.LpToxicityDetectRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.MacroGuardAssessRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.PolicyAuthoringRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.RegulatoryRagAskRequest;
+import com.jk.apps.banking.fx.sor.agent.dto.TreasuryHedgeCopilotRequest;
 import com.jk.apps.banking.fx.sor.agent.metrics.ServiceMetrics;
 import com.jk.apps.banking.fx.sor.agent.persistence.entity.AgentRunLog;
 import com.jk.apps.banking.fx.sor.agent.persistence.repo.AgentRunLogRepository;
 import com.jk.apps.banking.fx.sor.agent.service.workflow.AgentWorkflowResult;
 import com.jk.apps.banking.fx.sor.agent.service.workflow.BackpressureAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.BestExecutionAgentWorkflow;
 import com.jk.apps.banking.fx.sor.agent.service.workflow.BlastRadiusAgentWorkflow;
 import com.jk.apps.banking.fx.sor.agent.service.workflow.ChaosSimAgentWorkflow;
 import com.jk.apps.banking.fx.sor.agent.service.workflow.IncidentRcaAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.LpToxicityAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.MacroGuardAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.PolicyAuthoringAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.RegulatoryRagAgentWorkflow;
+import com.jk.apps.banking.fx.sor.agent.service.workflow.TreasuryHedgeAgentWorkflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,6 +49,12 @@ public class AgentOrchestratorService {
     private final BackpressureAgentWorkflow backpressureAgentWorkflow;
     private final IncidentRcaAgentWorkflow incidentRcaAgentWorkflow;
     private final ChaosSimAgentWorkflow chaosSimAgentWorkflow;
+    private final PolicyAuthoringAgentWorkflow policyAuthoringAgentWorkflow;
+    private final LpToxicityAgentWorkflow lpToxicityAgentWorkflow;
+    private final BestExecutionAgentWorkflow bestExecutionAgentWorkflow;
+    private final TreasuryHedgeAgentWorkflow treasuryHedgeAgentWorkflow;
+    private final RegulatoryRagAgentWorkflow regulatoryRagAgentWorkflow;
+    private final MacroGuardAgentWorkflow macroGuardAgentWorkflow;
 
     public AgentOrchestratorService(
             AgentRunLogRepository repository,
@@ -45,7 +63,13 @@ public class AgentOrchestratorService {
             BlastRadiusAgentWorkflow blastRadiusAgentWorkflow,
             BackpressureAgentWorkflow backpressureAgentWorkflow,
             IncidentRcaAgentWorkflow incidentRcaAgentWorkflow,
-            ChaosSimAgentWorkflow chaosSimAgentWorkflow) {
+            ChaosSimAgentWorkflow chaosSimAgentWorkflow,
+            PolicyAuthoringAgentWorkflow policyAuthoringAgentWorkflow,
+            LpToxicityAgentWorkflow lpToxicityAgentWorkflow,
+            BestExecutionAgentWorkflow bestExecutionAgentWorkflow,
+            TreasuryHedgeAgentWorkflow treasuryHedgeAgentWorkflow,
+            RegulatoryRagAgentWorkflow regulatoryRagAgentWorkflow,
+            MacroGuardAgentWorkflow macroGuardAgentWorkflow) {
         this.repository = repository;
         this.objectMapper = objectMapper;
         this.metrics = metrics;
@@ -53,6 +77,12 @@ public class AgentOrchestratorService {
         this.backpressureAgentWorkflow = backpressureAgentWorkflow;
         this.incidentRcaAgentWorkflow = incidentRcaAgentWorkflow;
         this.chaosSimAgentWorkflow = chaosSimAgentWorkflow;
+        this.policyAuthoringAgentWorkflow = policyAuthoringAgentWorkflow;
+        this.lpToxicityAgentWorkflow = lpToxicityAgentWorkflow;
+        this.bestExecutionAgentWorkflow = bestExecutionAgentWorkflow;
+        this.treasuryHedgeAgentWorkflow = treasuryHedgeAgentWorkflow;
+        this.regulatoryRagAgentWorkflow = regulatoryRagAgentWorkflow;
+        this.macroGuardAgentWorkflow = macroGuardAgentWorkflow;
     }
 
     @Transactional
@@ -90,6 +120,63 @@ public class AgentOrchestratorService {
     }
 
     @Transactional
+    public AgentAcceptedResponse generatePolicy(PolicyAuthoringRequest request) {
+        enforceLiveMutationGate(request.isDryRun(), request.getApprovalToken());
+        return acceptAndRun(
+                "POLICY_AUTHORING",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> policyAuthoringAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
+    public AgentAcceptedResponse detectLpToxicity(LpToxicityDetectRequest request) {
+        return acceptAndRun(
+                "LP_TOXICITY",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> lpToxicityAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
+    public AgentAcceptedResponse explainBestExecution(BestExecutionExplainRequest request) {
+        return acceptAndRun(
+                "BEST_EXECUTION",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> bestExecutionAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
+    public AgentAcceptedResponse treasuryHedgeCopilot(TreasuryHedgeCopilotRequest request) {
+        enforceLiveMutationGate(request.isDryRun(), request.getApprovalToken());
+        return acceptAndRun(
+                "TREASURY_HEDGE",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> treasuryHedgeAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
+    public AgentAcceptedResponse askRegulatoryRag(RegulatoryRagAskRequest request) {
+        return acceptAndRun(
+                "REGULATORY_RAG",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> regulatoryRagAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
     public AgentAcceptedResponse executeChaosSim(ChaosSimExecuteRequest request) {
         return acceptAndRun(
                 "CHAOS_SIM",
@@ -97,6 +184,17 @@ public class AgentOrchestratorService {
                 request.getApprovalToken(),
                 request,
                 () -> chaosSimAgentWorkflow.execute(request)
+        );
+    }
+
+    @Transactional
+    public AgentAcceptedResponse assessMacroGuard(MacroGuardAssessRequest request) {
+        return acceptAndRun(
+                "MACRO_GUARD",
+                request.isDryRun(),
+                request.getApprovalToken(),
+                request,
+                () -> macroGuardAgentWorkflow.execute(request)
         );
     }
 

@@ -2,6 +2,10 @@ package com.jk.apps.banking.fx.sor.agent.service.workflow;
 
 import com.jk.apps.banking.fx.sor.agent.client.TopologyMcpClient;
 import com.jk.apps.banking.fx.sor.agent.dto.ChaosSimExecuteRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.ChatModelGateway;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionResponse;
+import com.jk.apps.banking.fx.sor.agent.llm.ModelTier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +17,11 @@ import java.util.Map;
 public class ChaosSimAgentWorkflow {
 
     private final TopologyMcpClient mcpClient;
+    private final ChatModelGateway chatModelGateway;
 
-    public ChaosSimAgentWorkflow(TopologyMcpClient mcpClient) {
+    public ChaosSimAgentWorkflow(TopologyMcpClient mcpClient, ChatModelGateway chatModelGateway) {
         this.mcpClient = mcpClient;
+        this.chatModelGateway = chatModelGateway;
     }
 
     public AgentWorkflowResult execute(ChaosSimExecuteRequest request) {
@@ -47,6 +53,15 @@ public class ChaosSimAgentWorkflow {
                 "dryRun", request.isDryRun()
         )));
 
+        LlmCompletionResponse llm = chatModelGateway.complete(new LlmCompletionRequest(
+                "Plan synthetic chaos / skewed load for ccyPair="
+                        + (request.getCcyPair() == null ? "EURUSD" : request.getCcyPair())
+                        + " targetRps=" + (request.getTargetRps() == null ? 50_000 : request.getTargetRps()),
+                "You are a synthetic chaos and skewed load-generator agent.",
+                ModelTier.FAST,
+                0.2
+        ));
+
         Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("agent", "CHAOS_SIM");
         summary.put("dryRun", request.isDryRun());
@@ -57,6 +72,9 @@ public class ChaosSimAgentWorkflow {
                 "trigger_skewed_load_sim",
                 "poll_workflow_status"
         ));
+        summary.put("llmProvider", llm.provider());
+        summary.put("modelId", llm.modelId());
+        summary.put("llmContent", llm.content());
         summary.put("note", "Staging-only chaos; dryRun=true by default (ADR-032)");
         return new AgentWorkflowResult(invocations, summary);
     }

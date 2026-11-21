@@ -2,6 +2,10 @@ package com.jk.apps.banking.fx.sor.agent.service.workflow;
 
 import com.jk.apps.banking.fx.sor.agent.client.TopologyMcpClient;
 import com.jk.apps.banking.fx.sor.agent.dto.BlastRadiusAnalyzeRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.ChatModelGateway;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionResponse;
+import com.jk.apps.banking.fx.sor.agent.llm.ModelTier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +17,11 @@ import java.util.Map;
 public class BlastRadiusAgentWorkflow {
 
     private final TopologyMcpClient mcpClient;
+    private final ChatModelGateway chatModelGateway;
 
-    public BlastRadiusAgentWorkflow(TopologyMcpClient mcpClient) {
+    public BlastRadiusAgentWorkflow(TopologyMcpClient mcpClient, ChatModelGateway chatModelGateway) {
         this.mcpClient = mcpClient;
+        this.chatModelGateway = chatModelGateway;
     }
 
     public AgentWorkflowResult execute(BlastRadiusAnalyzeRequest request) {
@@ -41,6 +47,14 @@ public class BlastRadiusAgentWorkflow {
         }
         invocations.add(mcpClient.invokeTool("diff_topology_snapshots", diffPayload));
 
+        LlmCompletionResponse llm = chatModelGateway.complete(new LlmCompletionRequest(
+                "Summarize blast-radius risk for service=" + nullToEmpty(request.getServiceName())
+                        + " ccyPair=" + nullToEmpty(request.getCcyPair()),
+                "You are an FX SOR blast-radius pre-change guard agent.",
+                ModelTier.FAST,
+                0.2
+        ));
+
         Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("agent", "BLAST_RADIUS");
         summary.put("dryRun", request.isDryRun());
@@ -51,6 +65,9 @@ public class BlastRadiusAgentWorkflow {
                 "calculate_blast_radius",
                 "diff_topology_snapshots"
         ));
+        summary.put("llmProvider", llm.provider());
+        summary.put("modelId", llm.modelId());
+        summary.put("llmContent", llm.content());
         summary.put("note", "Manual pre-change validation; live mutations require dryRun=false + approvalToken");
         return new AgentWorkflowResult(invocations, summary);
     }

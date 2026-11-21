@@ -2,6 +2,10 @@ package com.jk.apps.banking.fx.sor.agent.service.workflow;
 
 import com.jk.apps.banking.fx.sor.agent.client.TopologyMcpClient;
 import com.jk.apps.banking.fx.sor.agent.dto.BackpressureAssessRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.ChatModelGateway;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionResponse;
+import com.jk.apps.banking.fx.sor.agent.llm.ModelTier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +17,11 @@ import java.util.Map;
 public class BackpressureAgentWorkflow {
 
     private final TopologyMcpClient mcpClient;
+    private final ChatModelGateway chatModelGateway;
 
-    public BackpressureAgentWorkflow(TopologyMcpClient mcpClient) {
+    public BackpressureAgentWorkflow(TopologyMcpClient mcpClient, ChatModelGateway chatModelGateway) {
         this.mcpClient = mcpClient;
+        this.chatModelGateway = chatModelGateway;
     }
 
     public AgentWorkflowResult execute(BackpressureAssessRequest request) {
@@ -34,6 +40,14 @@ public class BackpressureAgentWorkflow {
                 "approvalToken", nullToEmpty(request.getApprovalToken())
         )));
 
+        LlmCompletionResponse llm = chatModelGateway.complete(new LlmCompletionRequest(
+                "Assess Kafka lag / backpressure for consumerGroup=" + nullToEmpty(request.getConsumerGroup())
+                        + " service=" + nullToEmpty(request.getServiceName()),
+                "You are an FX SOR backpressure remediation agent.",
+                ModelTier.VOLUME,
+                0.2
+        ));
+
         Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("agent", "BACKPRESSURE");
         summary.put("dryRun", request.isDryRun());
@@ -45,6 +59,9 @@ public class BackpressureAgentWorkflow {
                 "get_pod_zgc_and_cpu_metrics",
                 "recommend_or_apply_scaling"
         ));
+        summary.put("llmProvider", llm.provider());
+        summary.put("modelId", llm.modelId());
+        summary.put("llmContent", llm.content());
         summary.put("recommendation", request.isDryRun()
                 ? "DRY_RUN: scaling recommendation only; no cluster mutation"
                 : "LIVE: applyScaling gated by approvalToken");

@@ -2,6 +2,10 @@ package com.jk.apps.banking.fx.sor.agent.service.workflow;
 
 import com.jk.apps.banking.fx.sor.agent.client.TopologyMcpClient;
 import com.jk.apps.banking.fx.sor.agent.dto.IncidentRcaInvestigateRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.ChatModelGateway;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionRequest;
+import com.jk.apps.banking.fx.sor.agent.llm.LlmCompletionResponse;
+import com.jk.apps.banking.fx.sor.agent.llm.ModelTier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,9 +17,11 @@ import java.util.Map;
 public class IncidentRcaAgentWorkflow {
 
     private final TopologyMcpClient mcpClient;
+    private final ChatModelGateway chatModelGateway;
 
-    public IncidentRcaAgentWorkflow(TopologyMcpClient mcpClient) {
+    public IncidentRcaAgentWorkflow(TopologyMcpClient mcpClient, ChatModelGateway chatModelGateway) {
         this.mcpClient = mcpClient;
+        this.chatModelGateway = chatModelGateway;
     }
 
     public AgentWorkflowResult execute(IncidentRcaInvestigateRequest request) {
@@ -43,6 +49,15 @@ public class IncidentRcaAgentWorkflow {
         }
         invocations.add(mcpClient.invokeTool("propose_or_execute_lp_halt", haltPayload));
 
+        LlmCompletionResponse llm = chatModelGateway.complete(new LlmCompletionRequest(
+                "Produce incident RCA narrative for service=" + nullToEmpty(request.getServiceName())
+                        + " lpId=" + nullToEmpty(request.getLpId())
+                        + " ccyPair=" + nullToEmpty(request.getCcyPair()),
+                "You are a 3:00 AM FX incident time-travel RCA agent.",
+                ModelTier.REASONING,
+                0.2
+        ));
+
         Map<String, Object> summary = new LinkedHashMap<>();
         summary.put("agent", "INCIDENT_RCA");
         summary.put("dryRun", request.isDryRun());
@@ -53,6 +68,9 @@ public class IncidentRcaAgentWorkflow {
                 "get_ipc_edge_health",
                 "propose_or_execute_lp_halt"
         ));
+        summary.put("llmProvider", llm.provider());
+        summary.put("modelId", llm.modelId());
+        summary.put("llmContent", llm.content());
         summary.put("governance", "ADR-032: live LP halt requires dryRun=false + Maker-Checker approvalToken");
         return new AgentWorkflowResult(invocations, summary);
     }

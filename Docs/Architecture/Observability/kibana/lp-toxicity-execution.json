@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "id": "fx-sor-lp-toxicity-execution",
+    "title": "FX SOR — LP Toxicity & Execution View",
+    "description": "Per-LP last-look rejection, hold latency heatmap, spread vs slippage, circuit-breaker states.",
+    "indexPattern": "fx-sor-exec-*",
+    "panels": [
+      {
+        "id": "last-look-rejection-rate",
+        "type": "data_table",
+        "groupBy": ["lp_id", "ccy_pair", "session_regime"],
+        "metrics": [
+          { "name": "last_look_reject_pct", "formula": "rejects / attempts * 100" }
+        ]
+      },
+      {
+        "id": "hold-latency-heatmap",
+        "type": "heatmap",
+        "x": "lp_id",
+        "y": "ccy_pair",
+        "value": "hold_latency_ms",
+        "alertThresholdMs": 50
+      },
+      {
+        "id": "spread-vs-slippage",
+        "type": "line",
+        "series": ["spread_capture_bps", "slippage_bps"],
+        "dimensions": ["ccy_pair"],
+        "pairs": 28
+      },
+      {
+        "id": "circuit-breaker-transitions",
+        "type": "timeline",
+        "field": "resilience4j.circuitbreaker.state",
+        "states": ["CLOSED", "OPEN", "HALF_OPEN"]
+      }
+    ]
+  }
+}

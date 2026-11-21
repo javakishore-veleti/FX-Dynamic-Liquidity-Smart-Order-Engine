@@ -7,6 +7,7 @@ import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.QuoteTickEvent;
 import com.jk.apps.banking.fx.sor.quote.dto.RateSnapshotResponse;
 import com.jk.apps.banking.fx.sor.quote.entity.ClientTierSpreadSchedule;
+import com.jk.apps.banking.fx.sor.quote.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.quote.metrics.ServiceMetrics;
 import com.jk.apps.banking.fx.sor.quote.repository.ClientTierSpreadScheduleRepository;
 import jakarta.annotation.PostConstruct;
@@ -18,9 +19,12 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
@@ -29,18 +33,24 @@ public class QuoteService {
 
     private static final String DEFAULT_REGIME = "LONDON_NY_OVERLAP";
     private static final long DEFAULT_TTL_MS = 2_000L;
+    private static final String TOPIC_REGIME_SHIFTED = "fx.quote.regime-shifted.v1";
+    private static final String TOPIC_STALE_FEED = "fx.quote.stale-feed-detected.v1";
 
     private final ClientTierSpreadScheduleRepository scheduleRepository;
     private final QuoteBookCache quoteBookCache;
     private final ServiceMetrics metrics;
+    private final DomainEventPublisher domainEvents;
+    private final AtomicReference<String> lastObservedRegime = new AtomicReference<>();
 
     public QuoteService(
             ClientTierSpreadScheduleRepository scheduleRepository,
             QuoteBookCache quoteBookCache,
-            ServiceMetrics metrics) {
+            ServiceMetrics metrics,
+            DomainEventPublisher domainEvents) {
         this.scheduleRepository = scheduleRepository;
         this.quoteBookCache = quoteBookCache;
         this.metrics = metrics;
+        this.domainEvents = domainEvents;
     }
 
     @PostConstruct
@@ -68,6 +78,7 @@ public class QuoteService {
         String regime = currentSessionRegime();
 
         BigDecimal markup = resolveMarkup(tier, ccyPair, regime);
+        maybeEmitRegimeShift(ccyPair, regime, markup);
         TopOfBook tob = topOfBook(ccyPair);
         BigDecimal raw = "SELL".equals(side) ? tob.bid() : tob.ask();
         BigDecimal adjustment = raw.multiply(markup)
@@ -98,6 +109,7 @@ public class QuoteService {
         String regime = currentSessionRegime();
         List<String> pairs = parsePairs(ccyPairs);
         BigDecimal markup = resolveMarkup(tier, pairs.getFirst(), regime);
+        maybeEmitRegimeShift(pairs.getFirst(), regime, markup);
         long now = Instant.now().toEpochMilli();
         List<QuoteTickEvent> ticks = new ArrayList<>();
         for (String pair : pairs) {
@@ -134,6 +146,7 @@ public class QuoteService {
             // refresh stale seed quotes so local demos keep streaming
             for (LpQuote q : quotes) {
                 if (q.isStale(now)) {
+                    emitStaleFeed(q, now);
                     quoteBookCache.put(new LpQuote(
                             q.getCcyPair(), q.getLpId(), q.getBid(), q.getAsk(),
                             q.getAvailableSize(), now, DEFAULT_TTL_MS));
@@ -142,6 +155,33 @@ public class QuoteService {
             fresh = quoteBookCache.getByCcyPair(ccyPair);
         }
         return fresh;
+    }
+
+    private void maybeEmitRegimeShift(String ccyPair, String activeRegime, BigDecimal spreadMultiplier) {
+        String previous = lastObservedRegime.getAndSet(activeRegime);
+        if (previous == null || previous.equals(activeRegime)) {
+            return;
+        }
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("ccyPair", ccyPair);
+        payload.put("previousRegime", previous);
+        payload.put("activeRegime", activeRegime);
+        payload.put("spreadMultiplier", spreadMultiplier);
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_REGIME_SHIFTED, payload);
+    }
+
+    private void emitStaleFeed(LpQuote quote, long nowMs) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("lpId", quote.getLpId());
+        payload.put("ccyPair", quote.getCcyPair());
+        payload.put("lastQuoteTs", Instant.ofEpochMilli(quote.getQuoteTs()).toString());
+        payload.put("ageMs", nowMs - quote.getQuoteTs());
+        payload.put("thresholdMs", quote.getTtlMs());
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_STALE_FEED, payload);
     }
 
     private TopOfBook topOfBook(String ccyPair) {

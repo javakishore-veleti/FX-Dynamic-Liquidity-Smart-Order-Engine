@@ -1,0 +1,39 @@
+{
+  "dashboard": {
+    "id": "fx-sor-regulatory-provenance-admin-audit",
+    "title": "FX SOR — Regulatory Provenance & Admin Audit",
+    "description": "Knock-out breakdown, desk escalations, Maker-Checker actions, wf_exec_log batches. Field masking per ADR-026.",
+    "indexPatterns": ["fx-sor-qual-*", "fx-sor-exec-*", "fx-sor-admin-*"],
+    "savedSearches": [
+      {
+        "id": "knockout-rule-breakdown",
+        "query": "event.topic: fx.qualify.venue-knockout.v1",
+        "columns": ["knockoutRuleCode", "ccyPair", "clientId", "escalatedToDesk", "@timestamp"]
+      },
+      {
+        "id": "desk-escalations",
+        "query": "escalatedToDesk:true AND ccyPair:(USDINR OR USDBRL OR *)",
+        "columns": ["ccyPair", "clientOrderId", "knockoutRuleCode", "@timestamp"]
+      },
+      {
+        "id": "order-routed-provenance",
+        "query": "event.topic: fx.exec.order-routed-provenance.v1",
+        "columns": ["clientOrderId", "winningLpId", "slippageBps", "droolsRuleVersion", "internalized"]
+      },
+      {
+        "id": "admin-maker-checker",
+        "query": "event.topic: fx.admin.policy-or-override-applied.v1",
+        "columns": ["wfExecId", "actionType", "targetResource", "approvedBy", "diffSummary"]
+      },
+      {
+        "id": "wf-exec-log-batches",
+        "query": "event.topic: fx.admin.synthetic-workflow-completed.v1",
+        "columns": ["wfExecId", "workflowType", "batchesCompleted", "recordsInserted", "durationMs"]
+      }
+    ],
+    "security": {
+      "fieldMasking": ["spread_bps", "pci_pan_token"],
+      "reference": "ADR-026"
+    }
+  }
+}

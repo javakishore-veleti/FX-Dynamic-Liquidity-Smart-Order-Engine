@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "id": "fx-sor-jvm-zgc-virtual-threads",
+    "title": "FX SOR — JVM ZGC, Virtual Threads & Kernel Backpressure",
+    "description": "Generational ZGC pauses, VT pinning, Redis Lua, Kafka lag, topology graph lag.",
+    "sources": ["Metricbeat JVM", "Elastic APM", "Prometheus remote-write", "fx-topology-service"],
+    "panels": [
+      {
+        "id": "zgc-pause-duration",
+        "type": "timeseries",
+        "metric": "jvm.gc.pause.duration",
+        "collector": "Generational ZGC",
+        "targetMs": 1.0
+      },
+      {
+        "id": "heap-allocation-rate",
+        "type": "timeseries",
+        "metric": "jvm.memory.allocation.rate"
+      },
+      {
+        "id": "vt-carrier-pinning",
+        "type": "annotation_log",
+        "metric": "jdk.VirtualThreadPinned",
+        "severity": "WARN"
+      },
+      {
+        "id": "redis-lua-latency",
+        "type": "heatmap",
+        "metric": "redis.lua.latency_ms"
+      },
+      {
+        "id": "kafka-consumer-lag",
+        "type": "bar",
+        "metric": "kafka.consumer.lag",
+        "stages": ["stage-1", "stage-2", "stage-3"]
+      },
+      {
+        "id": "topology-graph-lag",
+        "type": "gauge",
+        "metric": "fx.topology.graph.lag_ms",
+        "service": "fx-topology-service"
+      }
+    ]
+  }
+}

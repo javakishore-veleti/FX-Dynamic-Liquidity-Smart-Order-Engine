@@ -18,6 +18,7 @@ import com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyIpcEdgeRepo
 import com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyNetworkEdgeRepository;
 import com.jk.apps.banking.fx.sor.topology.domain.repository.TopologySnapshotRepository;
 import com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyTraceOutlierRepository;
+import com.jk.apps.banking.fx.sor.topology.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.topology.metrics.ServiceMetrics;
 import io.micrometer.core.instrument.Timer;
 import org.springframework.stereotype.Service;
@@ -28,32 +29,41 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 public class TopologyQueryService {
 
+    private static final String TOPIC_BLAST_RADIUS = "fx.topology.blast-radius-alert.v1";
+    private static final double DEGRADED_P99_MS = 10.0;
+
     private final TopologyNetworkEdgeRepository networkEdgeRepository;
     private final TopologyIpcEdgeRepository ipcEdgeRepository;
     private final TopologyTraceOutlierRepository traceOutlierRepository;
     private final TopologySnapshotRepository snapshotRepository;
     private final ServiceMetrics metrics;
+    private final DomainEventPublisher domainEvents;
 
     public TopologyQueryService(TopologyNetworkEdgeRepository networkEdgeRepository,
                                 TopologyIpcEdgeRepository ipcEdgeRepository,
                                 TopologyTraceOutlierRepository traceOutlierRepository,
                                 TopologySnapshotRepository snapshotRepository,
-                                ServiceMetrics metrics) {
+                                ServiceMetrics metrics,
+                                DomainEventPublisher domainEvents) {
         this.networkEdgeRepository = networkEdgeRepository;
         this.ipcEdgeRepository = ipcEdgeRepository;
         this.traceOutlierRepository = traceOutlierRepository;
         this.snapshotRepository = snapshotRepository;
         this.metrics = metrics;
+        this.domainEvents = domainEvents;
     }
 
     public NetworkGraphResponse networkGraph(String service, int depth) {
@@ -120,6 +130,7 @@ public class TopologyQueryService {
             impacted.remove(serviceName);
 
             metrics.blastRadiusQueries().increment();
+            maybeEmitBlastRadiusFromIpc(serviceName, ipc, impacted);
             return new BlastRadiusResponse(
                     serviceName,
                     request.ccyPair(),
@@ -151,6 +162,16 @@ public class TopologyQueryService {
             Integer delta = (fromEdges == null || toEdges == null) ? null : toEdges - fromEdges;
 
             metrics.topologyDiffQueries().increment();
+            if (!added.isEmpty() || (delta != null && delta > 0)) {
+                String source = fromSnap == null ? "unknown" : fromSnap.getLayer();
+                String target = added.isEmpty() ? "edge-delta" : added.getFirst();
+                emitBlastRadiusAlert(
+                        source,
+                        target,
+                        fromSnap == null ? "EBPF" : fromSnap.getLayer(),
+                        delta == null ? 0.0 : delta.doubleValue(),
+                        List.copyOf(added.isEmpty() ? Set.of("DESK_FX_G10") : new LinkedHashSet<>(added)));
+            }
             return new TopologyDiffResponse(
                     from,
                     to,
@@ -163,6 +184,43 @@ public class TopologyQueryService {
         } finally {
             sample.stop(metrics.queryLatency());
         }
+    }
+
+    private void maybeEmitBlastRadiusFromIpc(
+            String serviceName, List<TopologyIpcEdge> ipc, Set<String> impacted) {
+        for (TopologyIpcEdge edge : ipc) {
+            Double p99 = edge.getP99Ms();
+            if (p99 == null || p99 < DEGRADED_P99_MS) {
+                continue;
+            }
+            List<String> desks = edge.getDeskOwner() == null || edge.getDeskOwner().isBlank()
+                    ? List.of("DESK_FX_G10")
+                    : List.of(edge.getDeskOwner());
+            emitBlastRadiusAlert(
+                    edge.getSrcService() == null ? serviceName : edge.getSrcService(),
+                    edge.getDstService() == null ? "unknown" : edge.getDstService(),
+                    "IPC",
+                    p99,
+                    desks.isEmpty() ? List.copyOf(impacted) : desks);
+            break;
+        }
+    }
+
+    private void emitBlastRadiusAlert(
+            String sourceService,
+            String targetService,
+            String layer,
+            double p99DeltaMs,
+            List<String> affectedDeskOwners) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("sourceService", sourceService);
+        payload.put("targetService", targetService);
+        payload.put("layer", layer);
+        payload.put("p99DeltaMs", p99DeltaMs);
+        payload.put("affectedDeskOwners", affectedDeskOwners);
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_BLAST_RADIUS, payload);
     }
 
     private TopologySnapshot nearestAtOrBefore(Instant ts) {

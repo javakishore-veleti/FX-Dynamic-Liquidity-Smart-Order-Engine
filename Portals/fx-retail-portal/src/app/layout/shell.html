@@ -1,0 +1,52 @@
+<div class="fx-shell">
+  <aside class="fx-sidebar">
+    <div class="fx-brand">
+      <div class="fx-brand-mark"><i class="bi bi-globe2"></i></div>
+      <div>
+        <p class="fx-brand-title">FX Retail</p>
+        <p class="fx-brand-sub">Remit · Travel · Wealth</p>
+      </div>
+    </div>
+
+    <nav class="nav flex-column fx-nav">
+      @for (item of nav; track item.path) {
+        <a class="nav-link" [routerLink]="item.path" routerLinkActive="active">
+          <i [class]="'bi ' + item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="mt-auto px-2 pt-3" style="opacity: 0.85; font-size: 0.78rem">
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="badge rounded-pill" style="background:#e07a5f;color:#fff">RETAIL</span>
+        <span>Transparent all-in rates</span>
+      </div>
+      <div>Quote edge · netted retail flow</div>
+    </div>
+  </aside>
+
+  <div class="fx-main">
+    <header class="fx-topbar">
+      <div>
+        <div class="fw-bold" style="color: var(--fx-ink)">Smart Transfer Workspace</div>
+        <div class="small" style="color: var(--fx-ink-soft)">
+          Rate locks · fee clarity · cross-border tracking
+        </div>
+      </div>
+      <ul class="navbar-nav flex-row gap-1 align-items-center mb-0">
+        @for (link of topLinks; track link.path) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+          </li>
+        }
+        <li class="nav-item ms-2">
+          <a routerLink="/convert" class="btn btn-coral btn-sm"><i class="bi bi-send me-1"></i>Send money</a>
+        </li>
+      </ul>
+    </header>
+    <main class="fx-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

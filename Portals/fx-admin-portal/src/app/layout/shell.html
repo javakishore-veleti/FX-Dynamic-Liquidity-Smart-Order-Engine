@@ -1,0 +1,54 @@
+<div class="fx-shell">
+  <aside class="fx-sidebar">
+    <div class="fx-brand">
+      <div class="fx-brand-mark"><i class="bi bi-hexagon-fill"></i></div>
+      <div>
+        <p class="fx-brand-title">FX Admin</p>
+        <p class="fx-brand-sub">Dealing Desk · SRE · Risk</p>
+      </div>
+    </div>
+
+    <nav class="nav flex-column fx-nav">
+      @for (item of nav; track item.path) {
+        <a
+          class="nav-link"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+        >
+          <i [class]="'bi ' + item.icon"></i>
+          <span>{{ item.label }}</span>
+        </a>
+      }
+    </nav>
+
+    <div class="mt-auto px-2 pt-3" style="opacity: 0.85; font-size: 0.78rem">
+      <div class="d-flex align-items-center gap-2 mb-1">
+        <span class="badge rounded-pill" style="background:#f4c95f;color:#0a3d5c">PROD</span>
+        <span>H2 default · OTEL ready</span>
+      </div>
+      <div>Admin API :8084 · Topology :8085</div>
+    </div>
+  </aside>
+
+  <div class="fx-main">
+    <header class="fx-topbar">
+      <div>
+        <div class="fw-bold" style="color: var(--fx-ink)">Dynamic Liquidity Control Plane</div>
+        <div class="small" style="color: var(--fx-ink-soft)">Maker-checker gated actions · SSE agent stream</div>
+      </div>
+      <ul class="navbar-nav flex-row gap-1 align-items-center mb-0">
+        @for (link of topLinks; track link.path) {
+          <li class="nav-item">
+            <a class="nav-link" [routerLink]="link.path" routerLinkActive="active">{{ link.label }}</a>
+          </li>
+        }
+        <li class="nav-item ms-2">
+          <button class="btn btn-fx btn-sm"><i class="bi bi-bell me-1"></i>Alerts</button>
+        </li>
+      </ul>
+    </header>
+    <main class="fx-content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

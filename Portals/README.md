@@ -1,15 +1,35 @@
 # Portals
 
-Angular-based UI applications for the FX Dynamic Liquidity & Smart Order Routing Engine.
+Angular UI apps for the FX Dynamic Liquidity & Smart Order Routing Engine.
 
-Each portal is an independent Angular app under this directory (npm workspaces via the repo-root `package.json`). Portals call Middleware APIs over HTTP/WebSocket — they do **not** share Java source with Middleware modules.
+Each portal is an independent Angular app (npm workspaces via the repo-root `package.json`). Portals call Middleware APIs over HTTP/SSE — they do **not** share Java source with Middleware modules.
 
-## Planned portals
+Stack: **Angular 21** · **Bootstrap 5** · **Bootstrap Icons** · standalone components · left nav + top menu.
 
-| Portal | Purpose |
-| :--- | :--- |
-| `fx-dealer-desk-portal` | Dealer escalation, STP exceptions, routing diagnostics |
-| `fx-ops-control-portal` | Session calendars, policy maker-checker, LP health |
-| `fx-tca-portal` | Transaction cost analysis and best-execution provenance |
+## Apps
 
-Scaffold a portal with Angular CLI from this directory, then register it under the root npm workspaces.
+| Portal | Persona | Dev URL | Pages |
+| :--- | :--- | :--- | :--- |
+| `fx-admin-portal` | Dealing desk / SRE / risk | http://localhost:4201 | dashboard, topology, incident-rca, policy-studio, synthetic, agents, sre-dashboards |
+| `fx-corporate-portal` | Corporate treasury | http://localhost:4202 | dashboard, blotter, execution-copilot, exposures, tca, alerts |
+| `fx-retail-portal` | Retail / remittance | http://localhost:4203 | dashboard, convert, advisor, planner, tracker |
+
+## Run one portal
+
+```bash
+npm run run:portal:admin
+npm run run:portal:corporate
+npm run run:portal:retail
+```
+
+Or from each app directory: `npm start` (ports 4201 / 4202 / 4203).
+
+## Build all
+
+```bash
+npm run build:portals
+```
+
+## Spec
+
+`Docs/Specs/Angular-AI-Portals-Admin-Corporate-Retail-Spec.md`

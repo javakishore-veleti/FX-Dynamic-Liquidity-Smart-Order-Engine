@@ -39,6 +39,21 @@ fx:
     kafka-enabled: false
   mcp:
     base-url: ${FX_MCP_BASE_URL:http://localhost:8091}
+  llm:
+    provider: ${LLM_PROVIDER:LOCAL_OLLAMA}
+    bedrock:
+      region: ${BEDROCK_REGION:us-east-1}
+      reasoning-model: ${BEDROCK_REASONING_MODEL:us.anthropic.claude-3-7-sonnet-20250219-v1:0}
+      fast-model: ${BEDROCK_FAST_MODEL:us.amazon.nova-lite-v1:0}
+      embedding-model: ${BEDROCK_EMBEDDING_MODEL:amazon.titan-embed-text-v2:0}
+      guardrail-id: ${BEDROCK_GUARDRAIL_ID:}
+    huggingface:
+      endpoint-url: ${HF_ENDPOINT_URL:https://api-inference.huggingface.co}
+      reasoning-model: ${HF_REASONING_MODEL:Qwen/Qwen2.5-72B-Instruct}
+      embedding-model: ${HF_EMBEDDING_MODEL:BAAI/bge-m3}
+    local-ollama:
+      base-url: ${LOCAL_OLLAMA_BASE_URL:http://localhost:11434}
+      reasoning-model: ${LOCAL_REASONING_MODEL:qwen2.5:14b}
 
 management:
   endpoints:

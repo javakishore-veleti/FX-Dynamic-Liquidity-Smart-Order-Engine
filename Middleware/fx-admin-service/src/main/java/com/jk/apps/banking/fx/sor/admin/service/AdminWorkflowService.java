@@ -10,6 +10,7 @@ import com.jk.apps.banking.fx.sor.admin.dto.VenueHaltRequest;
 import com.jk.apps.banking.fx.sor.admin.dto.WorkflowAcceptedResponse;
 import com.jk.apps.banking.fx.sor.admin.dto.WorkflowStatusResponse;
 import com.jk.apps.banking.fx.sor.admin.entity.WfExecLog;
+import com.jk.apps.banking.fx.sor.admin.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.admin.metrics.ServiceMetrics;
 import com.jk.apps.banking.fx.sor.admin.repository.WfExecLogRepository;
 import java.time.Instant;
@@ -36,22 +37,27 @@ public class AdminWorkflowService {
             "BILATERAL_CREDIT",
             "LP_TELEMETRY",
             "EXECUTION_ORDERS");
+    private static final String TOPIC_POLICY_OVERRIDE = "fx.admin.policy-or-override-applied.v1";
+    private static final String TOPIC_SYNTHETIC_COMPLETED = "fx.admin.synthetic-workflow-completed.v1";
 
     private final WfExecLogRepository repository;
     private final ExecutorService workflowExecutor;
     private final ObjectMapper objectMapper;
     private final ServiceMetrics metrics;
+    private final DomainEventPublisher domainEvents;
     private final Set<UUID> cancelSignals = ConcurrentHashMap.newKeySet();
 
     public AdminWorkflowService(
             WfExecLogRepository repository,
             ExecutorService workflowExecutor,
             ObjectMapper objectMapper,
-            ServiceMetrics metrics) {
+            ServiceMetrics metrics,
+            DomainEventPublisher domainEvents) {
         this.repository = repository;
         this.workflowExecutor = workflowExecutor;
         this.objectMapper = objectMapper;
         this.metrics = metrics;
+        this.domainEvents = domainEvents;
     }
 
     public WorkflowAcceptedResponse generateSynthetic(SyntheticGenerateRequest request) {
@@ -150,6 +156,12 @@ public class AdminWorkflowService {
         WfExecLog log = createCompletedOps("CACHE_INVALIDATION", toJson(params), toJson(Map.of(
                 "action", "INVALIDATE",
                 "keys", request.getCacheKeys() == null ? List.of() : request.getCacheKeys())));
+        emitPolicyOrOverride(
+                log.getWfExecId(),
+                "CACHE_INVALIDATION",
+                "cache:" + (request.getCacheKeys() == null ? "ALL" : request.getCacheKeys()),
+                "ADMIN_API",
+                params.toString());
         return new WorkflowAcceptedResponse(log.getWfExecId(), log.getStatus(), log.getWorkflowType());
     }
 
@@ -163,6 +175,12 @@ public class AdminWorkflowService {
         WfExecLog log = createCompletedOps("CREDIT_OVERRIDE", toJson(params), toJson(Map.of(
                 "action", "CREDIT_OVERRIDE",
                 "diff", params)));
+        emitPolicyOrOverride(
+                log.getWfExecId(),
+                "CREDIT_OVERRIDE",
+                request.getClientId() + "/" + request.getCounterpartyLpId(),
+                "ADMIN_API",
+                params.toString());
         return new WorkflowAcceptedResponse(log.getWfExecId(), log.getStatus(), log.getWorkflowType());
     }
 
@@ -175,6 +193,12 @@ public class AdminWorkflowService {
         WfExecLog log = createCompletedOps("LP_KILL_SWITCH", toJson(params), toJson(Map.of(
                 "action", request.isHalt() ? "HALT" : "RESUME",
                 "lpId", lpId)));
+        emitPolicyOrOverride(
+                log.getWfExecId(),
+                request.isHalt() ? "LP_VENUE_HALT" : "LP_VENUE_RESUME",
+                lpId,
+                "ADMIN_API",
+                params.toString());
         return new WorkflowAcceptedResponse(log.getWfExecId(), log.getStatus(), log.getWorkflowType());
     }
 
@@ -300,7 +324,35 @@ public class AdminWorkflowService {
             log.setDurationMs(Math.max(0, now.toEpochMilli() - log.getStartedAt().toEpochMilli()));
             log.setErrorDetails(error);
             repository.save(log);
+            if ("COMPLETED".equals(status)) {
+                emitSyntheticWorkflowCompleted(log);
+            }
         });
+    }
+
+    private void emitPolicyOrOverride(
+            UUID wfExecId, String actionType, String targetResource, String approvedBy, String diffSummary) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("wfExecId", wfExecId.toString());
+        payload.put("actionType", actionType);
+        payload.put("targetResource", targetResource);
+        payload.put("approvedBy", approvedBy);
+        payload.put("diffSummary", diffSummary);
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_POLICY_OVERRIDE, payload);
+    }
+
+    private void emitSyntheticWorkflowCompleted(WfExecLog log) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("wfExecId", log.getWfExecId().toString());
+        payload.put("workflowType", log.getWorkflowType());
+        payload.put("batchesCompleted", log.getBatchesCompleted());
+        payload.put("recordsInserted", log.getRecordsInserted());
+        payload.put("durationMs", log.getDurationMs());
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_SYNTHETIC_COMPLETED, payload);
     }
 
     private void markCancelled(UUID wfExecId) {

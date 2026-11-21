@@ -56,6 +56,9 @@ yarn-error.log*
 dist/
 .angular/
 
+# Local process manager (middleware / portals start scripts)
+.local-run/
+
 # OS
 .DS_Store
 Thumbs.db

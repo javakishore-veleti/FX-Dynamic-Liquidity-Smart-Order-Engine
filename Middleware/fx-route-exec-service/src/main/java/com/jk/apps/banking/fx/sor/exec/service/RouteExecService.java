@@ -10,6 +10,7 @@ import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteRequest;
 import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteResponse;
 import com.jk.apps.banking.fx.sor.exec.entity.ChildVenueSplit;
 import com.jk.apps.banking.fx.sor.exec.entity.FxExecutionOrder;
+import com.jk.apps.banking.fx.sor.exec.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.exec.metrics.ServiceMetrics;
 import com.jk.apps.banking.fx.sor.exec.repository.ChildVenueSplitRepository;
 import com.jk.apps.banking.fx.sor.exec.repository.FxExecutionOrderRepository;
@@ -18,8 +19,10 @@ import java.math.RoundingMode;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -33,21 +36,26 @@ public class RouteExecService {
     private static final List<String> RANKED_LPS = List.of("LP_CITI", "LP_JPM", "LP_GS");
     private static final String RULE_VERSION = "LP_SCORE_v1.0";
     private static final BigDecimal INTERNALIZE_THRESHOLD = new BigDecimal("1000000");
+    private static final String TOPIC_ORDER_ROUTED = "fx.exec.order-routed-provenance.v1";
+    private static final String TOPIC_LAST_LOOK_FAILOVER = "fx.exec.last-look-failover.v1";
 
     private final FxExecutionOrderRepository orderRepository;
     private final ChildVenueSplitRepository splitRepository;
     private final IdempotencyStore idempotencyStore;
     private final ServiceMetrics metrics;
+    private final DomainEventPublisher domainEvents;
 
     public RouteExecService(
             FxExecutionOrderRepository orderRepository,
             ChildVenueSplitRepository splitRepository,
             IdempotencyStore idempotencyStore,
-            ServiceMetrics metrics) {
+            ServiceMetrics metrics,
+            DomainEventPublisher domainEvents) {
         this.orderRepository = orderRepository;
         this.splitRepository = splitRepository;
         this.idempotencyStore = idempotencyStore;
         this.metrics = metrics;
+        this.domainEvents = domainEvents;
     }
 
     @Transactional
@@ -106,6 +114,7 @@ public class RouteExecService {
 
         idempotencyStore.complete(clientOrderId, new IdempotencyRecord("FILLED", provisionalId, rate));
         metrics.auditEventsPublished().increment();
+        emitOrderRoutedProvenance(order, splits, internalize);
 
         return toExecuteResponse(order, splits, false);
     }
@@ -145,6 +154,8 @@ public class RouteExecService {
         order.setStatus("PARTIAL_FILLED".equals(order.getStatus()) ? "FILLED" : "FILLED");
         order.setExecutionMode("MULTI_LP_SWEEP");
         orderRepository.save(order);
+
+        emitLastLookFailover(orderId, request, backupLp, reroute);
 
         FailoverResponse response = new FailoverResponse();
         response.setOrderId(orderId);
@@ -261,5 +272,44 @@ public class RouteExecService {
             return "EURUSD";
         }
         return ccyPair.replace("/", "").toUpperCase(Locale.ROOT);
+    }
+
+    private void emitOrderRoutedProvenance(
+            FxExecutionOrder order, List<ChildVenueSplit> splits, boolean internalized) {
+        String winningLpId = splits.isEmpty() ? "INTERNAL_BOOK" : splits.getFirst().getLpId();
+        List<Map<String, Object>> childSplits = new ArrayList<>();
+        for (ChildVenueSplit split : splits) {
+            Map<String, Object> row = new LinkedHashMap<>();
+            row.put("splitId", split.getSplitId().toString());
+            row.put("lpId", split.getLpId());
+            row.put("allocatedNotional", split.getAllocatedNotional());
+            row.put("fillRate", split.getFillRate());
+            row.put("holdLatencyMs", split.getHoldLatencyMs());
+            row.put("lpStatus", split.getLpStatus());
+            childSplits.add(row);
+        }
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("clientOrderId", order.getClientOrderId());
+        payload.put("winningLpId", winningLpId);
+        payload.put("internalized", internalized);
+        payload.put("childSplits", childSplits);
+        payload.put("slippageBps", order.getSlippageBps());
+        payload.put("droolsRuleVersion", RULE_VERSION);
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_ORDER_ROUTED, payload);
+    }
+
+    private void emitLastLookFailover(
+            UUID orderId, FailoverRequest request, String backupLpId, ChildVenueSplit reroute) {
+        Map<String, Object> payload = new LinkedHashMap<>();
+        payload.put("eventId", UUID.randomUUID().toString());
+        payload.put("orderId", orderId.toString());
+        payload.put("rejectedLpId", request.getRejectedLpId());
+        payload.put("holdDurationMs", reroute.getHoldLatencyMs());
+        payload.put("backupLpId", backupLpId);
+        payload.put("incrementalSlippageBps", new BigDecimal("0.2500"));
+        payload.put("timestamp", Instant.now().toString());
+        domainEvents.publish(TOPIC_LAST_LOOK_FAILOVER, payload);
     }
 }

@@ -8,6 +8,7 @@
     "local:containers:all:stop": "bash CICD/Local/docker-all-down.sh",
     "local:containers:all:status": "bash CICD/Local/all-status.sh",
     "local:middleware:all:start": "bash CICD/Local/middleware-all-start.sh",
+    "local:middleware:all:start-with-postgres": "FX_SOR_SPRING_PROFILES=local-postgres bash CICD/Local/middleware-all-start.sh",
     "local:middleware:all:stop": "bash CICD/Local/middleware-all-stop.sh",
     "local:middleware:all:status": "bash CICD/Local/middleware-all-status.sh",
     "local:portals:all:start": "bash CICD/Local/portals-all-start.sh",

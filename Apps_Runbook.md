@@ -73,8 +73,18 @@ npm run local:aiops:start
 
 ### 2.4 Middleware
 
+Default (in-memory H2):
+
 ```bash
 npm run local:middleware:all:start
+```
+
+#### 2.4.1 Middleware with Postgres (optional)
+
+Requires containers (Postgres) already up. Uses Spring profile `local-postgres` (`fx_sor` / `fx_sor`, dedicated DB per service).
+
+```bash
+npm run local:middleware:all:start-with-postgres
 ```
 
 ### 2.5 Portals

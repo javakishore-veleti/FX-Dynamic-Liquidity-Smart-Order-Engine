@@ -1,7 +1,7 @@
 # **FX Dynamic Liquidity & Smart Order Routing Engine**
 
 **Target Namespace:** com.jk.apps.banking.fx.sor  
-**Architecture Style:** Neal Ford Closed-Layer Microservice Architecture  
+**Architecture Style:** Dynamic Liquidity Provider & Smart Order Routing (SOR)  
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  
 *A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and guarantee regulatory best execution in sub-10 milliseconds.*
 
@@ -66,12 +66,13 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
 
 **4\. Enterprise Architecture Blueprint**
 
-The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Architecture** under the com.jk.apps.banking.fx.sor namespace.
+The platform implements a **Dynamic Liquidity Provider & Smart Order Routing** architecture under the `com.jk.apps.banking.fx.sor` namespace — quote aggregation, deterministic LP qualification, composite scoring, and multi-venue execution.
 
-> * **Closed Layers** enforce strict top-down isolation so presentation concerns never leak into business logic, and business rules remain decoupled from underlying storage engines.  
-> * **An Open Services Layer** enables specialized business tasks to invoke shared cross-cutting domain services or bypass directly to the persistence tier for ultra-low-latency reference lookups.
+> * **Market Access** ingests client orders and streaming LP prices through API/FIX gateways without leaking transport details into routing decisions.  
+> * **SOR Core** runs the ordered pipeline (enrichment → knock-out → LP scoring → routing → audit) across `fx-quote-service`, `fx-qualify-service`, and `fx-route-exec-service`.  
+> * **Liquidity Policy & State** externalizes Drools/DMN guardrails, TCA scoring, credit/NOP utilization, and regulatory audit provenance for sub-10 ms best execution.
 
-![Closed-Layer Microservice Architecture](Docs/Architecture/closed-layer-microservice-architecture.png)
+![FX Dynamic Liquidity Provider & Smart Order Routing Architecture](Docs/Architecture/fx-dynamic-liquidity-sor-architecture.png)
 
 **4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
 
@@ -150,7 +151,7 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 # **FX Dynamic Liquidity & Smart Order Routing Engine**
 
 **Target Namespace:** com.jk.apps.banking.fx.sor  
-**Architecture Style:** Neal Ford Closed-Layer Microservice Architecture  
+**Architecture Style:** Dynamic Liquidity Provider & Smart Order Routing (SOR)  
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  
 *A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and guarantee regulatory best execution in sub-10 milliseconds.*
 
@@ -215,12 +216,13 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
 
 ## **4\. Enterprise Architecture Blueprint**
 
-The platform adheres strictly to **Neal Ford's Closed-Layer Microservice Architecture** under the com.jk.apps.banking.fx.sor namespace.
+The platform implements a **Dynamic Liquidity Provider & Smart Order Routing** architecture under the `com.jk.apps.banking.fx.sor` namespace — quote aggregation, deterministic LP qualification, composite scoring, and multi-venue execution.
 
-> * **Closed Layers** enforce strict top-down isolation so presentation concerns never leak into business logic, and business rules remain decoupled from underlying storage engines.  
-> * **An Open Services Layer** enables specialized business tasks to invoke shared cross-cutting domain services or bypass directly to the persistence tier for ultra-low-latency reference lookups.
+> * **Market Access** ingests client orders and streaming LP prices through API/FIX gateways without leaking transport details into routing decisions.  
+> * **SOR Core** runs the ordered pipeline (enrichment → knock-out → LP scoring → routing → audit) across `fx-quote-service`, `fx-qualify-service`, and `fx-route-exec-service`.  
+> * **Liquidity Policy & State** externalizes Drools/DMN guardrails, TCA scoring, credit/NOP utilization, and regulatory audit provenance for sub-10 ms best execution.
 
-![Closed-Layer Microservice Architecture](Docs/Architecture/closed-layer-microservice-architecture.png)
+![FX Dynamic Liquidity Provider & Smart Order Routing Architecture](Docs/Architecture/fx-dynamic-liquidity-sor-architecture.png)
 
 ## **4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
 

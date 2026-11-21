@@ -52,12 +52,13 @@ for entry in "${PORTALS[@]}"; do
 
   echo "  [START] ${name} → http://0.0.0.0:${port}/  (log: ${log_file})"
   (
-    cd "${ROOT_DIR}"
+    # Must run inside the Angular workspace (angular.json), not repo root
+    cd "${app_dir}"
     if command -v setsid >/dev/null 2>&1; then
-      setsid npx --prefix "${app_dir}" ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
+      setsid npx ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
       echo $! >"${pid_file}"
     else
-      nohup npx --prefix "${app_dir}" ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
+      nohup npx ng serve --port "${port}" --host 0.0.0.0 >"${log_file}" 2>&1 &
       echo $! >"${pid_file}"
     fi
   )

@@ -157,13 +157,28 @@ Services bind `0.0.0.0` (reachable from any host). Replace `localhost` with the 
 | topology-mcp (Python) | http://localhost:8191 |
 | agent-orchestrator (Python) | http://localhost:8192 |
 
-| Check | URL pattern |
-|-------|-------------|
-| Health (Java) | `http://localhost:<port>/actuator/health` |
-| Health (Python) | `http://localhost:<port>/health` |
-| Metrics (Java) | `http://localhost:<port>/actuator/prometheus` |
-| Metrics (Python) | `http://localhost:<port>/metrics` |
-| AgentCard | http://localhost:8092/.well-known/agent.json · http://localhost:8192/.well-known/agent.json |
+| Check | URL |
+|-------|-----|
+| quote health | http://localhost:8081/actuator/health |
+| qualify health | http://localhost:8082/actuator/health |
+| route-exec health | http://localhost:8083/actuator/health |
+| admin health | http://localhost:8084/actuator/health |
+| topology health | http://localhost:8085/actuator/health |
+| topology-mcp (Java) health | http://localhost:8091/actuator/health |
+| agent-orchestrator (Java) health | http://localhost:8092/actuator/health |
+| topology-mcp (Python) health | http://localhost:8191/health |
+| agent-orchestrator (Python) health | http://localhost:8192/health |
+| quote metrics | http://localhost:8081/actuator/prometheus |
+| qualify metrics | http://localhost:8082/actuator/prometheus |
+| route-exec metrics | http://localhost:8083/actuator/prometheus |
+| admin metrics | http://localhost:8084/actuator/prometheus |
+| topology metrics | http://localhost:8085/actuator/prometheus |
+| topology-mcp (Java) metrics | http://localhost:8091/actuator/prometheus |
+| agent-orchestrator (Java) metrics | http://localhost:8092/actuator/prometheus |
+| topology-mcp (Python) metrics | http://localhost:8191/metrics |
+| agent-orchestrator (Python) metrics | http://localhost:8192/metrics |
+| AgentCard (Java) | http://localhost:8092/.well-known/agent.json |
+| AgentCard (Python) | http://localhost:8192/.well-known/agent.json |
 
 ---
 
@@ -171,8 +186,15 @@ Services bind `0.0.0.0` (reachable from any host). Replace `localhost` with the 
 
 | Service | UI | Spec |
 |---------|----|------|
-| :8081–:8092 (Java) | `http://localhost:<port>/swagger-ui.html` | `http://localhost:<port>/v3/api-docs` |
-| :8191 / :8192 (Python) | `http://localhost:<port>/docs` | `http://localhost:<port>/openapi.json` |
+| quote | http://localhost:8081/swagger-ui.html | http://localhost:8081/v3/api-docs |
+| qualify | http://localhost:8082/swagger-ui.html | http://localhost:8082/v3/api-docs |
+| route-exec | http://localhost:8083/swagger-ui.html | http://localhost:8083/v3/api-docs |
+| admin | http://localhost:8084/swagger-ui.html | http://localhost:8084/v3/api-docs |
+| topology | http://localhost:8085/swagger-ui.html | http://localhost:8085/v3/api-docs |
+| topology-mcp (Java) | http://localhost:8091/swagger-ui.html | http://localhost:8091/v3/api-docs |
+| agent-orchestrator (Java) | http://localhost:8092/swagger-ui.html | http://localhost:8092/v3/api-docs |
+| topology-mcp (Python) | http://localhost:8191/docs | http://localhost:8191/openapi.json |
+| agent-orchestrator (Python) | http://localhost:8192/docs | http://localhost:8192/openapi.json |
 
 ---
 

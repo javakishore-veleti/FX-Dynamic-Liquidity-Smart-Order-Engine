@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from fx_agent_orchestrator.business.dtos.workflow_dtos import WorkflowExecuteCommandDto, WorkflowResultDto
-from fx_agent_orchestrator.presentation.dtos.agent_request_dtos import ChaosSimExecuteRequestDto
+from fx_agent_orchestrator.business.dtos.agent_command_dtos import ChaosSimCommandDto
+from fx_agent_orchestrator.business.dtos.workflow_dtos import WorkflowResultDto
 from fx_agent_orchestrator.services.adapters.topology_mcp_client import TopologyMcpClient
 from fx_agent_orchestrator.services.dtos.mcp_call_dtos import McpToolCallDto
 
@@ -12,24 +12,23 @@ class ChaosSimWorkflow:
     def __init__(self, mcp_client: TopologyMcpClient) -> None:
         self._mcp = mcp_client
 
-    def execute(self, dto: WorkflowExecuteCommandDto) -> WorkflowResultDto:
-        request = ChaosSimExecuteRequestDto.model_validate(dto.request_payload)
+    def execute(self, dto: ChaosSimCommandDto) -> WorkflowResultDto:
         seed_payload: dict = {
-            "numBatches": request.num_batches,
-            "batchSize": request.batch_size,
-            "dryRun": request.dry_run,
+            "numBatches": dto.num_batches,
+            "batchSize": dto.batch_size,
+            "dryRun": dto.dry_run,
         }
-        if request.datasets is not None:
-            seed_payload["datasets"] = request.datasets
+        if dto.datasets is not None:
+            seed_payload["datasets"] = dto.datasets
 
         load_result = self._mcp.invoke_tool(
             McpToolCallDto(
                 tool_name="trigger_skewed_load_sim",
                 payload={
-                    "targetRps": request.target_rps,
-                    "durationSec": request.duration_sec,
-                    "ccyPair": request.ccy_pair,
-                    "dryRun": request.dry_run,
+                    "targetRps": dto.target_rps,
+                    "durationSec": dto.duration_sec,
+                    "ccyPair": dto.ccy_pair,
+                    "dryRun": dto.dry_run,
                 },
             )
         )
@@ -45,15 +44,15 @@ class ChaosSimWorkflow:
             self._mcp.invoke_tool(
                 McpToolCallDto(
                     tool_name="poll_workflow_status",
-                    payload={"wfExecId": nested_wf, "dryRun": request.dry_run},
+                    payload={"wfExecId": nested_wf, "dryRun": dto.dry_run},
                 )
             ),
         ]
         summary = {
             "agent": "CHAOS_SIM",
-            "dryRun": request.dry_run,
-            "ccyPair": request.ccy_pair,
-            "targetRps": request.target_rps,
+            "dryRun": dto.dry_run,
+            "ccyPair": dto.ccy_pair,
+            "targetRps": dto.target_rps,
             "toolsInvoked": [
                 "trigger_synthetic_seed",
                 "trigger_skewed_load_sim",

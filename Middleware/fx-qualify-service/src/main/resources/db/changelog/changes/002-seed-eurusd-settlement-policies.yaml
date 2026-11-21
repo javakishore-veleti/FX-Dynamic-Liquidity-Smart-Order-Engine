@@ -1,0 +1,36 @@
+databaseChangeLog:
+  - changeSet:
+      id: qualify-002-seed-eurusd-settlement-policies
+      author: fx-sor
+      comment: Minimal EURUSD settlement cutoffs and clip policies
+      changes:
+        - insert:
+            tableName: settlement_cutoffs_and_policies
+            columns:
+              - column: { name: ccy_pair, value: EURUSD }
+              - column: { name: tenor, value: SPOT }
+              - column: { name: cls_eligible, valueBoolean: true }
+              - column: { name: cutoff_time_utc, value: "23:55:00" }
+              - column: { name: min_clip_usd, valueNumeric: 100000.00 }
+              - column: { name: max_clip_usd, valueNumeric: 50000000.00 }
+              - column: { name: restricted_flag, valueBoolean: false }
+        - insert:
+            tableName: settlement_cutoffs_and_policies
+            columns:
+              - column: { name: ccy_pair, value: EURUSD }
+              - column: { name: tenor, value: TOM }
+              - column: { name: cls_eligible, valueBoolean: true }
+              - column: { name: cutoff_time_utc, value: "16:00:00" }
+              - column: { name: min_clip_usd, valueNumeric: 100000.00 }
+              - column: { name: max_clip_usd, valueNumeric: 25000000.00 }
+              - column: { name: restricted_flag, valueBoolean: false }
+        - insert:
+            tableName: settlement_cutoffs_and_policies
+            columns:
+              - column: { name: ccy_pair, value: EURUSD }
+              - column: { name: tenor, value: "1M" }
+              - column: { name: cls_eligible, valueBoolean: false }
+              - column: { name: cutoff_time_utc, value: "15:00:00" }
+              - column: { name: min_clip_usd, valueNumeric: 250000.00 }
+              - column: { name: max_clip_usd, valueNumeric: 100000000.00 }
+              - column: { name: restricted_flag, valueBoolean: false }

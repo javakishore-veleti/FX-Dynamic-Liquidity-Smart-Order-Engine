@@ -4,7 +4,13 @@ import json
 import time
 from datetime import datetime, timezone
 
-from fx_agent_orchestrator.business.dtos.workflow_dtos import WorkflowExecuteCommandDto
+from fx_agent_orchestrator.business.dtos.agent_command_dtos import (
+    AgentAcceptedResultDto,
+    BackpressureCommandDto,
+    BlastRadiusCommandDto,
+    ChaosSimCommandDto,
+    IncidentRcaCommandDto,
+)
 from fx_agent_orchestrator.business.workflows.backpressure_workflow import BackpressureWorkflow
 from fx_agent_orchestrator.business.workflows.blast_radius_workflow import BlastRadiusWorkflow
 from fx_agent_orchestrator.business.workflows.chaos_sim_workflow import ChaosSimWorkflow
@@ -15,13 +21,6 @@ from fx_agent_orchestrator.persistence.dtos.run_record_dtos import (
     PersistRunFailDto,
 )
 from fx_agent_orchestrator.persistence.repositories.agent_run_repository import AgentRunRepository
-from fx_agent_orchestrator.presentation.dtos.agent_request_dtos import (
-    BackpressureAssessRequestDto,
-    BlastRadiusAnalyzeRequestDto,
-    ChaosSimExecuteRequestDto,
-    IncidentRcaInvestigateRequestDto,
-)
-from fx_agent_orchestrator.presentation.dtos.agent_response_dtos import AgentAcceptedResponseDto
 
 TRIGGERED_BY = "LANGGRAPH_AGENT"
 
@@ -43,44 +42,42 @@ class AgentOrchestratorFacade:
         self._incident_rca = incident_rca
         self._chaos_sim = chaos_sim
 
-    def analyze_blast_radius(self, dto: BlastRadiusAnalyzeRequestDto) -> AgentAcceptedResponseDto:
+    def analyze_blast_radius(self, dto: BlastRadiusCommandDto) -> AgentAcceptedResultDto:
         return self._accept_and_run(
             agent_type="BLAST_RADIUS",
             dry_run=dto.dry_run,
             approval_token=dto.approval_token,
-            request_payload=dto.model_dump(by_alias=True),
-            workflow=self._blast_radius,
+            request_payload=dto.model_dump(),
+            runner=lambda: self._blast_radius.execute(dto),
         )
 
-    def assess_backpressure(self, dto: BackpressureAssessRequestDto) -> AgentAcceptedResponseDto:
+    def assess_backpressure(self, dto: BackpressureCommandDto) -> AgentAcceptedResultDto:
         return self._accept_and_run(
             agent_type="BACKPRESSURE",
             dry_run=dto.dry_run,
             approval_token=dto.approval_token,
-            request_payload=dto.model_dump(by_alias=True),
-            workflow=self._backpressure,
+            request_payload=dto.model_dump(),
+            runner=lambda: self._backpressure.execute(dto),
         )
 
-    def investigate_incident_rca(
-        self, dto: IncidentRcaInvestigateRequestDto
-    ) -> AgentAcceptedResponseDto:
+    def investigate_incident_rca(self, dto: IncidentRcaCommandDto) -> AgentAcceptedResultDto:
         if not dto.dry_run and not dto.approval_token:
             raise ValueError("ADR-032: dryRun=false mutations require Maker-Checker approvalToken")
         return self._accept_and_run(
             agent_type="INCIDENT_RCA",
             dry_run=dto.dry_run,
             approval_token=dto.approval_token,
-            request_payload=dto.model_dump(by_alias=True),
-            workflow=self._incident_rca,
+            request_payload=dto.model_dump(),
+            runner=lambda: self._incident_rca.execute(dto),
         )
 
-    def execute_chaos_sim(self, dto: ChaosSimExecuteRequestDto) -> AgentAcceptedResponseDto:
+    def execute_chaos_sim(self, dto: ChaosSimCommandDto) -> AgentAcceptedResultDto:
         return self._accept_and_run(
             agent_type="CHAOS_SIM",
             dry_run=dto.dry_run,
             approval_token=dto.approval_token,
-            request_payload=dto.model_dump(by_alias=True),
-            workflow=self._chaos_sim,
+            request_payload=dto.model_dump(),
+            runner=lambda: self._chaos_sim.execute(dto),
         )
 
     def _accept_and_run(
@@ -90,8 +87,8 @@ class AgentOrchestratorFacade:
         dry_run: bool,
         approval_token: str | None,
         request_payload: dict,
-        workflow: object,
-    ) -> AgentAcceptedResponseDto:
+        runner: object,
+    ) -> AgentAcceptedResultDto:
         accepted_at = datetime.now(timezone.utc)
         started = time.perf_counter()
         run_id_dto = self._repository.begin_run(
@@ -106,13 +103,7 @@ class AgentOrchestratorFacade:
         self._repository.mark_running(run_id_dto)
         status = "COMPLETED"
         try:
-            command = WorkflowExecuteCommandDto(
-                agent_type=agent_type,
-                dry_run=dry_run,
-                approval_token=approval_token,
-                request_payload=request_payload,
-            )
-            result = workflow.execute(command)  # type: ignore[attr-defined]
+            result = runner()  # type: ignore[operator]
             duration_ms = int((time.perf_counter() - started) * 1000)
             self._repository.complete_run(
                 PersistRunCompleteDto(
@@ -133,11 +124,11 @@ class AgentOrchestratorFacade:
                 )
             )
 
-        return AgentAcceptedResponseDto(
-            wfExecId=run_id_dto.run_id,
-            agentType=agent_type,
+        return AgentAcceptedResultDto(
+            wf_exec_id=run_id_dto.run_id,
+            agent_type=agent_type,
             status=status,
-            dryRun=dry_run,
-            triggeredBy=TRIGGERED_BY,
-            acceptedAt=accepted_at,
+            dry_run=dry_run,
+            triggered_by=TRIGGERED_BY,
+            accepted_at=accepted_at,
         )

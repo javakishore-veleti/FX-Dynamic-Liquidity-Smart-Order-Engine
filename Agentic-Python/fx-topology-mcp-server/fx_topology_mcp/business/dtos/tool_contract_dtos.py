@@ -119,5 +119,3 @@ class CatalogRequestDto(BaseModel):
     """Empty frozen DTO for DTO-only catalog method signatures."""
 
     model_config = ConfigDict(frozen=True)
-
-    _: Optional[str] = None

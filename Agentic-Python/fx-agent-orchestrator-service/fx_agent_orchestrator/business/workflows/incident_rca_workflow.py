@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from fx_agent_orchestrator.business.dtos.workflow_dtos import WorkflowExecuteCommandDto, WorkflowResultDto
-from fx_agent_orchestrator.presentation.dtos.agent_request_dtos import IncidentRcaInvestigateRequestDto
+from fx_agent_orchestrator.business.dtos.agent_command_dtos import IncidentRcaCommandDto
+from fx_agent_orchestrator.business.dtos.workflow_dtos import WorkflowResultDto
 from fx_agent_orchestrator.services.adapters.topology_mcp_client import TopologyMcpClient
 from fx_agent_orchestrator.services.dtos.mcp_call_dtos import McpToolCallDto
 
@@ -12,24 +12,23 @@ class IncidentRcaWorkflow:
     def __init__(self, mcp_client: TopologyMcpClient) -> None:
         self._mcp = mcp_client
 
-    def execute(self, dto: WorkflowExecuteCommandDto) -> WorkflowResultDto:
-        request = IncidentRcaInvestigateRequestDto.model_validate(dto.request_payload)
+    def execute(self, dto: IncidentRcaCommandDto) -> WorkflowResultDto:
         halt_payload = {
-            "lpId": request.lp_id or "",
-            "reason": request.reason or "Incident RCA proposed halt",
-            "dryRun": request.dry_run,
+            "lpId": dto.lp_id or "",
+            "reason": dto.reason or "Incident RCA proposed halt",
+            "dryRun": dto.dry_run,
         }
-        if request.approval_token:
-            halt_payload["approvalToken"] = request.approval_token
+        if dto.approval_token:
+            halt_payload["approvalToken"] = dto.approval_token
 
         invocations = [
             self._mcp.invoke_tool(
                 McpToolCallDto(
                     tool_name="query_iceberg_outlier_traces",
                     payload={
-                        "serviceName": request.service_name or "",
-                        "minLatencyMs": request.min_latency_ms,
-                        "limit": request.limit,
+                        "serviceName": dto.service_name or "",
+                        "minLatencyMs": dto.min_latency_ms,
+                        "limit": dto.limit,
                     },
                 )
             ),
@@ -37,8 +36,8 @@ class IncidentRcaWorkflow:
                 McpToolCallDto(
                     tool_name="get_ipc_edge_health",
                     payload={
-                        "serviceName": request.service_name or "",
-                        "ccyPair": request.ccy_pair or "",
+                        "serviceName": dto.service_name or "",
+                        "ccyPair": dto.ccy_pair or "",
                     },
                 )
             ),
@@ -51,9 +50,9 @@ class IncidentRcaWorkflow:
         ]
         summary = {
             "agent": "INCIDENT_RCA",
-            "dryRun": request.dry_run,
-            "serviceName": request.service_name,
-            "lpId": request.lp_id,
+            "dryRun": dto.dry_run,
+            "serviceName": dto.service_name,
+            "lpId": dto.lp_id,
             "toolsInvoked": [
                 "query_iceberg_outlier_traces",
                 "get_ipc_edge_health",

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>fx-admin-service</title>
+<style>
+:root{--bg:#0b1c2c;--panel:#12263a;--ink:#e8eef4;--muted:#9bb0c3;--accent:#2f9e8b;--line:#1e3a52;--card:#0f2436}
+*{box-sizing:border-box}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 600px at 10% -10%,#16324a,transparent),var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+.hero{border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--card));border-radius:14px;padding:1.75rem 1.5rem;margin-bottom:1.25rem}
+.kicker{color:var(--muted);font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .4rem}
+h1{margin:0 0 .5rem;font-size:1.75rem;font-weight:700}h2{margin:0 0 .75rem;font-size:1.05rem}
+.lead{margin:0;color:var(--muted);max-width:70ch}
+.grid{display:grid;gap:1rem;margin-top:1rem}
+@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
+.card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:1.1rem 1rem}
+ul{margin:.4rem 0 0;padding-left:1.1rem}li{margin:.28rem 0;color:var(--ink)}
+code,table{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem}
+table{width:100%;border-collapse:collapse;margin-top:.4rem}th,td{border-bottom:1px solid var(--line);text-align:left;padding:.45rem .3rem;vertical-align:top}th{color:var(--muted);font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.links a{border:1px solid var(--line);background:var(--panel);padding:.4rem .7rem;border-radius:8px;color:var(--ink)}
+.badge{display:inline-block;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:.15rem .55rem;font-size:.78rem;margin-left:.4rem}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
+    <h1>fx-admin-service<span class="badge">:8084</span></h1>
+    <p class="lead"><strong>Control plane & governance</strong> — Admin workflows for synthetic data, load simulation, cache/credit overrides, and LP venue halts with audit logging.</p>
+    <div class="links">
+      <a href="/swagger-ui.html">OpenAPI / Docs</a>
+      <a href="/actuator/health">Health</a>
+    </div>
+  </section>
+  <div class="grid">
+    <section class="card">
+      <h2>Business features</h2>
+      <ul><li>Synthetic dataset generation batches</li><li>Skewed load / chaos simulation triggers</li><li>Workflow status, cancel, and purge</li><li>Cache invalidation, credit override, LP halt (maker-checker ready)</li></ul>
+    </section>
+    <section class="card">
+      <h2>Database</h2>
+      <p class="lead" style="margin-bottom:.5rem">Dedicated database: <code>dlp_sor_system_db</code></p>
+      <ul><li><code>wf_exec_log</code></li></ul>
+    </section>
+  </div>
+  <section class="card" style="margin-top:1rem">
+    <h2>API endpoints</h2>
+    <table>
+      <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
+      <tbody><tr><td><code>POST</code></td><td><code>/api/v1/admin/synthetic/datasets/generate</code></td><td>Generate synthetic datasets</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/admin/synthetic/load-sim/trigger</code></td><td>Trigger load simulation</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/admin/workflows</code></td><td>List workflows</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/admin/workflows/{wfExecId}</code></td><td>Workflow detail</td></tr><tr><td><code>PATCH</code></td><td><code>/api/v1/admin/workflows/{wfExecId}/cancel</code></td><td>Cancel workflow</td></tr><tr><td><code>DELETE</code></td><td><code>/api/v1/admin/workflows/{wfExecId}</code></td><td>Delete / purge workflow</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/admin/cache/invalidate</code></td><td>Invalidate caches</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/admin/credit/override</code></td><td>Credit override</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/admin/venues/{lpId}/halt</code></td><td>Halt LP venue</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>

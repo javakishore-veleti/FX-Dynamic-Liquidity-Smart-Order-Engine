@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from fastapi import FastAPI
-from fastapi.responses import JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 
 from fx_agent_orchestrator.business.facades.agent_orchestrator_facade import AgentOrchestratorFacade
 from fx_agent_orchestrator.business.workflows.backpressure_workflow import BackpressureWorkflow
@@ -52,6 +52,13 @@ class AgentOrchestratorAppFactory:
         observability.configure(application)
         observability.instrument_app(application)
         application.include_router(controller.router)
+        home_html = (
+            Path(__file__).resolve().parent / "presentation" / "home_page.html"
+        ).read_text(encoding="utf-8")
+
+        @application.get("/", response_class=HTMLResponse, include_in_schema=False)
+        def home() -> str:
+            return home_html
 
         @application.get("/.well-known/agent.json")
         def agent_card() -> JSONResponse:

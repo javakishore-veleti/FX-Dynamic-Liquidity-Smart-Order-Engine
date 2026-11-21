@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>fx-topology-service</title>
+<style>
+:root{--bg:#0b1c2c;--panel:#12263a;--ink:#e8eef4;--muted:#9bb0c3;--accent:#2f9e8b;--line:#1e3a52;--card:#0f2436}
+*{box-sizing:border-box}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 600px at 10% -10%,#16324a,transparent),var(--bg);color:var(--ink);line-height:1.5}
+a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
+.hero{border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--card));border-radius:14px;padding:1.75rem 1.5rem;margin-bottom:1.25rem}
+.kicker{color:var(--muted);font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .4rem}
+h1{margin:0 0 .5rem;font-size:1.75rem;font-weight:700}h2{margin:0 0 .75rem;font-size:1.05rem}
+.lead{margin:0;color:var(--muted);max-width:70ch}
+.grid{display:grid;gap:1rem;margin-top:1rem}
+@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
+.card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:1.1rem 1rem}
+ul{margin:.4rem 0 0;padding-left:1.1rem}li{margin:.28rem 0;color:var(--ink)}
+code,table{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem}
+table{width:100%;border-collapse:collapse;margin-top:.4rem}th,td{border-bottom:1px solid var(--line);text-align:left;padding:.45rem .3rem;vertical-align:top}th{color:var(--muted);font-weight:600}
+.links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.links a{border:1px solid var(--line);background:var(--panel);padding:.4rem .7rem;border-radius:8px;color:var(--ink)}
+.badge{display:inline-block;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:.15rem .55rem;font-size:.78rem;margin-left:.4rem}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <section class="hero">
+    <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
+    <h1>fx-topology-service<span class="badge">:8085</span></h1>
+    <p class="lead"><strong>Runtime topology graph</strong> — Exposes network, IPC, and outlier-trace topology layers for blast-radius and time-travel diffs.</p>
+    <div class="links">
+      <a href="/swagger-ui.html">OpenAPI / Docs</a>
+      <a href="/actuator/health">Health</a>
+    </div>
+  </section>
+  <div class="grid">
+    <section class="card">
+      <h2>Business features</h2>
+      <ul><li>Layer 1 network dependency graph</li><li>Layer 2 application IPC edges (pair / window)</li><li>Layer 3 outlier traces</li><li>Blast-radius analysis and snapshot diffs</li></ul>
+    </section>
+    <section class="card">
+      <h2>Database</h2>
+      <p class="lead" style="margin-bottom:.5rem">Dedicated database: <code>fx_topology_db</code></p>
+      <ul><li><code>topology_network_edges</code></li><li><code>topology_ipc_edges</code></li><li><code>topology_trace_outliers</code></li><li><code>topology_snapshots</code></li></ul>
+    </section>
+  </div>
+  <section class="card" style="margin-top:1rem">
+    <h2>API endpoints</h2>
+    <table>
+      <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
+      <tbody><tr><td><code>GET</code></td><td><code>/api/v1/topology/graph/network</code></td><td>Network graph</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/topology/graph/ipc</code></td><td>IPC graph</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/topology/traces/outliers</code></td><td>Outlier traces</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/topology/blast-radius</code></td><td>Blast-radius analysis</td></tr><tr><td><code>GET</code></td><td><code>/api/v1/topology/diff</code></td><td>Snapshot diff</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
+    </table>
+  </section>
+</main>
+</body>
+</html>

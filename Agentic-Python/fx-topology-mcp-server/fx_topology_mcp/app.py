@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.responses import HTMLResponse
 
 from fx_topology_mcp.business.facades.mcp_tool_catalog import McpToolCatalog
 from fx_topology_mcp.business.facades.mcp_tool_facade import McpToolFacade
@@ -49,6 +51,13 @@ class TopologyMcpServerApp:
         tools_controller = McpToolsController(facade)
         self._app.include_router(catalog_controller.router)
         self._app.include_router(tools_controller.router)
+        home_html = (
+            Path(__file__).resolve().parent / "presentation" / "home_page.html"
+        ).read_text(encoding="utf-8")
+
+        @self._app.get("/", response_class=HTMLResponse, include_in_schema=False)
+        def home() -> str:
+            return home_html
 
         @self._app.get("/health")
         def health() -> dict:

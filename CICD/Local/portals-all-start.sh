@@ -15,6 +15,9 @@ PORTALS=(
   "retail|Portals/fx-retail-portal|4203"
 )
 
+# npm install + first ng serve can be slow; override with FX_SOR_PORTAL_WAIT_SEC
+WAIT_SEC="${FX_SOR_PORTAL_WAIT_SEC:-600}"
+
 echo "==> Starting FX SOR portals (cwd=${ROOT_DIR})"
 cd "${ROOT_DIR}"
 
@@ -23,6 +26,8 @@ if [[ ! -d "${ROOT_DIR}/node_modules" ]]; then
   echo "  --> npm install (root workspaces)"
   npm install
 fi
+
+WAIT_ENTRIES=()
 
 for entry in "${PORTALS[@]}"; do
   IFS='|' read -r name workspace port <<<"${entry}"
@@ -36,8 +41,8 @@ for entry in "${PORTALS[@]}"; do
   fi
 
   existing="$(read_pid "${pid_file}" || true)"
-  if [[ -n "${existing}" ]] && is_pid_alive "${existing}"; then
-    echo "  [SKIP] ${name} already running pid=${existing}"
+  if [[ -n "${existing}" ]] && is_pid_alive "${existing}" && port_listening "${port}"; then
+    echo "  [SKIP] ${name} already up pid=${existing} port=${port}"
     continue
   fi
   if port_listening "${port}"; then
@@ -56,8 +61,22 @@ for entry in "${PORTALS[@]}"; do
       echo $! >"${pid_file}"
     fi
   )
+  WAIT_ENTRIES+=("${name}|${port}|${pid_file}|${log_file}")
 done
 
 echo
-echo "==> Portal start requested. Status:"
+if ((${#WAIT_ENTRIES[@]} > 0)); then
+  set +e
+  wait_for_services "${WAIT_SEC}" "${WAIT_ENTRIES[@]}"
+  wait_rc=$?
+  set -e
+else
+  wait_rc=0
+fi
+
+echo
 "${SCRIPT_DIR}/portals-all-status.sh"
+echo
+echo "Tip: FX_SOR_PORTAL_WAIT_SEC=900 npm run local:portals:all:start   # longer wait (default 600s / 10m)"
+
+exit "${wait_rc}"

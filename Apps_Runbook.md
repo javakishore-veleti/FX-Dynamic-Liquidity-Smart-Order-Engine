@@ -55,6 +55,8 @@ Run in order.
 
 ### 2.1 Containers
 
+Waits until Redis/Postgres/Kafka are ready (max 40m for image pulls; exits as soon as ready).
+
 ```bash
 npm run local:containers:all:start
 ```
@@ -88,6 +90,8 @@ npm run local:middleware:all:start-with-postgres
 ```
 
 ### 2.5 Portals
+
+Waits until portals listen (max 10m for npm/ng serve; exits as soon as ready).
 
 ```bash
 npm run local:portals:all:start

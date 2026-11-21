@@ -80,7 +80,6 @@ else
 fi
 
 echo
-echo "==> Middleware status"
 "${SCRIPT_DIR}/middleware-all-status.sh"
 echo
 echo "Tip: FX_SOR_SPRING_PROFILES=local-postgres,load-redis,load-kafka npm run local:middleware:all:start"

@@ -8,6 +8,7 @@
 **Table of Contents**
 
 > * [Understanding the Dynamic Liquidity Provider & FX Routing Domain](#bookmark=id.863vjn2fswql)  
+> * [What is Smart Order Routing (SOR) — Knowledge Base](#what-is-smart-order-routing-sor--knowledge-base)
 > * [1\. Business Context & Problem Statement](#bookmark=id.akvjtn4rwvrb)  
 > * [2\. Strategic Value & Business Outcomes](#bookmark=id.t0bam69r4fwv)  
 > * [3\. Core Domain Capabilities](#bookmark=id.1plpw3kv7eil)  
@@ -29,7 +30,61 @@ This platform is architected for a **major U.S. Tier-1 Commercial & Investment B
 | **Spread Leakage** | Invisible revenue loss that occurs when our bank quotes a tight rate to a corporate client expecting to cover that trade wholesale at a profit, but static or slow routing sends the order to an LP offering a wider spread—giving away our margin on the trade. |
 | **Last-Look Rejections** | A wholesale FX practice where an LP displays a streaming price, our bank submits an order at that price, and the LP holds the order for a brief window (10 ms to 200 ms) before deciding whether to accept or reject it. If the market moves against the LP during that window, the LP rejects the trade—forcing our bank to re-route at a worse price. |
 | **Slippage** | The negative price difference between the exchange rate available when a client order arrives and the actual rate achieved after routing delays, last-look rejections, or market movement across fragmented venues. |
-| **Smart Order Routing (SOR)** | An automated, policy-driven decision engine that acts like an electronic chief dealer—filtering out ineligible or credit-capped LPs, penalizing LPs with high rejection rates, checking if the bank can match the trade internally against opposing client flow, and splitting large institutional orders across multiple LPs to achieve the best all-in execution. |
+| **Smart Order Routing (SOR)** | An automated execution capability that applies **configurable routing rules** and **real-time market intelligence** to decide where and how to place an order—or portions of an order—across one or many liquidity venues (in FX: LPs, ECNs, and the bank's internal principal book). |
+| **Liquidity Fragmentation** | Liquidity no longer sits in one place. In equities it spans exchanges, dark pools, and ATS; in **FX** it spans competing bank LPs, non-bank market makers, and ECNs. Without intelligent routing, desks miss available liquidity, take unnecessary market impact, or accept suboptimal prices. |
+| **Order Slicing (Child Orders)** | Breaking a large institutional parent order into smaller child clips routed across ranked LPs/venues to reduce signaling risk and market impact while raising fill probability. |
+| **Internalization** | Matching client flow against the bank's own principal inventory or opposing client flow when safe—before hedging externally—reducing external venue fees and last-look exposure. |
+| **Best Execution** | The regulatory and commercial duty to pursue the best available result for the client on a consistent basis (price, cost, speed, likelihood of fill). SOR provides the **auditability and TCA evidence** desks need for FX Global Code / MiFID II-style obligations. |
+| **TCA (Transaction Cost Analysis)** | Post-trade (and increasingly pre-trade) analytics that measure slippage, fill quality, venue/LP toxicity, and routing effectiveness so desks can prove and improve best execution. |
+
+**What is Smart Order Routing (SOR) — Knowledge Base**
+
+Smart Order Routing is a core component of the institutional execution stack (alongside OMS/EMS). Rather than sending a full ticket to a single pre-assigned venue, a modern SOR continuously evaluates **where liquidity exists**, **how it can be accessed**, and **which execution tactic** best meets the desk's policy for that clip.
+
+### Why SOR matters for FX desks (New York, London, Singapore)
+
+FX is fragmented by design: there is no single global exchange for spot. Liquidity is quoted simultaneously across Tier-1 bank LPs, quantitative market makers, and ECNs. Static “always route EURUSD to LP\_X” tables create spread leakage, last-look churn, and credit/NOP rejects. Dynamic SOR + Dynamic LP selection is how eFX franchises protect margin and STP fill ratios under Tokyo / London–NY overlap / FOMC–NFP regimes.
+
+### How this platform's SOR works (mechanics)
+
+| SOR Building Block | What it does in industry practice | How this engine implements it |
+| :--- | :--- | :--- |
+| **Configurable routing rules** | Eligible venues, size thresholds, internalization preference, fallback/waterfall behaviour | Drools/DMN policy tables + knock-out rules in `fx-qualify-service` / `fx-route-exec-service` with maker-checker hot reload |
+| **Real-time market intelligence** | Bid/ask, depth, venue latency, liquidity availability, restrictions | LP quote aggregation & session regime guards in `fx-quote-service` (Caffeine L1 + optional Redis L2) |
+| **Execution tactics & order slicing** | Child orders, IOC/limit-style venue interaction, multi-venue sweep | Single-LP best-ex, multi-LP sweep, and waterfall failover inside the OrderRoutingFacade pipeline |
+| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code / MiFID II RTS-27/28) |
+| **Adaptive venue intelligence** | Refine routing from historical fill quality / toxicity rather than static rank alone | Composite LP scoring using fill ratio, last-look hold latency, and markout toxicity projections |
+
+### SOR vs algorithmic trading
+
+| Concern | Smart Order Routing (SOR) | Algorithmic trading |
+| :--- | :--- | :--- |
+| **Primary job** | *Where* (and to which venues/LPs) liquidity is accessed | *How* a parent order is worked over time (TWAP/VWAP-style schedules, participation) |
+| **Typical output** | Venue/LP selection, child splits, failover path | Schedule of child releases into the market |
+| **In this repo** | Core product — Dynamic LP qualification + routing facade | Can sit upstream/downstream; SOR remains the venue-selection brain |
+
+The two are complementary: algos often **call** a SOR for each child clip.
+
+### Benefits this knowledge base emphasizes
+
+> * **Improved execution quality** — compete across fragmented LP prices instead of a static map.  
+> * **Lower market impact** — slice institutional blocks; avoid signaling a full notional to one venue.  
+> * **Consistency & repeatability** — desk policy encoded as versioned rules, not tribal knowledge.  
+> * **Auditability & best-execution evidence** — every decision leaves a TCA-ready provenance trace.  
+> * **Operational flexibility** — session/news regimes and LP kill-switches without multi-week releases.
+
+### What institutional buyers look for (mapped to this repo)
+
+| Selection criterion | Platform response |
+| :--- | :--- |
+| Real-time market intelligence | Streaming quote aggregation + session/microstructure awareness |
+| Configurable routing logic | Externalized Drools/DMN + knock-out policies |
+| Low-latency infrastructure | Java 21 virtual threads, Generational ZGC, eBPF/Cilium, horizontal pod scale |
+| Integrated TCA / best-ex reporting | Async Kafka audit stream + order trace APIs |
+| Scalability across global desks | NY / London / Singapore session matrices; 50–150+ pod topology |
+| Governance | Maker-checker policy changes; dealing-desk escalation for exceptions |
+
+*Industry framing for SOR mechanics is aligned with public market-structure explainers such as [Quod Financial — What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/); this repository applies those principles specifically to **institutional FX Dynamic Liquidity Provider** routing.*
 
 **1\. Business Context & Problem Statement**
 
@@ -145,7 +200,9 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 
 **7\. Governance & Documentation**
 
-> * **Product Requirements & Domain Knowledge Base:** See PRD-FX-SOR-001.md for full functional specifications, market session matrices, regulatory provenance rules, and an institutional FX glossary.  
+> * **Product Requirements & Domain Knowledge Base:** See `PRD-FX-SOR-001.md` for functional specifications, session matrices, regulatory provenance rules, and the institutional FX glossary.  
+> * **Architecture & API Specs:** See `Docs/Specs/` and `Docs/Architecture/` (including Chief Architect ADRs and topology/MCP extensions).  
+> * **Industry SOR primer:** [What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/) (external knowledge-base framing for multi-venue execution).  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.
 
 # **FX Dynamic Liquidity & Smart Order Routing Engine**
@@ -158,6 +215,7 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 ## **Table of Contents**
 
 > * Understanding the Dynamic Liquidity Provider & FX Routing Domain  
+> * What is Smart Order Routing (SOR) — Knowledge Base  
 > * 1\. Business Context & Problem Statement  
 > * 2\. Strategic Value & Business Outcomes  
 > * 3\. Core Domain Capabilities  
@@ -179,7 +237,61 @@ This platform is architected for a **major U.S. Tier-1 Commercial & Investment B
 | **Spread Leakage** | Invisible revenue loss that occurs when our bank quotes a tight rate to a corporate client expecting to cover that trade wholesale at a profit, but static or slow routing sends the order to an LP offering a wider spread—giving away our margin on the trade. |
 | **Last-Look Rejections** | A wholesale FX practice where an LP displays a streaming price, our bank submits an order at that price, and the LP holds the order for a brief window (10 ms to 200 ms) before deciding whether to accept or reject it. If the market moves against the LP during that window, the LP rejects the trade—forcing our bank to re-route at a worse price. |
 | **Slippage** | The negative price difference between the exchange rate available when a client order arrives and the actual rate achieved after routing delays, last-look rejections, or market movement across fragmented venues. |
-| **Smart Order Routing (SOR)** | An automated, policy-driven decision engine that acts like an electronic chief dealer—filtering out ineligible or credit-capped LPs, penalizing LPs with high rejection rates, checking if the bank can match the trade internally against opposing client flow, and splitting large institutional orders across multiple LPs to achieve the best all-in execution. |
+| **Smart Order Routing (SOR)** | An automated execution capability that applies **configurable routing rules** and **real-time market intelligence** to decide where and how to place an order—or portions of an order—across one or many liquidity venues (in FX: LPs, ECNs, and the bank's internal principal book). |
+| **Liquidity Fragmentation** | Liquidity no longer sits in one place. In equities it spans exchanges, dark pools, and ATS; in **FX** it spans competing bank LPs, non-bank market makers, and ECNs. Without intelligent routing, desks miss available liquidity, take unnecessary market impact, or accept suboptimal prices. |
+| **Order Slicing (Child Orders)** | Breaking a large institutional parent order into smaller child clips routed across ranked LPs/venues to reduce signaling risk and market impact while raising fill probability. |
+| **Internalization** | Matching client flow against the bank's own principal inventory or opposing client flow when safe—before hedging externally—reducing external venue fees and last-look exposure. |
+| **Best Execution** | The regulatory and commercial duty to pursue the best available result for the client on a consistent basis (price, cost, speed, likelihood of fill). SOR provides the **auditability and TCA evidence** desks need for FX Global Code / MiFID II-style obligations. |
+| **TCA (Transaction Cost Analysis)** | Post-trade (and increasingly pre-trade) analytics that measure slippage, fill quality, venue/LP toxicity, and routing effectiveness so desks can prove and improve best execution. |
+
+## **What is Smart Order Routing (SOR) — Knowledge Base**
+
+Smart Order Routing is a core component of the institutional execution stack (alongside OMS/EMS). Rather than sending a full ticket to a single pre-assigned venue, a modern SOR continuously evaluates **where liquidity exists**, **how it can be accessed**, and **which execution tactic** best meets the desk's policy for that clip.
+
+### Why SOR matters for FX desks (New York, London, Singapore)
+
+FX is fragmented by design: there is no single global exchange for spot. Liquidity is quoted simultaneously across Tier-1 bank LPs, quantitative market makers, and ECNs. Static “always route EURUSD to LP\_X” tables create spread leakage, last-look churn, and credit/NOP rejects. Dynamic SOR + Dynamic LP selection is how eFX franchises protect margin and STP fill ratios under Tokyo / London–NY overlap / FOMC–NFP regimes.
+
+### How this platform's SOR works (mechanics)
+
+| SOR Building Block | What it does in industry practice | How this engine implements it |
+| :--- | :--- | :--- |
+| **Configurable routing rules** | Eligible venues, size thresholds, internalization preference, fallback/waterfall behaviour | Drools/DMN policy tables + knock-out rules in `fx-qualify-service` / `fx-route-exec-service` with maker-checker hot reload |
+| **Real-time market intelligence** | Bid/ask, depth, venue latency, liquidity availability, restrictions | LP quote aggregation & session regime guards in `fx-quote-service` (Caffeine L1 + optional Redis L2) |
+| **Execution tactics & order slicing** | Child orders, IOC/limit-style venue interaction, multi-venue sweep | Single-LP best-ex, multi-LP sweep, and waterfall failover inside the OrderRoutingFacade pipeline |
+| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code / MiFID II RTS-27/28) |
+| **Adaptive venue intelligence** | Refine routing from historical fill quality / toxicity rather than static rank alone | Composite LP scoring using fill ratio, last-look hold latency, and markout toxicity projections |
+
+### SOR vs algorithmic trading
+
+| Concern | Smart Order Routing (SOR) | Algorithmic trading |
+| :--- | :--- | :--- |
+| **Primary job** | *Where* (and to which venues/LPs) liquidity is accessed | *How* a parent order is worked over time (TWAP/VWAP-style schedules, participation) |
+| **Typical output** | Venue/LP selection, child splits, failover path | Schedule of child releases into the market |
+| **In this repo** | Core product — Dynamic LP qualification + routing facade | Can sit upstream/downstream; SOR remains the venue-selection brain |
+
+The two are complementary: algos often **call** a SOR for each child clip.
+
+### Benefits this knowledge base emphasizes
+
+> * **Improved execution quality** — compete across fragmented LP prices instead of a static map.  
+> * **Lower market impact** — slice institutional blocks; avoid signaling a full notional to one venue.  
+> * **Consistency & repeatability** — desk policy encoded as versioned rules, not tribal knowledge.  
+> * **Auditability & best-execution evidence** — every decision leaves a TCA-ready provenance trace.  
+> * **Operational flexibility** — session/news regimes and LP kill-switches without multi-week releases.
+
+### What institutional buyers look for (mapped to this repo)
+
+| Selection criterion | Platform response |
+| :--- | :--- |
+| Real-time market intelligence | Streaming quote aggregation + session/microstructure awareness |
+| Configurable routing logic | Externalized Drools/DMN + knock-out policies |
+| Low-latency infrastructure | Java 21 virtual threads, Generational ZGC, eBPF/Cilium, horizontal pod scale |
+| Integrated TCA / best-ex reporting | Async Kafka audit stream + order trace APIs |
+| Scalability across global desks | NY / London / Singapore session matrices; 50–150+ pod topology |
+| Governance | Maker-checker policy changes; dealing-desk escalation for exceptions |
+
+*Industry framing for SOR mechanics is aligned with public market-structure explainers such as [Quod Financial — What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/); this repository applies those principles specifically to **institutional FX Dynamic Liquidity Provider** routing.*
 
 ## **1\. Business Context & Problem Statement**
 
@@ -303,5 +415,7 @@ To sustain 1M aggregate RPS reliably while protecting the **\< 5 ms (p99)** inte
 
 ## **7\. Governance & Documentation**
 
-> * **Product Requirements & Domain Knowledge Base:** See PRD-FX-SOR-001.md for full functional specifications, market session matrices, regulatory provenance rules, and an institutional FX glossary.  
+> * **Product Requirements & Domain Knowledge Base:** See `PRD-FX-SOR-001.md` for functional specifications, session matrices, regulatory provenance rules, and the institutional FX glossary.  
+> * **Architecture & API Specs:** See `Docs/Specs/` and `Docs/Architecture/` (including Chief Architect ADRs and topology/MCP extensions).  
+> * **Industry SOR primer:** [What is Smart Order Routing (SOR)?](https://www.quodfinancial.com/what-is-smart-order-routing-sor/) (external knowledge-base framing for multi-venue execution).  
 > * **Policy Authoring Lifecycle:** All production rule changes require Maker-Checker sign-off and historical replay validation prior to hot-reloading into active trading pods.

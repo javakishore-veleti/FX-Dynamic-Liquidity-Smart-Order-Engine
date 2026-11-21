@@ -1,0 +1,79 @@
+spring:
+  application:
+    name: fx-quote-service
+  threads:
+    virtual:
+      enabled: true
+  # Local default: embedded H2 (no external DB required)
+  datasource:
+    url: jdbc:h2:mem:fx_quote;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+      - org.springframework.boot.autoconfigure.data.redis.RedisRepositoriesAutoConfiguration
+
+server:
+  port: ${SERVER_PORT:8081}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+logging:
+  level:
+    root: INFO
+    com.jk.apps.banking.fx.sor.quote: INFO
+
+---
+# Activate with: --spring.profiles.active=postgres
+# Requires: CICD/Local/Postgres (docker-all-up.sh)
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:5432}/${POSTGRES_DB:fx_sor}
+    driver-class-name: org.postgresql.Driver
+    username: ${POSTGRES_USER:fx_sor}
+    password: ${POSTGRES_PASSWORD:fx_sor}
+  h2:
+    console:
+      enabled: false
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+---
+# Activate with: --spring.profiles.active=redis (or postgres,redis)
+# Requires: CICD/Local/Redis (docker-all-up.sh)
+spring:
+  config:
+    activate:
+      on-profile: redis
+  autoconfigure:
+    exclude: []
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}

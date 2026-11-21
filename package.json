@@ -1,0 +1,27 @@
+{
+  "name": "fx-dynamic-liquidity-smart-order-engine",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FX Dynamic Liquidity & Smart Order Routing Engine — monorepo scripts for Middleware services and Portals UIs",
+  "scripts": {
+    "local:containers:all:start": "bash CICD/Local/docker-all-up.sh",
+    "local:containers:all:stop": "bash CICD/Local/docker-all-down.sh",
+    "local:containers:all:status": "bash CICD/Local/all-status.sh",
+    "build:middleware": "mvn -DskipTests package",
+    "build:quote": "mvn -pl Middleware/fx-quote-service -am -DskipTests package",
+    "build:qualify": "mvn -pl Middleware/fx-qualify-service -am -DskipTests package",
+    "build:route-exec": "mvn -pl Middleware/fx-route-exec-service -am -DskipTests package",
+    "run:quote": "mvn -pl Middleware/fx-quote-service spring-boot:run",
+    "run:qualify": "mvn -pl Middleware/fx-qualify-service spring-boot:run",
+    "run:route-exec": "mvn -pl Middleware/fx-route-exec-service spring-boot:run",
+    "run:quote:full": "mvn -pl Middleware/fx-quote-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis",
+    "run:qualify:full": "mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis",
+    "run:route-exec:full": "mvn -pl Middleware/fx-route-exec-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "Portals/*"
+  ]
+}

@@ -12,6 +12,7 @@
 > * [2\. Strategic Value & Business Outcomes](#bookmark=id.t0bam69r4fwv)  
 > * [3\. Core Domain Capabilities](#bookmark=id.1plpw3kv7eil)  
 > * [4\. Enterprise Architecture Blueprint](#bookmark=id.yr40gh4s6wxt)  
+> * [4.1 Maven Reactor Monorepo (Zero-Sharing Modules)](#41-maven-reactor-monorepo-zero-sharing-modules)
 > * [5\. Technology & Resilience Pillars](#bookmark=id.w8py2shsa0yh)
 > * [6\. High-Throughput Runtime & Kubernetes Topology](#bookmark=id.w8py2shsa0yh)  
 > * [7\. Governance & Documentation](#bookmark=id.k82zljo3w3e9)
@@ -94,6 +95,50 @@ The platform adheres strictly to **Neal Ford’s Closed-Layer Microservice Archi
 \|          In-Memory Hot Rule Cache \-\> Distributed Credit State \-\> Audit Stream \|  
 \+-------------------------------------------------------------------------------+
 
+**4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
+
+The repository is a **Maven Reactor Monorepo with Self-Contained Service Modules**. Root `pom.xml` stays at the repo root as aggregator + version BOM. Middleware services live under `Middleware/`; Angular UIs under `Portals/`; shared local infra under `CICD/Local/`. **There is zero cross-module Java source or shared library module.**
+
+```text
+fx-dynamic-liquidity-smart-order-engine/
+├── pom.xml                              # Aggregator + BOM (modules → Middleware/*)
+├── package.json                         # npm scripts + Portals workspaces
+├── Middleware/
+│   ├── fx-quote-service/                # Self-contained Spring Boot (H2 default)
+│   ├── fx-qualify-service/              # Self-contained (Drools + Resilience4j)
+│   └── fx-route-exec-service/           # Self-contained (routing / execution)
+├── Portals/                             # Angular UI apps (npm workspaces)
+└── CICD/Local/
+    ├── docker-all-up.sh | docker-all-down.sh | all-status.sh
+    ├── Redis/docker-compose.yaml
+    ├── Postgres/docker-compose.yaml
+    └── Kafka/docker-compose.yaml
+```
+
+| Rule | Practice |
+| :--- | :--- |
+| **Root POM** | `<dependencyManagement>` + `<pluginManagement>` only — no `<dependencies>`, no Boot plugin execution |
+| **Local DB** | Embedded **H2** by default; switch with `--spring.profiles.active=postgres` after `npm run local:containers:all:start` |
+| **Redis / Kafka** | Opt-in via Spring profiles after local compose stacks are up |
+| **Service POM** | Declares exact starters; activates `spring-boot-maven-plugin` for its own fat JAR |
+| **Portals** | Independent Angular apps under `Portals/`; no Java sharing with Middleware |
+| **Runtime** | Java 21 + Generational ZGC per service Dockerfile / `spring-boot:run` |
+
+```bash
+# Local infra (Redis + Postgres + Kafka)
+npm run local:containers:all:start
+npm run local:containers:all:status
+npm run local:containers:all:stop
+
+# Build / run one Middleware service (H2 default — no Docker required)
+mvn -pl Middleware/fx-qualify-service clean package
+mvn -pl Middleware/fx-qualify-service spring-boot:run
+# or: npm run run:qualify
+
+# Optional: Postgres + Redis profiles
+mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis
+```
+
 **5\. Technology & Resilience Pillars**
 
 > * **High-Throughput Concurrency (Java 21 Virtual Threads):** Combines imperative, readable business task pipelines with non-blocking I/O scalability for parallel market-data and credit-limit enrichment.  
@@ -138,6 +183,7 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 > * 2\. Strategic Value & Business Outcomes  
 > * 3\. Core Domain Capabilities  
 > * 4\. Enterprise Architecture Blueprint  
+> * 4.1 Maven Reactor Monorepo (Zero-Sharing Modules)  
 > * 5\. Technology & Resilience Pillars  
 > * 6\. High-Throughput Runtime & Kubernetes Capacity Architecture  
 > * 7\. Governance & Documentation
@@ -219,6 +265,50 @@ The platform adheres strictly to **Neal Ford's Closed-Layer Microservice Archite
 \| \[CLOSED\] Persistence & Distributed State Layer                                \|  
 \| In-Memory Hot Rule Cache \-\> Distributed Credit State \-\> Audit Stream          \|  
 \+-------------------------------------------------------------------------------+
+
+## **4.1 Maven Reactor Monorepo (Zero-Sharing Modules)**
+
+The repository is a **Maven Reactor Monorepo with Self-Contained Service Modules**. Root `pom.xml` stays at the repo root as aggregator + version BOM. Middleware services live under `Middleware/`; Angular UIs under `Portals/`; shared local infra under `CICD/Local/`. **There is zero cross-module Java source or shared library module.**
+
+```text
+fx-dynamic-liquidity-smart-order-engine/
+├── pom.xml                              # Aggregator + BOM (modules → Middleware/*)
+├── package.json                         # npm scripts + Portals workspaces
+├── Middleware/
+│   ├── fx-quote-service/                # Self-contained Spring Boot (H2 default)
+│   ├── fx-qualify-service/              # Self-contained (Drools + Resilience4j)
+│   └── fx-route-exec-service/           # Self-contained (routing / execution)
+├── Portals/                             # Angular UI apps (npm workspaces)
+└── CICD/Local/
+    ├── docker-all-up.sh | docker-all-down.sh | all-status.sh
+    ├── Redis/docker-compose.yaml
+    ├── Postgres/docker-compose.yaml
+    └── Kafka/docker-compose.yaml
+```
+
+| Rule | Practice |
+| :--- | :--- |
+| **Root POM** | `<dependencyManagement>` + `<pluginManagement>` only — no `<dependencies>`, no Boot plugin execution |
+| **Local DB** | Embedded **H2** by default; switch with `--spring.profiles.active=postgres` after `npm run local:containers:all:start` |
+| **Redis / Kafka** | Opt-in via Spring profiles after local compose stacks are up |
+| **Service POM** | Declares exact starters; activates `spring-boot-maven-plugin` for its own fat JAR |
+| **Portals** | Independent Angular apps under `Portals/`; no Java sharing with Middleware |
+| **Runtime** | Java 21 + Generational ZGC per service Dockerfile / `spring-boot:run` |
+
+```bash
+# Local infra (Redis + Postgres + Kafka)
+npm run local:containers:all:start
+npm run local:containers:all:status
+npm run local:containers:all:stop
+
+# Build / run one Middleware service (H2 default — no Docker required)
+mvn -pl Middleware/fx-qualify-service clean package
+mvn -pl Middleware/fx-qualify-service spring-boot:run
+# or: npm run run:qualify
+
+# Optional: Postgres + Redis profiles
+mvn -pl Middleware/fx-qualify-service spring-boot:run -Dspring-boot.run.profiles=postgres,redis
+```
 
 ## **5\. Technology & Resilience Pillars**
 

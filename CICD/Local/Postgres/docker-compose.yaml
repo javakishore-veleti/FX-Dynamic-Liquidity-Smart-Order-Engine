@@ -1,0 +1,23 @@
+name: fx-sor-postgres
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fx-sor-postgres
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fx_sor}
+      POSTGRES_USER: ${POSTGRES_USER:-fx_sor}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fx_sor}
+    volumes:
+      - fx_sor_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  fx_sor_postgres_data:

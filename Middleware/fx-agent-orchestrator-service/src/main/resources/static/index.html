@@ -5,54 +5,175 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>fx-agent-orchestrator-service</title>
 <style>
-:root{--bg:#0b1c2c;--panel:#12263a;--ink:#e8eef4;--muted:#9bb0c3;--accent:#2f9e8b;--line:#1e3a52;--card:#0f2436}
-*{box-sizing:border-box}body{margin:0;font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;background:radial-gradient(1200px 600px at 10% -10%,#16324a,transparent),var(--bg);color:var(--ink);line-height:1.5}
-a{color:var(--accent);text-decoration:none}a:hover{text-decoration:underline}
-.wrap{max-width:980px;margin:0 auto;padding:2.5rem 1.25rem 4rem}
-.hero{border:1px solid var(--line);background:linear-gradient(160deg,var(--panel),var(--card));border-radius:14px;padding:1.75rem 1.5rem;margin-bottom:1.25rem}
-.kicker{color:var(--muted);font-size:.85rem;letter-spacing:.04em;text-transform:uppercase;margin:0 0 .4rem}
-h1{margin:0 0 .5rem;font-size:1.75rem;font-weight:700}h2{margin:0 0 .75rem;font-size:1.05rem}
-.lead{margin:0;color:var(--muted);max-width:70ch}
-.grid{display:grid;gap:1rem;margin-top:1rem}
-@media(min-width:800px){.grid{grid-template-columns:1fr 1fr}}
-.card{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:1.1rem 1rem}
-ul{margin:.4rem 0 0;padding-left:1.1rem}li{margin:.28rem 0;color:var(--ink)}
-code,table{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.86rem}
-table{width:100%;border-collapse:collapse;margin-top:.4rem}th,td{border-bottom:1px solid var(--line);text-align:left;padding:.45rem .3rem;vertical-align:top}th{color:var(--muted);font-weight:600}
-.links{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
-.links a{border:1px solid var(--line);background:var(--panel);padding:.4rem .7rem;border-radius:8px;color:var(--ink)}
-.badge{display:inline-block;border:1px solid var(--line);color:var(--muted);border-radius:999px;padding:.15rem .55rem;font-size:.78rem;margin-left:.4rem}
+:root{
+  --bg:#f7f5f1;
+  --surface:#ffffff;
+  --ink:#1a1a1a;
+  --muted:#5c5c5c;
+  --line:#d9d4cb;
+  --accent:#0b5fff;
+  --accent-ink:#063799;
+  --soft:#efeae2;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,"Times New Roman",serif;
+  background:
+    linear-gradient(180deg,#fbfaf7 0%,var(--bg) 220px),
+    var(--bg);
+  color:var(--ink);
+  line-height:1.55;
+}
+h1,h2,h3,.sans{
+  font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  letter-spacing:-0.01em;
+}
+a{color:var(--accent-ink);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:920px;margin:0 auto;padding:2rem 1.25rem 4rem}
+.hero{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:1.75rem 1.5rem;
+  margin-bottom:1.25rem;
+}
+.kicker{
+  font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+  color:var(--muted);
+  font-size:0.78rem;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  margin:0 0 0.55rem;
+}
+h1{margin:0 0 0.55rem;font-size:1.85rem;font-weight:700;color:var(--ink)}
+.badge{
+  display:inline-block;
+  margin-left:0.45rem;
+  padding:0.12rem 0.5rem;
+  border:1px solid var(--line);
+  border-radius:999px;
+  font-size:0.78rem;
+  color:var(--muted);
+  font-weight:600;
+  vertical-align:middle;
+}
+.lead{margin:0;color:var(--muted);max-width:68ch;font-size:1.05rem}
+.toc,.section{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:1.15rem 1.25rem;
+  margin-bottom:1rem;
+}
+.toc h2,.section h2{
+  margin:0 0 0.75rem;
+  font-size:1.05rem;
+  font-weight:700;
+}
+.toc ol{margin:0;padding-left:1.2rem}
+.toc li{margin:0.35rem 0}
+.links{display:flex;flex-wrap:wrap;gap:0.55rem;margin-top:1rem}
+.links a{
+  font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+  font-size:0.88rem;
+  border:1px solid var(--line);
+  background:var(--soft);
+  color:var(--ink);
+  padding:0.42rem 0.7rem;
+  border-radius:3px;
+}
+.links a:hover{border-color:#b9b2a6;text-decoration:none}
+ul{margin:0.25rem 0 0;padding-left:1.15rem}
+li{margin:0.3rem 0}
+code,table{
+  font-family:"IBM Plex Mono","SF Mono",Menlo,Consolas,monospace;
+  font-size:0.86rem;
+}
+.meta{margin:0 0 0.65rem;color:var(--muted)}
+table{width:100%;border-collapse:collapse;margin-top:0.35rem}
+th,td{
+  border-bottom:1px solid var(--line);
+  text-align:left;
+  padding:0.55rem 0.35rem;
+  vertical-align:top;
+}
+th{
+  font-family:"Avenir Next","Segoe UI",system-ui,sans-serif;
+  color:var(--muted);
+  font-weight:650;
+  font-size:0.8rem;
+  text-transform:uppercase;
+  letter-spacing:0.04em;
+}
+.footer{
+  margin-top:1.5rem;
+  color:var(--muted);
+  font-size:0.9rem;
+}
 </style>
 </head>
 <body>
 <main class="wrap">
-  <section class="hero">
+  <header class="hero" id="top">
     <p class="kicker">FX Dynamic Liquidity &amp; Smart Order Routing</p>
     <h1>fx-agent-orchestrator-service<span class="badge">:8092</span></h1>
-    <p class="lead"><strong>Agent orchestrator (Java / Spring AI)</strong> — Coordinates multi-agent SRE and eFX copilots via MCP tools and the LiteLLM gateway.</p>
-    <div class="links">
+    <p class="lead"><strong>Agent orchestrator (Java / Spring AI).</strong> Coordinates multi-agent SRE and eFX copilots via MCP tools and the LiteLLM gateway.</p>
+    <div class="links sans">
       <a href="/swagger-ui.html">OpenAPI / Docs</a>
       <a href="/actuator/health">Health</a>
+      <a href="#api">API endpoints</a>
     </div>
+  </header>
+
+  <nav class="toc" id="contents" aria-label="Table of contents">
+    <h2>Table of contents</h2>
+    <ol>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#features">Business features</a></li>
+      <li><a href="#database">Database tables</a></li>
+      <li><a href="#api">API endpoints</a></li>
+      <li><a href="#ops">Operations links</a></li>
+    </ol>
+  </nav>
+
+  <section class="section" id="overview">
+    <h2>1. Overview</h2>
+    <p class="meta">Service port <code>8092</code> · dedicated database <code>fx_agent_orchestrator_db</code></p>
+    <p>Coordinates multi-agent SRE and eFX copilots via MCP tools and the LiteLLM gateway.</p>
   </section>
-  <div class="grid">
-    <section class="card">
-      <h2>Business features</h2>
-      <ul><li>Blast-radius, backpressure, incident RCA agents</li><li>Policy authoring, LP toxicity, best-execution explain</li><li>Treasury hedge, regulatory RAG, chaos sim, macro guard</li><li>A2A agent card at /.well-known/agent.json</li></ul>
-    </section>
-    <section class="card">
-      <h2>Database</h2>
-      <p class="lead" style="margin-bottom:.5rem">Dedicated database: <code>fx_agent_orchestrator_db</code></p>
-      <ul><li><code>agent_run_log</code></li></ul>
-    </section>
-  </div>
-  <section class="card" style="margin-top:1rem">
-    <h2>API endpoints</h2>
+
+  <section class="section" id="features">
+    <h2>2. Business features</h2>
+    <ul><li>Blast-radius, backpressure, incident RCA agents</li><li>Policy authoring, LP toxicity, best-execution explain</li><li>Treasury hedge, regulatory RAG, chaos sim, macro guard</li><li>A2A agent card at /.well-known/agent.json</li></ul>
+  </section>
+
+  <section class="section" id="database">
+    <h2>3. Database tables</h2>
+    <p class="meta">Database: <code>fx_agent_orchestrator_db</code></p>
+    <ul><li><code>agent_run_log</code></li></ul>
+  </section>
+
+  <section class="section" id="api">
+    <h2>4. API endpoints</h2>
     <table>
       <thead><tr><th>Method</th><th>Path</th><th>Purpose</th></tr></thead>
       <tbody><tr><td><code>POST</code></td><td><code>/api/v1/agents/blast-radius/analyze</code></td><td>Blast-radius agent</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/backpressure/assess</code></td><td>Backpressure agent</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/incident-rca/investigate</code></td><td>Incident RCA</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/policy-authoring/generate</code></td><td>Policy authoring</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/lp-toxicity/detect</code></td><td>LP toxicity</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/best-execution/explain</code></td><td>Best execution</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/treasury-hedge/copilot</code></td><td>Treasury hedge</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/regulatory-rag/ask</code></td><td>Regulatory RAG</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/chaos-sim/execute</code></td><td>Chaos simulation</td></tr><tr><td><code>POST</code></td><td><code>/api/v1/agents/macro-guard/assess</code></td><td>Macro guard</td></tr><tr><td><code>GET</code></td><td><code>/.well-known/agent.json</code></td><td>A2A agent card</td></tr><tr><td><code>GET</code></td><td><code>/swagger-ui.html</code></td><td>OpenAPI UI</td></tr></tbody>
     </table>
   </section>
+
+  <section class="section" id="ops">
+    <h2>5. Operations links</h2>
+    <div class="links sans">
+      <a href="/swagger-ui.html">OpenAPI / Docs</a>
+      <a href="/actuator/health">Health</a>
+      <a href="#top">Back to top</a>
+    </div>
+  </section>
+
+  <p class="footer">Local reference page for operators and developers. Replace <code>localhost</code> with the host IP when calling remotely.</p>
 </main>
 </body>
 </html>

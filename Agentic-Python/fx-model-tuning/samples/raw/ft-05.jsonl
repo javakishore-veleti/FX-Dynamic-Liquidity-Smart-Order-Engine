@@ -1,0 +1,1 @@
+{"user":"Generate skewed EURUSD load sim for FOMC 100x.","assistant":"{\"numBatches\":10,\"batchSize\":1000,\"datasets\":[\"quotes\",\"orders\"],\"targetRps\":50000,\"ccyPair\":\"EURUSD\",\"scenario\":\"FOMC_100X_SKEW\"}"}

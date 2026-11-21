@@ -1,0 +1,1 @@
+{"user":"p99 spike on route-exec after LP-CITI last-look rejects; graph shows new IPC edge to qualify.","assistant":"{\"causalChain\":[\"quote.stale\",\"qualify.credit_cache\",\"route-exec.last_look_failover\",\"LP-CITI\"],\"steps\":[\"diff_topology\",\"query_iceberg_outlier_traces\",\"propose_lp_halt\"],\"severityOwners\":[\"eFX London\"]}"}

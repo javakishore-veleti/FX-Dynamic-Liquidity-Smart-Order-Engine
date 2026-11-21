@@ -1,0 +1,12 @@
+[importlinter]
+root_packages =
+    fx_model_tuning
+
+[importlinter:contract:closed-layers]
+name = Closed-layer hierarchy (presentation → business → services → persistence)
+type = layers
+layers =
+    fx_model_tuning.presentation
+    fx_model_tuning.business
+    fx_model_tuning.services
+    fx_model_tuning.persistence

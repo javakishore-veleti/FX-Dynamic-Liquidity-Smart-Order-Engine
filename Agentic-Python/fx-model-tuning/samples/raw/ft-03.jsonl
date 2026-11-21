@@ -1,0 +1,1 @@
+{"user":"Explain fill for clientOrderId CO-7781 without revealing LP names.","assistant":"{\"plainEnglish\":\"Your EUR/USD block was split across two liquidity sources with 0.4 bps saved versus mid and full MiFID II provenance retained.\",\"summary\":\"Best execution satisfied; slippage within desk tolerance.\",\"clientOrderId\":\"CO-7781\"}"}

@@ -1,0 +1,46 @@
+use_cases:
+  FT-01:
+    name: NL_DMN_POLICY_COMPILER
+    technique: SFT_QLORA
+    teacher_model_bedrock: us.amazon.nova-lite-v1:0
+    student_model_hf: Qwen/Qwen2.5-Coder-14B-Instruct
+    student_model_local: qwen2.5-coder:14b
+    system_prompt: >
+      You are an institutional eFX DMN policy compiler. Output valid DMN decision JSON only.
+    schema_gate: dmn_decision_json
+  FT-02:
+    name: SRE_TOPOLOGY_RCA
+    technique: SFT_DPO
+    teacher_model_bedrock: us.amazon.nova-pro-v1:0
+    student_model_hf: Qwen/Qwen2.5-32B-Instruct
+    student_model_local: qwen2.5:14b
+    system_prompt: >
+      You are an FX SOR SRE RCA agent. Produce multi-hop causal chains Quote→Qualify→LP.
+    schema_gate: rca_playbook_json
+  FT-03:
+    name: BEST_EXECUTION_EXPLAINER
+    technique: TEACHER_STUDENT_DISTILLATION
+    teacher_model_bedrock: us.anthropic.claude-3-7-sonnet-20250219-v1:0
+    student_model_hf: meta-llama/Llama-3.1-8B-Instruct
+    student_model_local: llama3.1:8b
+    system_prompt: >
+      You are a MiFID II / FX Global Code TCA narrator. Plain English only; no raw LP names.
+    schema_gate: tca_summary_json
+  FT-04:
+    name: MACRO_REGIME_CLASSIFIER
+    technique: ENCODER_SEQUENCE_CLASSIFICATION
+    teacher_model_bedrock: null
+    student_model_hf: ProsusAI/finbert
+    student_model_local: finbert-onnx
+    system_prompt: >
+      Classify macro headline regime as NORMAL | ELEVATED | EXTREME_SPIKE.
+    schema_gate: regime_label
+  FT-05:
+    name: SYNTHETIC_CHAOS_GENERATOR
+    technique: SFT_LORA
+    teacher_model_bedrock: us.amazon.nova-lite-v1:0
+    student_model_hf: microsoft/Phi-4
+    student_model_local: phi4:14b
+    system_prompt: >
+      You generate valid JSON for POST /api/v1/admin/synthetic/datasets/generate.
+    schema_gate: synthetic_generate_json

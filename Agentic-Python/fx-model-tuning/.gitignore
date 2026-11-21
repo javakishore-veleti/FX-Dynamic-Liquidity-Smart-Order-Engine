@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.pyc
+samples/redacted/
+samples/distilled/
+samples/adapters/
+samples/eval/
+*.gguf
+*.onnx
+*.safetensors

@@ -2,7 +2,7 @@
   "name": "fx-dynamic-liquidity-smart-order-engine",
   "version": "1.0.0",
   "private": true,
-  "description": "FX Dynamic Liquidity & Smart Order Routing Engine — monorepo scripts for Middleware services and Portals UIs",
+  "description": "FX Dynamic Liquidity & Smart Order Routing Engine \u2014 monorepo scripts for Middleware services and Portals UIs",
   "scripts": {
     "local:containers:all:start": "bash CICD/Local/docker-all-up.sh",
     "local:containers:all:stop": "bash CICD/Local/docker-all-down.sh",
@@ -47,7 +47,9 @@
     "run:topology-mcp:full": "mvn -pl Middleware/fx-topology-mcp-server spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
     "run:agent-orchestrator:full": "mvn -pl Middleware/fx-agent-orchestrator-service spring-boot:run -Dspring-boot.run.profiles=local-postgres,load-redis,load-kafka",
     "run:topology-mcp:python": "cd Agentic-Python/fx-topology-mcp-server && uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8191",
-    "run:agent-orchestrator:python": "cd Agentic-Python/fx-agent-orchestrator-service && uvicorn fx_agent_orchestrator.app:app --host 0.0.0.0 --port 8192"
+    "run:agent-orchestrator:python": "cd Agentic-Python/fx-agent-orchestrator-service && uvicorn fx_agent_orchestrator.app:app --host 0.0.0.0 --port 8192",
+    "run:model-tuning": "python Agentic-Python/fx-model-tuning/scripts/run_pipeline.py",
+    "run:model-tuning:all": "bash Agentic-Python/fx-model-tuning/scripts/run_all_use_cases.sh"
   },
   "engines": {
     "node": ">=20"

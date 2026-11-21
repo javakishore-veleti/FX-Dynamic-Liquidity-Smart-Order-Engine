@@ -12,7 +12,7 @@ databaseChangeLog:
               - column: { name: session_regime, value: LONDON_NY_OVERLAP }
               - column: { name: markup_bps, valueNumeric: 0.7500 }
               - column: { name: news_multiplier, valueNumeric: 1.00 }
-              - column: { name: effective_from, valueDate: "2026-01-01T00:00:00Z" }
+              - column: { name: effective_from, value: "2026-01-01T00:00:00Z" }
               - column: { name: approved_by, value: SYSTEM_SEED }
         - insert:
             tableName: client_tier_spread_schedules
@@ -22,7 +22,7 @@ databaseChangeLog:
               - column: { name: session_regime, value: LONDON_NY_OVERLAP }
               - column: { name: markup_bps, valueNumeric: 1.5000 }
               - column: { name: news_multiplier, valueNumeric: 1.00 }
-              - column: { name: effective_from, valueDate: "2026-01-01T00:00:00Z" }
+              - column: { name: effective_from, value: "2026-01-01T00:00:00Z" }
               - column: { name: approved_by, value: SYSTEM_SEED }
         - insert:
             tableName: client_tier_spread_schedules
@@ -32,7 +32,7 @@ databaseChangeLog:
               - column: { name: session_regime, value: TOKYO }
               - column: { name: markup_bps, valueNumeric: 1.7500 }
               - column: { name: news_multiplier, valueNumeric: 1.10 }
-              - column: { name: effective_from, valueDate: "2026-01-01T00:00:00Z" }
+              - column: { name: effective_from, value: "2026-01-01T00:00:00Z" }
               - column: { name: approved_by, value: SYSTEM_SEED }
         - insert:
             tableName: client_tier_spread_schedules
@@ -42,5 +42,5 @@ databaseChangeLog:
               - column: { name: session_regime, value: NY_ROLLOVER }
               - column: { name: markup_bps, valueNumeric: 2.0000 }
               - column: { name: news_multiplier, valueNumeric: 1.25 }
-              - column: { name: effective_from, valueDate: "2026-01-01T00:00:00Z" }
+              - column: { name: effective_from, value: "2026-01-01T00:00:00Z" }
               - column: { name: approved_by, value: SYSTEM_SEED }

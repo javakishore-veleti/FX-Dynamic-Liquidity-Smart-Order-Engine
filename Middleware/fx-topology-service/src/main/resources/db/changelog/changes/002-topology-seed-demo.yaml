@@ -16,7 +16,7 @@ databaseChangeLog:
               - column: { name: egress_lp_gateway, value: null }
               - column: { name: socket_retransmits, valueNumeric: 2 }
               - column: { name: flow_count, valueNumeric: 18420 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:00:05Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:00:05Z' }
         - insert:
             tableName: topology_network_edges
             columns:
@@ -29,7 +29,7 @@ databaseChangeLog:
               - column: { name: egress_lp_gateway, value: null }
               - column: { name: socket_retransmits, valueNumeric: 0 }
               - column: { name: flow_count, valueNumeric: 9200 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:00:08Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:00:08Z' }
         - insert:
             tableName: topology_network_edges
             columns:
@@ -42,7 +42,7 @@ databaseChangeLog:
               - column: { name: egress_lp_gateway, value: 'lp-gateway-citi' }
               - column: { name: socket_retransmits, valueNumeric: 5 }
               - column: { name: flow_count, valueNumeric: 4100 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:00:12Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:00:12Z' }
         - insert:
             tableName: topology_network_edges
             columns:
@@ -55,7 +55,7 @@ databaseChangeLog:
               - column: { name: egress_lp_gateway, value: null }
               - column: { name: socket_retransmits, valueNumeric: 1 }
               - column: { name: flow_count, valueNumeric: 55000 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:00:03Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:00:03Z' }
 
   - changeSet:
       id: topology-002-seed-ipc
@@ -74,7 +74,7 @@ databaseChangeLog:
               - column: { name: p99_ms, valueNumeric: 1.8 }
               - column: { name: stp_fill_pct, valueNumeric: 99.2 }
               - column: { name: circuit_state, value: 'CLOSED' }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:05:00Z' }
         - insert:
             tableName: topology_ipc_edges
             columns:
@@ -88,7 +88,7 @@ databaseChangeLog:
               - column: { name: p99_ms, valueNumeric: 3.4 }
               - column: { name: stp_fill_pct, valueNumeric: 98.7 }
               - column: { name: circuit_state, value: 'CLOSED' }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:05:00Z' }
         - insert:
             tableName: topology_ipc_edges
             columns:
@@ -102,7 +102,7 @@ databaseChangeLog:
               - column: { name: p99_ms, valueNumeric: 12.5 }
               - column: { name: stp_fill_pct, valueNumeric: 94.1 }
               - column: { name: circuit_state, value: 'HALF_OPEN' }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:05:00Z' }
 
   - changeSet:
       id: topology-002-seed-traces
@@ -118,7 +118,7 @@ databaseChangeLog:
               - column: { name: knockout_reason, value: 'LAST_LOOK_REJECT' }
               - column: { name: winning_lp_id, value: 'LP_CITI' }
               - column: { name: latency_ms, valueNumeric: 18.4 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:04:22Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:04:22Z' }
         - insert:
             tableName: topology_trace_outliers
             columns:
@@ -129,7 +129,7 @@ databaseChangeLog:
               - column: { name: knockout_reason, value: 'CREDIT_HEADROOM' }
               - column: { name: winning_lp_id, value: null }
               - column: { name: latency_ms, valueNumeric: 11.2 }
-              - column: { name: observed_at, valueDate: '2026-11-21T15:04:40Z' }
+              - column: { name: observed_at, value: '2026-11-21T15:04:40Z' }
 
   - changeSet:
       id: topology-002-seed-snapshots
@@ -139,17 +139,17 @@ databaseChangeLog:
             tableName: topology_snapshots
             columns:
               - column: { name: id, value: '44444444-4444-4444-4444-444444444401' }
-              - column: { name: snapshot_ts, valueDate: '2026-11-21T14:00:00Z' }
+              - column: { name: snapshot_ts, value: '2026-11-21T14:00:00Z' }
               - column: { name: layer, value: 'UNIFIED' }
               - column: { name: edge_count, valueNumeric: 3 }
               - column: { name: node_summary, value: 'fx-quote-service,fx-qualify-service,fx-route-exec-service' }
-              - column: { name: created_at, valueDate: '2026-11-21T14:00:01Z' }
+              - column: { name: created_at, value: '2026-11-21T14:00:01Z' }
         - insert:
             tableName: topology_snapshots
             columns:
               - column: { name: id, value: '44444444-4444-4444-4444-444444444402' }
-              - column: { name: snapshot_ts, valueDate: '2026-11-21T15:00:00Z' }
+              - column: { name: snapshot_ts, value: '2026-11-21T15:00:00Z' }
               - column: { name: layer, value: 'UNIFIED' }
               - column: { name: edge_count, valueNumeric: 4 }
               - column: { name: node_summary, value: 'fx-quote-service,fx-qualify-service,fx-route-exec-service,redis-l2,lp-gateway-citi' }
-              - column: { name: created_at, valueDate: '2026-11-21T15:00:01Z' }
+              - column: { name: created_at, value: '2026-11-21T15:00:01Z' }

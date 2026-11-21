@@ -22,6 +22,8 @@ SERVICES=(
 PROFILES="${FX_SOR_SPRING_PROFILES:-}"
 # Bind all interfaces so services are reachable from any host (override with SERVER_ADDRESS)
 export SERVER_ADDRESS="${SERVER_ADDRESS:-0.0.0.0}"
+# First Maven boot can take >30s; override with FX_SOR_START_WAIT_SEC
+WAIT_SEC="${FX_SOR_START_WAIT_SEC:-120}"
 
 echo "==> Starting FX SOR middleware services (cwd=${ROOT_DIR}, bind=${SERVER_ADDRESS})"
 if [[ -n "${PROFILES}" ]]; then
@@ -30,14 +32,16 @@ fi
 
 cd "${ROOT_DIR}"
 
+WAIT_ENTRIES=()
+
 for entry in "${SERVICES[@]}"; do
   IFS='|' read -r name module port <<<"${entry}"
   pid_file="${RUN_ROOT}/middleware/pids/${name}.pid"
   log_file="${RUN_ROOT}/middleware/logs/${name}.log"
 
   existing="$(read_pid "${pid_file}" || true)"
-  if [[ -n "${existing}" ]] && is_pid_alive "${existing}"; then
-    echo "  [SKIP] ${name} already running pid=${existing}"
+  if [[ -n "${existing}" ]] && is_pid_alive "${existing}" && port_listening "${port}"; then
+    echo "  [SKIP] ${name} already up pid=${existing} port=${port}"
     continue
   fi
   if port_listening "${port}"; then
@@ -62,10 +66,24 @@ for entry in "${SERVICES[@]}"; do
       echo $! >"${pid_file}"
     fi
   )
+  WAIT_ENTRIES+=("${name}|${port}|${pid_file}|${log_file}")
 done
 
 echo
-echo "==> Middleware start requested. Status:"
+if ((${#WAIT_ENTRIES[@]} > 0)); then
+  set +e
+  wait_for_services "${WAIT_SEC}" "${WAIT_ENTRIES[@]}"
+  wait_rc=$?
+  set -e
+else
+  wait_rc=0
+fi
+
+echo
+echo "==> Middleware status"
 "${SCRIPT_DIR}/middleware-all-status.sh"
 echo
 echo "Tip: FX_SOR_SPRING_PROFILES=local-postgres,load-redis,load-kafka npm run local:middleware:all:start"
+echo "Tip: FX_SOR_START_WAIT_SEC=180 npm run local:middleware:all:start   # longer first-boot wait"
+
+exit "${wait_rc}"

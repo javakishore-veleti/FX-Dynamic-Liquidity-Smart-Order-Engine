@@ -87,3 +87,61 @@ print_status_row() {
     echo "  [DOWN]   ${name}  port=${port}"
   fi
 }
+
+# Poll until port listens or timeout. Returns 0 when ready, 1 on timeout/failure.
+# Exits as soon as the port is listening — does not wait out the full timeout.
+wait_for_port() {
+  local name="$1"
+  local port="$2"
+  local pid_file="$3"
+  local log_file="${4:-}"
+  local timeout_sec="${5:-${FX_SOR_START_WAIT_SEC:-120}}"
+  local interval_sec=2
+  local elapsed=0
+  local pid
+  pid="$(read_pid "${pid_file}" || true)"
+
+  while (( elapsed < timeout_sec )); do
+    if port_listening "${port}"; then
+      echo "  [UP]     ${name}  port=${port}  pid=${pid:-n/a}  ready=${elapsed}s"
+      return 0
+    fi
+    if [[ -n "${pid}" ]] && ! is_pid_alive "${pid}"; then
+      echo "  [FAIL]   ${name}  port=${port}  process exited after ${elapsed}s"
+      if [[ -n "${log_file}" && -f "${log_file}" ]]; then
+        echo "           last log lines (${log_file}):"
+        tail -n 12 "${log_file}" | sed 's/^/           /'
+      fi
+      return 1
+    fi
+    if [[ -n "${log_file}" && -f "${log_file}" ]] && grep -qE 'BUILD FAILURE|APPLICATION FAILED TO START' "${log_file}" 2>/dev/null; then
+      echo "  [FAIL]   ${name}  port=${port}  build/startup failure after ${elapsed}s"
+      tail -n 12 "${log_file}" | sed 's/^/           /'
+      return 1
+    fi
+    sleep "${interval_sec}"
+    elapsed=$((elapsed + interval_sec))
+  done
+
+  echo "  [TIMEOUT] ${name}  port=${port}  not listening after ${timeout_sec}s"
+  if [[ -n "${log_file}" && -f "${log_file}" ]]; then
+    tail -n 12 "${log_file}" | sed 's/^/           /'
+  fi
+  return 1
+}
+
+# Wait for a list of "name|port|pid_file|log_file" entries. Returns count of failures.
+wait_for_services() {
+  local timeout_sec="${1:-${FX_SOR_START_WAIT_SEC:-120}}"
+  shift
+  local failures=0
+  local entry name port pid_file log_file
+  echo "==> Waiting for readiness (max ${timeout_sec}s each; returns as soon as ready)"
+  for entry in "$@"; do
+    IFS='|' read -r name port pid_file log_file <<<"${entry}"
+    if ! wait_for_port "${name}" "${port}" "${pid_file}" "${log_file}" "${timeout_sec}"; then
+      failures=$((failures + 1))
+    fi
+  done
+  return "${failures}"
+}

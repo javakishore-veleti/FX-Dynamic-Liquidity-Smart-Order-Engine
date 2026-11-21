@@ -1,0 +1,233 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-001-network-edges
+      author: fx-sor
+      comment: Layer 1 network graph edges (eBPF / Hubble style) for fx_topology_db
+      changes:
+        - createTable:
+            tableName: topology_network_edges
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_topology_network_edges
+                    nullable: false
+              - column:
+                  name: src_service
+                  type: varchar(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dst_service
+                  type: varchar(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: time_bucket
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: pod_namespace
+                  type: varchar(64)
+              - column:
+                  name: az_zone
+                  type: varchar(32)
+              - column:
+                  name: egress_lp_gateway
+                  type: varchar(64)
+              - column:
+                  name: socket_retransmits
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: flow_count
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: observed_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: topology_network_edges
+            indexName: idx_topo_net_src_dst_bucket
+            columns:
+              - column:
+                  name: src_service
+              - column:
+                  name: dst_service
+              - column:
+                  name: time_bucket
+
+  - changeSet:
+      id: topology-001-ipc-edges
+      author: fx-sor
+      comment: Layer 2 application IPC graph edges for fx_topology_db
+      changes:
+        - createTable:
+            tableName: topology_ipc_edges
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_topology_ipc_edges
+                    nullable: false
+              - column:
+                  name: src_service
+                  type: varchar(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: dst_service
+                  type: varchar(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ccy_pair
+                  type: varchar(16)
+              - column:
+                  name: window_label
+                  type: varchar(16)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: availability_tier
+                  type: varchar(32)
+              - column:
+                  name: desk_owner
+                  type: varchar(32)
+              - column:
+                  name: p99_ms
+                  type: double
+              - column:
+                  name: stp_fill_pct
+                  type: double
+              - column:
+                  name: circuit_state
+                  type: varchar(32)
+              - column:
+                  name: observed_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: topology_ipc_edges
+            indexName: idx_topo_ipc_ccy_window
+            columns:
+              - column:
+                  name: ccy_pair
+              - column:
+                  name: window_label
+
+  - changeSet:
+      id: topology-001-trace-outliers
+      author: fx-sor
+      comment: Layer 3 tail-sampled outlier traces for fx_topology_db
+      changes:
+        - createTable:
+            tableName: topology_trace_outliers
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_topology_trace_outliers
+                    nullable: false
+              - column:
+                  name: service_name
+                  type: varchar(120)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: client_order_id
+                  type: varchar(64)
+              - column:
+                  name: drools_rule_version
+                  type: varchar(32)
+              - column:
+                  name: knockout_reason
+                  type: varchar(128)
+              - column:
+                  name: winning_lp_id
+                  type: varchar(64)
+              - column:
+                  name: latency_ms
+                  type: double
+                  constraints:
+                    nullable: false
+              - column:
+                  name: observed_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: topology_trace_outliers
+            indexName: idx_topo_trace_svc_latency
+            columns:
+              - column:
+                  name: service_name
+              - column:
+                  name: latency_ms
+                  descending: true
+
+  - changeSet:
+      id: topology-001-snapshots
+      author: fx-sor
+      comment: Time-travel topology snapshots for diff API
+      changes:
+        - createTable:
+            tableName: topology_snapshots
+            columns:
+              - column:
+                  name: id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_topology_snapshots
+                    nullable: false
+              - column:
+                  name: snapshot_ts
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: layer
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: edge_count
+                  type: int
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: node_summary
+                  type: clob
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+        - createIndex:
+            tableName: topology_snapshots
+            indexName: idx_topo_snap_ts_layer
+            columns:
+              - column:
+                  name: snapshot_ts
+              - column:
+                  name: layer

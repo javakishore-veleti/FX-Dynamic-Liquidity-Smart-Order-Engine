@@ -1,0 +1,155 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-002-seed-network
+      author: fx-sor
+      comment: Demo network edges for local blast-radius / graph queries
+      changes:
+        - insert:
+            tableName: topology_network_edges
+            columns:
+              - column: { name: id, value: '11111111-1111-1111-1111-111111111101' }
+              - column: { name: src_service, value: 'fx-quote-service' }
+              - column: { name: dst_service, value: 'fx-qualify-service' }
+              - column: { name: time_bucket, value: '2026-11-21T15:00' }
+              - column: { name: pod_namespace, value: 'fx-sor' }
+              - column: { name: az_zone, value: 'us-east-1a' }
+              - column: { name: egress_lp_gateway, value: null }
+              - column: { name: socket_retransmits, valueNumeric: 2 }
+              - column: { name: flow_count, valueNumeric: 18420 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:00:05Z' }
+        - insert:
+            tableName: topology_network_edges
+            columns:
+              - column: { name: id, value: '11111111-1111-1111-1111-111111111102' }
+              - column: { name: src_service, value: 'fx-qualify-service' }
+              - column: { name: dst_service, value: 'fx-route-exec-service' }
+              - column: { name: time_bucket, value: '2026-11-21T15:00' }
+              - column: { name: pod_namespace, value: 'fx-sor' }
+              - column: { name: az_zone, value: 'us-east-1b' }
+              - column: { name: egress_lp_gateway, value: null }
+              - column: { name: socket_retransmits, valueNumeric: 0 }
+              - column: { name: flow_count, valueNumeric: 9200 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:00:08Z' }
+        - insert:
+            tableName: topology_network_edges
+            columns:
+              - column: { name: id, value: '11111111-1111-1111-1111-111111111103' }
+              - column: { name: src_service, value: 'fx-route-exec-service' }
+              - column: { name: dst_service, value: 'lp-gateway-citi' }
+              - column: { name: time_bucket, value: '2026-11-21T15:00' }
+              - column: { name: pod_namespace, value: 'fx-sor' }
+              - column: { name: az_zone, value: 'us-east-1a' }
+              - column: { name: egress_lp_gateway, value: 'lp-gateway-citi' }
+              - column: { name: socket_retransmits, valueNumeric: 5 }
+              - column: { name: flow_count, valueNumeric: 4100 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:00:12Z' }
+        - insert:
+            tableName: topology_network_edges
+            columns:
+              - column: { name: id, value: '11111111-1111-1111-1111-111111111104' }
+              - column: { name: src_service, value: 'fx-qualify-service' }
+              - column: { name: dst_service, value: 'redis-l2' }
+              - column: { name: time_bucket, value: '2026-11-21T15:00' }
+              - column: { name: pod_namespace, value: 'fx-platform' }
+              - column: { name: az_zone, value: 'us-east-1a' }
+              - column: { name: egress_lp_gateway, value: null }
+              - column: { name: socket_retransmits, valueNumeric: 1 }
+              - column: { name: flow_count, valueNumeric: 55000 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:00:03Z' }
+
+  - changeSet:
+      id: topology-002-seed-ipc
+      author: fx-sor
+      changes:
+        - insert:
+            tableName: topology_ipc_edges
+            columns:
+              - column: { name: id, value: '22222222-2222-2222-2222-222222222201' }
+              - column: { name: src_service, value: 'fx-quote-service' }
+              - column: { name: dst_service, value: 'fx-qualify-service' }
+              - column: { name: ccy_pair, value: 'EURUSD' }
+              - column: { name: window_label, value: '5m' }
+              - column: { name: availability_tier, value: 'TIER_0_CRITICAL' }
+              - column: { name: desk_owner, value: 'NY_EFX' }
+              - column: { name: p99_ms, valueNumeric: 1.8 }
+              - column: { name: stp_fill_pct, valueNumeric: 99.2 }
+              - column: { name: circuit_state, value: 'CLOSED' }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+        - insert:
+            tableName: topology_ipc_edges
+            columns:
+              - column: { name: id, value: '22222222-2222-2222-2222-222222222202' }
+              - column: { name: src_service, value: 'fx-qualify-service' }
+              - column: { name: dst_service, value: 'fx-route-exec-service' }
+              - column: { name: ccy_pair, value: 'EURUSD' }
+              - column: { name: window_label, value: '5m' }
+              - column: { name: availability_tier, value: 'TIER_0_CRITICAL' }
+              - column: { name: desk_owner, value: 'NY_EFX' }
+              - column: { name: p99_ms, valueNumeric: 3.4 }
+              - column: { name: stp_fill_pct, valueNumeric: 98.7 }
+              - column: { name: circuit_state, value: 'CLOSED' }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+        - insert:
+            tableName: topology_ipc_edges
+            columns:
+              - column: { name: id, value: '22222222-2222-2222-2222-222222222203' }
+              - column: { name: src_service, value: 'fx-route-exec-service' }
+              - column: { name: dst_service, value: 'lp-gateway-jpm' }
+              - column: { name: ccy_pair, value: 'EURUSD' }
+              - column: { name: window_label, value: '5m' }
+              - column: { name: availability_tier, value: 'TIER_1' }
+              - column: { name: desk_owner, value: 'LON_EFX' }
+              - column: { name: p99_ms, valueNumeric: 12.5 }
+              - column: { name: stp_fill_pct, valueNumeric: 94.1 }
+              - column: { name: circuit_state, value: 'HALF_OPEN' }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:05:00Z' }
+
+  - changeSet:
+      id: topology-002-seed-traces
+      author: fx-sor
+      changes:
+        - insert:
+            tableName: topology_trace_outliers
+            columns:
+              - column: { name: id, value: '33333333-3333-3333-3333-333333333301' }
+              - column: { name: service_name, value: 'fx-route-exec-service' }
+              - column: { name: client_order_id, value: 'ORD-20261121-991' }
+              - column: { name: drools_rule_version, value: 'v2026.11.1' }
+              - column: { name: knockout_reason, value: 'LAST_LOOK_REJECT' }
+              - column: { name: winning_lp_id, value: 'LP_CITI' }
+              - column: { name: latency_ms, valueNumeric: 18.4 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:04:22Z' }
+        - insert:
+            tableName: topology_trace_outliers
+            columns:
+              - column: { name: id, value: '33333333-3333-3333-3333-333333333302' }
+              - column: { name: service_name, value: 'fx-qualify-service' }
+              - column: { name: client_order_id, value: 'ORD-20261121-992' }
+              - column: { name: drools_rule_version, value: null }
+              - column: { name: knockout_reason, value: 'CREDIT_HEADROOM' }
+              - column: { name: winning_lp_id, value: null }
+              - column: { name: latency_ms, valueNumeric: 11.2 }
+              - column: { name: observed_at, valueDate: '2026-11-21T15:04:40Z' }
+
+  - changeSet:
+      id: topology-002-seed-snapshots
+      author: fx-sor
+      changes:
+        - insert:
+            tableName: topology_snapshots
+            columns:
+              - column: { name: id, value: '44444444-4444-4444-4444-444444444401' }
+              - column: { name: snapshot_ts, valueDate: '2026-11-21T14:00:00Z' }
+              - column: { name: layer, value: 'UNIFIED' }
+              - column: { name: edge_count, valueNumeric: 3 }
+              - column: { name: node_summary, value: 'fx-quote-service,fx-qualify-service,fx-route-exec-service' }
+              - column: { name: created_at, valueDate: '2026-11-21T14:00:01Z' }
+        - insert:
+            tableName: topology_snapshots
+            columns:
+              - column: { name: id, value: '44444444-4444-4444-4444-444444444402' }
+              - column: { name: snapshot_ts, valueDate: '2026-11-21T15:00:00Z' }
+              - column: { name: layer, value: 'UNIFIED' }
+              - column: { name: edge_count, valueNumeric: 4 }
+              - column: { name: node_summary, value: 'fx-quote-service,fx-qualify-service,fx-route-exec-service,redis-l2,lp-gateway-citi' }
+              - column: { name: created_at, valueDate: '2026-11-21T15:00:01Z' }

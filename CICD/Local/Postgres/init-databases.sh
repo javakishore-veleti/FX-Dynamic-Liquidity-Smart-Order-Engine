@@ -9,4 +9,6 @@ CREATE DATABASE fx_quote_db;
 CREATE DATABASE fx_qualify_db;
 CREATE DATABASE fx_route_exec_db;
 CREATE DATABASE dlp_sor_system_db;
+CREATE DATABASE fx_topology_db;
+CREATE DATABASE fx_agent_orchestrator_db;
 SQL

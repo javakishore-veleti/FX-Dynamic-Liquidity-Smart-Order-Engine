@@ -327,6 +327,47 @@ th{
     </div>
 
     <div class="term">
+      <strong>Spot</strong>
+      <p>
+        In FX, <em>spot</em> means exchanging currencies for near-immediate delivery
+        (market convention is usually settlement in about <strong>T+2</strong> business days),
+        as opposed to a <em>forward</em> (a rate agreed now for a future date) or an NDF.
+        When this service defaults tenor to <code>SPOT</code>, it is pricing the everyday “buy/sell now” market, not a long-dated forward.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Mid (mid-rate)</strong>
+      <p>
+        Banks quote two sides: <em>bid</em> (price they buy base currency) and <em>ask</em> (price they sell).
+        The <em>mid</em> is the halfway point: <code>(bid + ask) / 2</code>.
+        It is a neutral reference level — not usually the price a client trades at (clients trade on bid or ask, plus markup).
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Spot mid</strong>
+      <p>
+        The mid-rate for the <em>spot</em> market in a currency pair.
+        Example: if EURUSD spot bid = 1.0848 and ask = 1.0850, spot mid ≈ <strong>1.0849</strong>.
+      </p>
+    </div>
+
+    <div class="term">
+      <strong>Spot mid lookup</strong>
+      <p>
+        An API call that returns the current spot bid/ask/mid (and related book info) for a pair —
+        here: <code>GET /api/v1/fx/rates/{ccyPair}</code>.
+        Plain meaning: “Look up today’s near-term EUR/USD (or other pair) reference price.”
+        It does not by itself book a trade; it reads the top of the LP quote book and computes mid.
+      </p>
+      <p class="example">
+        Common-man picture: checking the board rate for cash FX at the counter (“what’s the mid for euros today?”)
+        before you decide whether to buy or sell.
+      </p>
+    </div>
+
+    <div class="term">
       <strong>Live quote</strong>
       <p>
         A price that is current <em>right now</em>, not a stale printed rate from earlier.
@@ -388,7 +429,7 @@ th{
       <li>Push current FX prices to web screens (portal blotters) over SSE</li>
       <li>On-demand indicative (non-binding estimate) quote used by both Corporate and Retail portals</li>
       <li>Fee rules by client tier, pair, and market session (DB schedule); LP top-of-book held in local quote-book cache (~2s TTL)</li>
-      <li>Spot mid-rate lookup by currency pair</li>
+      <li>Spot mid lookup by currency pair (reference bid/ask/mid via <code>/api/v1/fx/rates/{ccyPair}</code>)</li>
     </ul>
   </section>
 
@@ -401,6 +442,40 @@ th{
         the fee price list: which markup (in bps) applies for a given client tier, currency pair, and session.
       </li>
     </ul>
+
+    <div class="term" style="margin-top:1rem">
+      <strong>What kind of data is this?</strong>
+      <p>
+        <strong>Reference / configuration (master-style pricing config)</strong> — not transactional trade data.
+        Rows describe durable pricing policy (“Tier 2 EURUSD in London/NY overlap costs 1.5 bps”), not individual customer trades.
+        Each request may <em>read</em> this table to price a quote, but the quote/trade itself is not written here.
+      </p>
+      <p>
+        Closest labels:
+      </p>
+      <ul>
+        <li><strong>Not transactional</strong> — no order fills, no payment ledger, no per-deal audit of execution</li>
+        <li><strong>Config / pricing master data</strong> — slowly changing rules maintained by risk/pricing/admin (with <code>approved_by</code> / <code>effective_from</code>)</li>
+      </ul>
+    </div>
+
+    <div class="term">
+      <strong>How often does it get updated?</strong>
+      <p>
+        In production intent: <strong>infrequently</strong> compared with live quotes —
+        typically when the desk changes client pricing policy (new tier, pair, session fee, or news multiplier),
+        often after maker-checker style approval. Think hours/days/weeks between changes, not every tick.
+      </p>
+      <p>
+        In this local demo: seeded once by Liquibase (<code>002-seed-eurusd-spread-schedules</code>) at startup;
+        it does not auto-update on every quote. Live market prices change in the LP quote-book cache (~2s TTL);
+        the schedule stays put until someone changes the config rows.
+      </p>
+      <p class="example">
+        Picture: the restaurant menu (schedule) changes occasionally; the kitchen’s “today’s special board” of live LP prices
+        (quote book) changes constantly. Diners read the menu for fees, then look at the board for the current market level.
+      </p>
+    </div>
   </section>
 
   <section class="section" id="api">

@@ -280,10 +280,10 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 |---|---|---|
 | F10.0 Premises and gap analysis | Thirteen premises from both posts, each with current state | DONE (docs) |
 | F10.1 Intermediary resolution (P4) | `IntermediaryResolver`: pure function, six unit tests (single LB, pass-through, chain of two, sum across paths, dead end, empty) | DONE (tests pass) |
-| F10.2 Layer tag and merged view (P1, P8) | Union of layers with agreement counts | TODO |
-| F10.3 Enrichment at write (P9) | Tier, domain, owner applied on write | TODO |
-| F10.4 Freshness window (P13) | `last_seen` and read-time expiry | TODO |
-| F10.5 Bounded ingest (P7) | Bounded queue with counted drops | TODO |
+| F10.2 Layer tag and merged view (P1, P8) | `LayerMerge`: union of layers with agreement counts; unit tested | DONE (tests pass) |
+| F10.3 Enrichment at write (P9) | `EdgeEnrich`: tiers, domain, UNKNOWN when metadata missing; unit tested | DONE (tests pass) |
+| F10.4 Freshness window (P13) | `Freshness`: edges fade past the window; unit tested | DONE (tests pass) |
+| F10.5 Bounded ingest (P7) | `IngestQueue`: bounded, refusals counted, not silent; unit tested | DONE (tests pass) |
 | F10.6 Stream ingest (P2) | Kafka consumers feeding F10.1 to F10.5 | TODO |
 | F10.7 Mutation history (P10) | Later | DEFERRED |
 
@@ -291,3 +291,4 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 |---|---|---|
 | 2026-11-22 | Topology premises document and epic E10 | (this commit) |
 | 2026-11-22 | F10.1: intermediary resolver with six unit tests; first attempt resolved intermediaries in one batch and failed the chain test, fixed by resolving one intermediary at a time | (this commit) |
+| 2026-11-22 | F10.2 to F10.5: layer merge, enrichment, freshness, bounded ingest, each with unit tests | (this commit) |

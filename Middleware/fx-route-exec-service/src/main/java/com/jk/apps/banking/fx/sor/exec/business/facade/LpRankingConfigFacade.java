@@ -22,9 +22,6 @@ public class LpRankingConfigFacade {
 
     public LpRankingConfigFacade(com.fasterxml.jackson.databind.ObjectMapper mapper) {
         this.mapper = mapper;
-        rankings.add(new LpRankingEntryDto("LP_CITI", 1, DEFAULT_RULE_VERSION, true));
-        rankings.add(new LpRankingEntryDto("LP_JPM", 2, DEFAULT_RULE_VERSION, true));
-        rankings.add(new LpRankingEntryDto("LP_GS", 3, DEFAULT_RULE_VERSION, true));
     }
 
     /** Loads the committed ranking starter (master/lp-rankings.json). Idempotent. Admin workflow only. */

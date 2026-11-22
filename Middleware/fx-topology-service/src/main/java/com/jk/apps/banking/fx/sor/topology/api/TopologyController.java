@@ -53,6 +53,23 @@ public class TopologyController {
         return rootSourceQuery.rank(thresholdMs);
     }
 
+    /** Paginated network graph (premise P3): GET /api/v1/topology/graph/network/page?page=0&size=50 */
+    @GetMapping("/graph/network/page")
+    public java.util.Map<String, Object> networkPage(
+            @RequestParam(name = "service", required = false) String service,
+            @RequestParam(name = "depth", defaultValue = "3") int depth,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "50") int size) {
+        int pageSize = Math.max(1, Math.min(size, 500));
+        int pageIndex = Math.max(0, page);
+        var all = topologyQueryService.networkGraph(service, depth, 0).edges();
+        int from = Math.min(all.size(), pageIndex * pageSize);
+        int to = Math.min(all.size(), from + pageSize);
+        return java.util.Map.of(
+                "page", pageIndex, "size", pageSize, "total", all.size(),
+                "edges", all.subList(from, to));
+    }
+
     @GetMapping("/graph/merged")
     public java.util.List<com.jk.apps.banking.fx.sor.topology.service.LayerMerge.Merged> mergedGraph(
             @RequestParam(name = "freshMinutes", defaultValue = "0") int freshMinutes) {

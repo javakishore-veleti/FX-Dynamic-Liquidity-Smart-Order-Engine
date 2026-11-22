@@ -38,6 +38,8 @@ public class FlowHopIngest {
     private final IngestQueue<FlowHop> queue;
     private final EdgeEnrich enrich;
     private final Freshness freshness;
+    private final IngestPartition partition;
+    private final java.util.concurrent.atomic.AtomicLong notOwned = new java.util.concurrent.atomic.AtomicLong();
     private final java.util.concurrent.atomic.AtomicLong stale = new java.util.concurrent.atomic.AtomicLong();
 
     @Autowired
@@ -46,8 +48,11 @@ public class FlowHopIngest {
             TopologyNetworkEdgeRepository repository,
             EdgeEnrich enrich,
             @Value("${fx.topology.intermediaries:}") List<String> intermediaries,
-            @Value("${fx.topology.freshness-minutes:10}") long freshnessMinutes) {
-        this(mapper, repository, enrich, Set.copyOf(intermediaries), 10_000, freshnessMinutes);
+            @Value("${fx.topology.freshness-minutes:10}") long freshnessMinutes,
+            @Value("${fx.topology.instance-id:local-1}") String instanceId,
+            @Value("${fx.topology.members:}") List<String> members) {
+        this(mapper, repository, enrich, Set.copyOf(intermediaries), 10_000, freshnessMinutes,
+                new IngestPartition(instanceId, members));
     }
 
     FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
@@ -57,6 +62,13 @@ public class FlowHopIngest {
 
     FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
                   Set<String> intermediaries, int capacity, long freshnessMinutes) {
+        this(mapper, repository, enrich, intermediaries, capacity, freshnessMinutes,
+                new IngestPartition("local-1", List.of()));
+    }
+
+    FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
+                  Set<String> intermediaries, int capacity, long freshnessMinutes, IngestPartition partition) {
+        this.partition = partition;
         this.freshness = new Freshness(Duration.ofMinutes(freshnessMinutes));
         this.mapper = mapper;
         this.repository = repository;
@@ -73,12 +85,21 @@ public class FlowHopIngest {
             return;
         }
         FlowHop hop = parse(json);
+        if (!partition.owns(hop.src())) {
+            notOwned.incrementAndGet();
+            return;
+        }
         while (!queue.offer(hop)) {
             Thread.sleep(10);
         }
     }
 
     /** Hops older than the freshness window are dropped at ingest and counted, never silently. */
+    /** Hops whose key belongs to another instance on the hash ring (P6). */
+    public long notOwnedCount() {
+        return notOwned.get();
+    }
+
     public long staleCount() {
         return stale.get();
     }

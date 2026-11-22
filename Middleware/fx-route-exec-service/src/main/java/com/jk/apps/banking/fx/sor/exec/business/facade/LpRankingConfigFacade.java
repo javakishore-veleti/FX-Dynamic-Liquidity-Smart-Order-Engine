@@ -18,10 +18,26 @@ public class LpRankingConfigFacade {
 
     private final CopyOnWriteArrayList<LpRankingEntryDto> rankings = new CopyOnWriteArrayList<>();
 
-    public LpRankingConfigFacade() {
+    private final com.fasterxml.jackson.databind.ObjectMapper mapper;
+
+    public LpRankingConfigFacade(com.fasterxml.jackson.databind.ObjectMapper mapper) {
+        this.mapper = mapper;
         rankings.add(new LpRankingEntryDto("LP_CITI", 1, DEFAULT_RULE_VERSION, true));
         rankings.add(new LpRankingEntryDto("LP_JPM", 2, DEFAULT_RULE_VERSION, true));
         rankings.add(new LpRankingEntryDto("LP_GS", 3, DEFAULT_RULE_VERSION, true));
+    }
+
+    /** Loads the committed ranking starter (master/lp-rankings.json). Idempotent. Admin workflow only. */
+    public int loadCommitted() {
+        List<LpRankingEntryDto> rows;
+        try (java.io.InputStream in = new org.springframework.core.io.ClassPathResource("master/lp-rankings.json").getInputStream()) {
+            rows = mapper.readValue(in, new com.fasterxml.jackson.core.type.TypeReference<List<LpRankingEntryDto>>() {
+            });
+        } catch (java.io.IOException ex) {
+            throw new IllegalStateException("cannot read master/lp-rankings.json", ex);
+        }
+        replaceAll(rows);
+        return rows.size();
     }
 
     public List<LpRankingEntryDto> listAll() {

@@ -1,0 +1,20 @@
+[
+  {
+    "lpId": "LP_CITI",
+    "rank": 1,
+    "ruleVersion": "LP_SCORE_v1.0",
+    "enabled": true
+  },
+  {
+    "lpId": "LP_JPM",
+    "rank": 2,
+    "ruleVersion": "LP_SCORE_v1.0",
+    "enabled": true
+  },
+  {
+    "lpId": "LP_GS",
+    "rank": 3,
+    "ruleVersion": "LP_SCORE_v1.0",
+    "enabled": true
+  }
+]

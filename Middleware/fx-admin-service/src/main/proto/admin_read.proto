@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+// Read-only admin API (workflow catalog and Initial Data status). REST and gRPC kept in step.
+package fx.admin.v1;
+
+option java_multiple_files = true;
+option java_package = "com.jk.apps.banking.fx.sor.admin.grpc.v1";
+option java_outer_classname = "AdminReadProto";
+
+service AdminRead {
+  rpc ListWorkflowDefinitions(WorkflowFilter) returns (WorkflowDefinitionList);
+  rpc ListInitialData(Empty) returns (InitialDataList);
+}
+
+message Empty {}
+
+message WorkflowFilter {
+  string portal_scope = 1;
+}
+
+message WorkflowDefinition {
+  string workflow_key = 1;
+  string name = 2;
+  string bpmn_resource = 3;
+  string version = 4;
+  string portal_scope = 5;
+  string status = 6;
+  string fr_id = 7;
+  string purpose = 8;
+}
+
+message WorkflowDefinitionList {
+  repeated WorkflowDefinition definitions = 1;
+}
+
+message InitialDataset {
+  string dataset_key = 1;
+  string title = 2;
+  string owner_service = 3;
+  string workflow_key = 4;
+  string setup_status = 5;
+  bool setup_allowed = 6;
+  string completed_at = 7;
+}
+
+message InitialDataList {
+  repeated InitialDataset datasets = 1;
+}

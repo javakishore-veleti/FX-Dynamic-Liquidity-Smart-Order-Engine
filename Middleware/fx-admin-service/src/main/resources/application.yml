@@ -1,6 +1,9 @@
 spring:
   application:
     name: fx-admin-service
+  grpc:
+    server:
+      port: 9084
   threads:
     virtual:
       enabled: true
@@ -41,6 +44,7 @@ fx:
   route-exec:
     base-url: ${FX_ROUTE_EXEC_BASE_URL:http://127.0.0.1:8083}
   features:
+    grpc-enabled: ${FX_GRPC_ENABLED:false}
     redis-enabled: false
     kafka-enabled: false
     liquibase-on-startup: ${LIQUIBASE_ON_STARTUP:true}

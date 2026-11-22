@@ -98,6 +98,7 @@
 | T-40 | F8.1 | Pair settlement attributes (SYNTHETIC until business values arrive) | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da` |
 | T-41 | F8.2 | Business questions answered with assumptions (section 7) | DONE (assumed) | 2026-11-22 | 2026-11-22 | `f190518` |
 | T-42 | F9.1 | Pair-code validation in qualify (UNKNOWN_PAIR) and route-exec (400) | DONE | 2026-11-22 | 2026-11-22 | `809b3f3`, `d9e64fd` |
+| T-45 | F4.11 | Credit lines: startup seed removed from qualify; committed `master/credit-lines.json`; `INIT_CREDIT_LINES` workflow (admin changeset 008); end to end: 3 loaded and verified, repeat 409 | DONE | 2026-11-22 | 2026-11-22 | `2ad1e4c` |
 | T-43 | F8.1 | Settlement seed (SYNTHETIC, 46 rows): generator, qualify changeset 003 removes startup EURUSD seed, qualify load endpoint, admin workflow `INIT_SETTLEMENT_POLICIES` | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da`, `982941f` |
 | T-44 | F4.6 | Purpose column: seeds start on `purpose`, not key prefix | DONE | 2026-11-22 | 2026-11-22 | `c0afc58` |
 
@@ -236,7 +237,7 @@ Replacing synthetic data with business or published data is a file change: regen
 1. **NFP and ECB dates are SYNTHETIC.** Replace with published schedules by editing the committed calendar file.
 2. **Settlement values are SYNTHETIC.** Replace with business values in the committed file.
 3. **Slippage limit is a placeholder (5 bps)** and is not yet enforced in route-exec.
-4. **Qualify still seeds credit lines at startup** (`seedCreditLines`). This predates the change and conflicts with the master-data rule. Move it to an Initial Data workflow in a follow-up.
+4. CLOSED: credit-line startup seed moved to `master/credit-lines.json` and the `INIT_CREDIT_LINES` workflow (verified: 3 loaded, 3 found, repeat 409).
 5. **Remaining datasets (F4.11):** credit lines, LP top-of-book, LP rankings. Each needs its own file and loader.
 6. **Browser click-through** of the Run setup button has not been done. The API path is verified.
 
@@ -248,3 +249,8 @@ Replacing synthetic data with business or published data is a file change: regen
 
 New downloads go to `FMOC-Meeings/YYYY-MM-DD-HH-MM-SS/`, one folder per download, with a `SOURCE.md` recording the URL and date.
 
+## 11. Progress log
+
+| Date | Change | Commit |
+|---|---|---|
+| 2026-11-22 | Credit lines moved to committed master data and workflow; qualify startup seed removed | `2ad1e4c` |

@@ -56,9 +56,19 @@ type WorkflowDef = {
                 <td class="small">{{ row.bpmnResource }}</td>
                 <td><span class="badge badge-fx">{{ row.status }}</span></td>
                 <td class="text-end">
+                  @if (isSeed(row.workflowKey)) {
+                    <button class="btn btn-fx btn-sm me-2"
+                            [disabled]="seedBusy() === row.workflowKey"
+                            (click)="runSeed(row.workflowKey)">
+                      {{ seedBusy() === row.workflowKey ? 'Running…' : 'Run setup' }}
+                    </button>
+                  }
                   <a class="btn btn-fx btn-sm" [routerLink]="['/workflows/executions']" [queryParams]="{ start: row.workflowKey }">
                     Run / view executions
                   </a>
+                  @if (seedMessage()[row.workflowKey]; as msg) {
+                    <div class="small mt-1" [class.text-success]="msg.ok" [class.text-danger]="!msg.ok">{{ msg.text }}</div>
+                  }
                 </td>
               </tr>
             } @empty {
@@ -76,6 +86,37 @@ export class WorkflowsMasterPage implements OnInit {
   private readonly http = inject(HttpClient);
   readonly api = API;
   readonly rows = signal<WorkflowDef[]>([]);
+  readonly seedBusy = signal<string | null>(null);
+  readonly seedMessage = signal<Record<string, { ok: boolean; text: string }>>({});
+
+  /** Seed workflows are the INIT_* rows. Each runs once from this button and takes no typed input. */
+  isSeed(workflowKey: string): boolean {
+    return workflowKey.startsWith('INIT_');
+  }
+
+  runSeed(workflowKey: string): void {
+    const dataset = workflowKey.replace(/^INIT_/, '');
+    this.seedBusy.set(workflowKey);
+    this.http
+      .post<{ setupStatus: string; title: string }>(
+        `${API.admin}/api/v1/admin/initial-data/${dataset}/setup`,
+        { triggeredBy: 'ADMIN_PORTAL' },
+      )
+      .subscribe({
+        next: (r) => {
+          this.seedBusy.set(null);
+          this.setMsg(workflowKey, r.setupStatus === 'COMPLETED', `${r.title}: ${r.setupStatus}`);
+        },
+        error: (e) => {
+          this.seedBusy.set(null);
+          this.setMsg(workflowKey, false, e?.error?.message || e?.message || 'Setup failed');
+        },
+      });
+  }
+
+  private setMsg(key: string, ok: boolean, text: string): void {
+    this.seedMessage.update((m) => ({ ...m, [key]: { ok, text } }));
+  }
   readonly error = signal<string | null>(null);
 
   ngOnInit(): void {

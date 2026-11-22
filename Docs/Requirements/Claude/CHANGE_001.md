@@ -295,3 +295,11 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | 2026-11-22 | F10.6: stream ingest with backpressure and drain to network edges; unit tests pass; Kafka end-to-end not run | (this commit) |
 | 2026-11-22 | F10.6 fix: `FlowHopIngest` had two constructors and Spring could not pick one, so the topology service failed to start. Unit tests did not start Spring, so they missed it. Fixed with `@Autowired`; service boots, health 200, network graph 200 | (this commit) |
 
+### E10 open items (not hidden)
+1. **Wiring:** `LayerMerge`, `EdgeEnrich`, and `Freshness` are tested library classes. They are not yet called from the REST read path (`/graph/network`, `/graph/ipc`) or from the ingest write path. Next step: call `EdgeEnrich` in `FlowHopIngest.drainOnce`, and `Freshness` on read.
+2. **Merged view:** no REST endpoint returns the `LayerMerge` union yet.
+3. **Kafka end to end:** the listener is compiled and the service boots, but no message has been sent to `fx.topology.flow-hop.v1` against the local Kafka container.
+4. **P5 and P6 (shuffle and consistent hashing):** design only, per TOPOLOGY-PREMISES §3.
+5. **P10 mutation history and re-aggregation:** deferred (F10.7).
+6. **IPC and trace ingest:** only flow-hop ingest exists. IPC and trace layers still have seed data only.
+

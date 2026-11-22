@@ -35,6 +35,12 @@ public class TopologyController {
         return topologyQueryService.networkGraph(service, depth);
     }
 
+    @GetMapping("/graph/merged")
+    public java.util.List<com.jk.apps.banking.fx.sor.topology.service.LayerMerge.Merged> mergedGraph(
+            @RequestParam(name = "freshMinutes", defaultValue = "0") int freshMinutes) {
+        return topologyQueryService.mergedGraph(freshMinutes);
+    }
+
     @GetMapping("/graph/ipc")
     public IpcGraphResponse ipcGraph(
             @RequestParam(name = "ccyPair", required = false) String ccyPair,

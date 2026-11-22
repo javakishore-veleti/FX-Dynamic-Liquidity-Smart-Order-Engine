@@ -208,3 +208,34 @@ All GitHub Actions and CloudFormation coding for the AWS deployment is written. 
 |---|---|---|
 | 2026-11-22 | Coding complete: 11 workflows and 4 templates, validated with actionlint, cfn-lint, YAML parse, and a local Maven package. Nothing run in AWS or GitHub | (this commit) |
 
+### 6.7 Cost budget and decisions (first deployment)
+
+Budget for the first run: about 30 minutes and at most $3. Decisions are chosen for cost and can be revisited after deployment.
+
+| Resource | Decision | Why |
+|---|---|---|
+| NAT gateway | None. Public subnets | A NAT gateway costs more per hour than the whole first run |
+| Database | RDS PostgreSQL, smallest instance class, single availability zone, 1 day of backups | Lowest cost managed database |
+| Compute | One Fargate task, 0.5 vCPU, 1 GB | Smallest reasonable size for the service |
+| Load balancer | One Application Load Balancer | Needed for HTTP access; the main fixed hourly cost |
+| Messaging | No managed Kafka | Kafka is the most expensive piece; the ingest path is tested locally |
+| Logs | 14-day retention | Keeps log storage cost near zero |
+| Registry | ECR, scan on push | Storage cost is small for one image |
+
+Estimated cost for a 30-minute run: well under $1 at on-demand list prices, before any free-tier credits. Use `AWS-0100-Destroy-All` straight after the run.
+
+Later optimisation candidates (after the first deployment): Fargate Spot, a smaller database, a scheduled stop of the service, and a managed Kafka alternative.
+
+### 6.8 GitHub secrets to update
+
+| Secret | Required | Used by |
+|---|---|---|
+| `AWS_ACCESS_KEY_ID` | Yes | Every AWS workflow |
+| `AWS_SECRET_ACCESS_KEY` | Yes | Every AWS workflow |
+| `AWS_REGION` | Yes | Every AWS workflow (for example `eu-west-1`) |
+| `VPC_ID` | Only when `use_existing_vpc` is `yes` | `AWS-0001-Setup-network` |
+| `REUSE_PUBLIC_SUBNET_A` | Only when reusing a VPC | `AWS-0001-Setup-network` |
+| `REUSE_PUBLIC_SUBNET_B` | Only when reusing a VPC | `AWS-0001-Setup-network` |
+
+The database password is not a secret you set. RDS creates it and keeps it in Secrets Manager.
+

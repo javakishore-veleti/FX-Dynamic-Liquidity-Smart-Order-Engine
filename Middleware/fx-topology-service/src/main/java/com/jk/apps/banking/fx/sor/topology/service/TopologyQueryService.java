@@ -32,6 +32,8 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import com.jk.apps.banking.fx.sor.topology.service.Freshness;
+import com.jk.apps.banking.fx.sor.topology.service.LayerMerge;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -64,6 +66,25 @@ public class TopologyQueryService {
         this.snapshotRepository = snapshotRepository;
         this.metrics = metrics;
         this.domainEvents = domainEvents;
+    }
+
+    /**
+     * Premises P1, P8, P13 (Netflix TechBlog): union of the network and IPC layers with agreement counts.
+     * freshMinutes greater than zero hides network edges not seen within that window; zero disables it.
+     */
+    public List<LayerMerge.Merged> mergedGraph(int freshMinutes) {
+        Freshness freshness = freshMinutes > 0 ? new Freshness(java.time.Duration.ofMinutes(freshMinutes)) : null;
+        Instant now = Instant.now();
+        List<LayerMerge.Edge> edges = new java.util.ArrayList<>();
+        for (TopologyNetworkEdge e : networkEdgeRepository.findAll()) {
+            if (freshness == null || freshness.isFresh(e.getObservedAt(), now)) {
+                edges.add(new LayerMerge.Edge("network", e.getSrcService(), e.getDstService()));
+            }
+        }
+        for (TopologyIpcEdge e : ipcEdgeRepository.findAll()) {
+            edges.add(new LayerMerge.Edge("ipc", e.getSrcService(), e.getDstService()));
+        }
+        return LayerMerge.merge(edges);
     }
 
     public NetworkGraphResponse networkGraph(String service, int depth) {

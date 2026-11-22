@@ -86,6 +86,9 @@ public class RouteExecService {
     }
 
     @Transactional
+    /** Placeholder slippage budget (business assumption F8.2 #3, 5 bps). Confirm with the business. */
+    static final BigDecimal DEFAULT_MAX_SLIPPAGE_BPS = new BigDecimal("5.0000");
+
     public RouteExecuteResponse routeExecute(RouteExecuteRequest request) {
         metrics.ordersRouteExecute().increment();
         String clientOrderId = request.getClientOrderId();
@@ -110,7 +113,7 @@ public class RouteExecService {
         String side = request.getSide() == null ? "BUY" : request.getSide().toUpperCase(Locale.ROOT);
         BigDecimal notional = request.getNotional() == null ? BigDecimal.ZERO : request.getNotional();
         BigDecimal maxSlip = request.getMaxSlippageBps() == null
-                ? new BigDecimal("2.0000")
+                ? DEFAULT_MAX_SLIPPAGE_BPS
                 : request.getMaxSlippageBps();
 
         BigDecimal mid = new BigDecimal("1.08500");

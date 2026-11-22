@@ -1,0 +1,88 @@
+databaseChangeLog:
+  - changeSet:
+      id: quote-004-add-purpose-note
+      author: fx-sor
+      changes:
+        - addColumn:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  type: varchar(500)
+                  constraints:
+                    nullable: true
+  - changeSet:
+      id: quote-004-seed-purpose-notes
+      author: fx-sor
+      comment: Desk-facing purpose for each seeded markup schedule
+      changes:
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Prime relationship pricing in deep London–NY liquidity — protect wallet share without giving away margin."
+            where: tier_id='TIER_1' AND ccy_pair='EURUSD' AND session_regime='LONDON_NY_OVERLAP'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Standard corporate pricing when both London and New York are open — baseline margin for mid-tier clients."
+            where: tier_id='TIER_2' AND ccy_pair='EURUSD' AND session_regime='LONDON_NY_OVERLAP'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Slightly wider markup in Asia hours — thinner EURUSD depth; avoid adverse selection overnight."
+            where: tier_id='TIER_2' AND ccy_pair='EURUSD' AND session_regime='TOKYO'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Defend margin at NY day-end rollover when books thin and last-look risk rises."
+            where: tier_id='TIER_2' AND ccy_pair='EURUSD' AND session_regime='NY_ROLLOVER'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "High-impact macro window (FOMC/NFP/ECB) — widen client markup and stress multiplier until desk clears."
+            where: tier_id='TIER_2' AND ccy_pair='EURUSD' AND session_regime='MACRO_NEWS_HIGH'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Tier-1 Tokyo session — modest widening vs overlap while keeping preferred-client pricing."
+            where: tier_id='TIER_1' AND ccy_pair='EURUSD' AND session_regime='TOKYO'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Tier-1 NY rollover guardrail — small markup step-up without losing franchise clients."
+            where: tier_id='TIER_1' AND ccy_pair='EURUSD' AND session_regime='NY_ROLLOVER'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Tier-1 macro stress schedule — tighter than mid-tier but still protects bank edge in news prints."
+            where: tier_id='TIER_1' AND ccy_pair='EURUSD' AND session_regime='MACRO_NEWS_HIGH'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Retail / high-touch Tier-3 in deep liquidity — wider client markup for operational cost recovery."
+            where: tier_id='TIER_3' AND ccy_pair='EURUSD' AND session_regime='LONDON_NY_OVERLAP'
+        - update:
+            tableName: client_tier_spread_schedules
+            columns:
+              - column:
+                  name: purpose_note
+                  value: "Tier-3 rollover — widest seeded markup; thin liquidity and higher reject risk for smaller clients."
+            where: tier_id='TIER_3' AND ccy_pair='EURUSD' AND session_regime='NY_ROLLOVER'

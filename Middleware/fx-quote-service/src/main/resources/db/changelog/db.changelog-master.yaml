@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/changes/002-seed-eurusd-spread-schedules.yaml
   - include:
       file: db/changelog/changes/003-spread-schedule-status-and-macro-seed.yaml
+  - include:
+      file: db/changelog/changes/004-schedule-purpose-note.yaml

@@ -41,6 +41,10 @@ public class ClientTierSpreadSchedule {
     @Column(name = "status", length = 20, nullable = false)
     private String status = "ACTIVE";
 
+    /** Desk-facing purpose — why this tier×pair×session markup exists. */
+    @Column(name = "purpose_note", length = 500)
+    private String purposeNote;
+
     public String getTierId() {
         return tierId;
     }
@@ -103,5 +107,13 @@ public class ClientTierSpreadSchedule {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPurposeNote() {
+        return purposeNote;
+    }
+
+    public void setPurposeNote(String purposeNote) {
+        this.purposeNote = purposeNote;
     }
 }

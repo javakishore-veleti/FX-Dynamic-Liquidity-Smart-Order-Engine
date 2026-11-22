@@ -14,6 +14,8 @@ import { RefCalendarPage } from './pages/ref-calendar';
 import { RefSettlementPage } from './pages/ref-settlement';
 import { RefCreditPage } from './pages/ref-credit';
 import { RefLpRankingsPage } from './pages/ref-lp-rankings';
+import { RefSchedulesPage } from './pages/ref-schedules';
+import { RefSchedulesCreatePage } from './pages/ref-schedules-create';
 
 export const routes: Routes = [
   {
@@ -25,7 +27,9 @@ export const routes: Routes = [
       { path: 'topology', component: TopologyPage },
       { path: 'incident-rca', component: IncidentRcaPage },
       { path: 'policy-studio', component: PolicyStudioPage },
-      { path: 'reference', pathMatch: 'full', redirectTo: 'reference/lp-book' },
+      { path: 'reference', pathMatch: 'full', redirectTo: 'reference/schedules' },
+      { path: 'reference/schedules', component: RefSchedulesPage },
+      { path: 'reference/schedules/create', component: RefSchedulesCreatePage },
       { path: 'reference/lp-book', component: RefLpBookPage },
       { path: 'reference/calendar', component: RefCalendarPage },
       { path: 'reference/settlement', component: RefSettlementPage },

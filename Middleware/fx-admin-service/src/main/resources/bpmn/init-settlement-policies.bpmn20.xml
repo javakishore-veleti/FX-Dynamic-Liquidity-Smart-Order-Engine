@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_SETTLE">
+  <process id="INIT_SETTLEMENT_POLICIES" name="Initial Data - Settlement Policies" isExecutable="true">
+    <startEvent id="start_settle" name="Start"/>
+    <sequenceFlow id="f_settle_1" sourceRef="start_settle" targetRef="task_init_load_settlement"/>
+    <serviceTask id="task_init_load_settlement" name="Load settlement policies into qualify"/>
+    <sequenceFlow id="f_settle_2" sourceRef="task_init_load_settlement" targetRef="task_init_verify_settlement"/>
+    <serviceTask id="task_init_verify_settlement" name="Verify settlement policy count in qualify"/>
+    <sequenceFlow id="f_settle_3" sourceRef="task_init_verify_settlement" targetRef="end_settle"/>
+    <endEvent id="end_settle" name="Done"/>
+  </process>
+</definitions>

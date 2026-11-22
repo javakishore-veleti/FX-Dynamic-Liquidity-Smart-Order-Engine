@@ -9,6 +9,7 @@ public final class InitDataCatalog {
     /** workflows.purpose value that marks a seed workflow. */
     public static final String PURPOSE = "INITIAL_DATA_SETUP";
     public static final String PAIRS_WORKFLOW = "INIT_CURRENCY_PAIRS";
+    public static final String SETTLEMENT_WORKFLOW = "INIT_SETTLEMENT_POLICIES";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
@@ -29,6 +30,13 @@ public final class InitDataCatalog {
                     "fx-quote-service",
                     PAIRS_WORKFLOW,
                     "fx-quote-service master/currency-pairs.json"),
+            new Dataset(
+                    "SETTLEMENT_POLICIES",
+                    "Settlement Policies",
+                    "SPOT and TOM cutoffs, clip limits, CLS and restricted flags per pair. SYNTHETIC seed until business values arrive. Owner: qualify.",
+                    "fx-qualify-service",
+                    SETTLEMENT_WORKFLOW,
+                    "fx-qualify-service master/settlement-policies.synthetic.json"),
             new Dataset(
                     "ECONOMIC_CALENDAR",
                     "Economic Calendar",

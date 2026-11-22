@@ -11,3 +11,5 @@ databaseChangeLog:
       file: db/changelog/changes/005-currency-pairs-workflow.yaml
   - include:
       file: db/changelog/changes/006-workflows-purpose.yaml
+  - include:
+      file: db/changelog/changes/007-settlement-workflow.yaml

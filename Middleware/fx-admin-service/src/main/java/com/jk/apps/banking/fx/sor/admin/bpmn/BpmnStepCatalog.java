@@ -34,6 +34,10 @@ public final class BpmnStepCatalog {
             new Step("task_init_load_pairs", "Load currency pair master into quote", TaskType.SERVICE),
             new Step("task_init_verify_pairs", "Verify currency pair count in quote", TaskType.SERVICE));
 
+    private static final List<Step> INIT_SETTLEMENT_POLICIES = List.of(
+            new Step("task_init_load_settlement", "Load settlement policies into qualify", TaskType.SERVICE),
+            new Step("task_init_verify_settlement", "Verify settlement policy count in qualify", TaskType.SERVICE));
+
     private static final Map<String, List<Step>> BY_KEY = Map.of(
             Fr01BpmnDefinition.PROCESS_KEY,
             FR01_ADMIN,
@@ -44,6 +48,8 @@ public final class BpmnStepCatalog {
                     new Step("task_route_execute", "Route-execute with last-look penalty", TaskType.SERVICE)),
             InitDataCatalog.PAIRS_WORKFLOW,
             INIT_CURRENCY_PAIRS,
+            InitDataCatalog.SETTLEMENT_WORKFLOW,
+            INIT_SETTLEMENT_POLICIES,
             InitDataCatalog.CALENDAR_WORKFLOW,
             INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-007-seed-initial-data-workflow-settlement
+      author: fx-sor
+      comment: Master definition for the Initial Data workflow (settlement policies). Purpose marks it as seed.
+      changes:
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: INIT_SETTLEMENT_POLICIES }
+              - column: { name: name, value: "Initial Data · Settlement Policies" }
+              - column:
+                  name: description
+                  value: "Load SPOT and TOM settlement policies into fx-qualify-service and verify the count"
+              - column: { name: bpmn_resource, value: bpmn/init-settlement-policies.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: ADMIN }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: INITIAL_DATA }
+              - column: { name: purpose, value: INITIAL_DATA_SETUP }

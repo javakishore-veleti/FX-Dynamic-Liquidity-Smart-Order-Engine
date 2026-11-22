@@ -12,7 +12,7 @@ public final class EdgeEnrich {
     public record ServiceMeta(String tier, String domain, String owner) {
     }
 
-    public record Enriched(String src, String dst, String srcTier, String dstTier, String domain) {
+    public record Enriched(String src, String dst, String srcTier, String dstTier, String domain, String owner) {
     }
 
     public static final String UNKNOWN = "UNKNOWN";
@@ -30,6 +30,7 @@ public final class EdgeEnrich {
         return new Enriched(src, dst,
                 s == null ? UNKNOWN : s.tier(),
                 d == null ? UNKNOWN : d.tier(),
-                domain);
+                domain,
+                d == null ? UNKNOWN : d.owner());
     }
 }

@@ -284,7 +284,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | F10.3 Enrichment at write (P9) | `EdgeEnrich`: tiers, domain, UNKNOWN when metadata missing; unit tested | DONE (tests pass) |
 | F10.4 Freshness window (P13) | `Freshness`: edges fade past the window; unit tested | DONE (tests pass) |
 | F10.5 Bounded ingest (P7) | `IngestQueue`: bounded, refusals counted, not silent; unit tested | DONE (tests pass) |
-| F10.6 Stream ingest (P2) | Kafka consumers feeding F10.1 to F10.5 | TODO |
+| F10.6 Stream ingest (P2) | `FlowHopIngest` + `FlowHopListener`: topic `fx.topology.flow-hop.v1`, JSON `{src,dst,flows}`, bounded queue (blocks when full), 5-minute drain resolves and writes `topology_network_edges`. Unit tested (3). **Not yet run against Kafka.** Listener is off unless `fx.features.kafka-enabled=true` | DONE (unit); Kafka end-to-end NOT RUN |
 | F10.7 Mutation history (P10) | Later | DEFERRED |
 
 | Date | Change | Commit |
@@ -292,3 +292,4 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | 2026-11-22 | Topology premises document and epic E10 | (this commit) |
 | 2026-11-22 | F10.1: intermediary resolver with six unit tests; first attempt resolved intermediaries in one batch and failed the chain test, fixed by resolving one intermediary at a time | (this commit) |
 | 2026-11-22 | F10.2 to F10.5: layer merge, enrichment, freshness, bounded ingest, each with unit tests | (this commit) |
+| 2026-11-22 | F10.6: stream ingest with backpressure and drain to network edges; unit tests pass; Kafka end-to-end not run | (this commit) |

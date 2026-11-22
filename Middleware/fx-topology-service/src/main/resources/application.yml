@@ -128,7 +128,15 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: fx-topology
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 fx:
+  topology:
+    flow-topic: fx.topology.flow-hop.v1
+    drain-ms: 5000
+    intermediaries: []
   features:
     kafka-enabled: true
 app:

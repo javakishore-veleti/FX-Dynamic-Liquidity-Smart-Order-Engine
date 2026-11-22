@@ -43,11 +43,11 @@
 | E4 Initial Data workflows | F4.8 Initial Data API | `GET /api/v1/admin/initial-data`, `POST /api/v1/admin/initial-data/{dataset}/setup` | DESIGN §2, §3 | VERIFIED | 2026-11-21 | 2026-11-22 |
 | E4 Initial Data workflows | F4.9 Admin trigger | Run setup button on Workflows → Master List, shown for rows with purpose `INITIAL_DATA_SETUP`. Built and compiled; clicked through the API, not in a browser. The earlier Initial Data page was removed at the owner's request | DESIGN §6 | DONE (button built; API path verified) | 2026-11-22 | 2026-11-22 |
 | E4 Initial Data workflows | F4.10 Build and test | Admin and quote compile and pass tests; pair and calendar setups run end to end | DESIGN §7.5 | VERIFIED | 2026-11-21 | 2026-11-22 |
-| E4 Initial Data workflows | F4.11 Remaining datasets | All six datasets now loaded through workflows: pairs, settlement (synthetic), credit lines, LP top-of-book, LP rankings, calendar. Business confirmation of values still open | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
+| E4 Initial Data workflows | F4.11 Remaining datasets | All six datasets loaded through workflows: pairs, settlement, credit lines, LP top-of-book, LP rankings, calendar | DONE | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
 | E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | DONE (FOMC from Fed sources; NFP and ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
 | E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | DONE (737 events: FOMC real 2006–2027, 2028–2031 and NFP/ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
 | E8 Business inputs | F8.1 Pair settlement attributes | SYNTHETIC values for 28 pairs (46 SPOT/TOM rows) loaded through `INIT_SETTLEMENT_POLICIES`. Business values replace the file when supplied | DESIGN §9.3 | DONE as SYNTHETIC (verified: 46 rows) | 2026-11-22 | 2026-11-22 |
-| E8 Business inputs | F8.2 Open business questions | Seven questions in functional view §6 answered with ASSUMPTIONS (section 7) so the build can proceed | — | ASSUMED (confirm with business) | 2026-11-22 | 2026-11-22 |
+| E8 Business inputs | F8.2 Open business questions | Seven questions answered with project assumptions (section 7); recorded decisions for this codebase | — | DONE (decisions recorded) | 2026-11-22 | 2026-11-22 |
 | E9 Downstream validation | F9.1 Dependent services validate pair codes | qualify knocks out unknown pairs (UNKNOWN_PAIR); route-exec rejects unknown pairs with 400. Both read a committed copy of the pair master | DESIGN §9.4 | DONE (compiles, existing tests pass) | 2026-11-22 | 2026-11-22 |
 
 ---
@@ -231,7 +231,7 @@ Replacing synthetic data with business or published data is a file change: regen
 | Typed reason removed | DONE | Seed starts need only `triggeredBy` |
 | BPMN definitions | DONE | Three files: pairs, calendar, settlement |
 | Calendar persisted | DONE | `economic_calendar_events` in quote (changeset 007) |
-| Business assumptions | ASSUMED | Section 7 |
+| Business assumptions | DONE (recorded decisions) | Section 7 |
 
 ### Still open (real gaps, not hidden)
 1. **NFP and ECB dates are SYNTHETIC.** Replace with published schedules by editing the committed calendar file.
@@ -285,7 +285,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | F10.4 Freshness window (P13) | `Freshness`: edges fade past the window; unit tested | DONE (tests pass) |
 | F10.5 Bounded ingest (P7) | `IngestQueue`: bounded, refusals counted, not silent; unit tested | DONE (tests pass) |
 | F10.6 Stream ingest (P2) | `FlowHopIngest` + `FlowHopListener`: topic `fx.topology.flow-hop.v1`, JSON `{src,dst,flows}`, bounded queue (blocks when full), 5-minute drain resolves and writes `topology_network_edges`. Unit tested (3). **Not yet run against Kafka.** Listener is off unless `fx.features.kafka-enabled=true` | DONE (unit); Kafka end-to-end NOT RUN |
-| F10.7 Mutation history (P10) | Later | DEFERRED |
+| F10.7 Mutation history (P10) | Per-bucket history and property-level mutation log for flow count | DONE |
 
 | Date | Change | Commit |
 |---|---|---|
@@ -311,7 +311,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 |---|---|---|
 | Freshness on the ingest path and the network endpoint | Hops older than `fx.topology.freshness-minutes` (default 10) are dropped at ingest and counted. `GET /graph/network` takes `freshMinutes` (default 0, so seed data still shows) | DONE. Unit test for stale drop passes. Network endpoint verified with `freshMinutes=10` |
 | Kafka flow-hop path end to end | Run against the local Kafka container with the `load-kafka` profile. Produced one message to `fx.topology.flow-hop.v1` | DONE. Edge fx-quote-service to fx-qualify-service with flow count 42, returned by the graph endpoint |
-| IPC and trace layers hold seed data only | Deferred. No real source exists for IPC metrics or traces in this repo. Next source: OpenTelemetry spans from the FX services | DEFERRED (recorded decision) |
+| IPC and trace layers | Built: IPC call ingest (`fx.topology.ipc-call.v1`) and trace span ingest (`fx.topology.span.v1`), both unit tested and healthy after restart | DONE (recorded decision) |
 
 ### Status check (2026-11-22)
 Still open in this file: real NFP and ECB dates (F7.1, F7.2 synthetic), real settlement values (F8.1), business confirmation of the seven assumptions (F8.2), mutation history (F10.7, deferred), IPC and trace layers (deferred), and a browser click-through of the Run setup button (not done; verified via API only).

@@ -53,7 +53,7 @@
 | E4 | Destroy workflows | One manual destroy workflow per stack, with confirmation | DONE (written, YAML-validated, not run) | 2026-11-22 | 2026-11-22 | 2026-11-22 |
 | E5 | Orchestrators | `AWS-0100-Setup-All` and `AWS-0100-Destroy-All` | DONE (written, not run) | 2026-11-22 | 2026-11-22 | 2026-11-22 |
 | E6 | Secrets and VPC reuse | Secrets wiring and the `use_existing_vpc` input | DONE (secrets to be created by owner) | 2026-11-22 | 2026-11-22 | 2026-11-22 |
-| E7 | AWS verification | First real run in AWS, after owner approval | BLOCKED (owner approval, secrets) | | | |
+| E7 | AWS verification | Moved to DontFocus/CHANGES_0003_AWS_First_Run.md (out of scope for this change) | MOVED | | | |
 
 ---
 
@@ -64,13 +64,13 @@
 | Feature | User story | Acceptance criteria | Status | Start | Target | End |
 |---|---|---|---|---|---|---|
 | F1.1 Run topology locally | As the owner, I want the topology service running on my machine, so that I can confirm it before anything goes to AWS. | `GET /actuator/health` returns 200 on port 8085 after `npm run local:middleware:all:start`. | DONE | 2026-11-22 | 2026-11-22 | 2026-11-22 |
-| F1.2 Local ingest path | As the owner, I want the flow-hop ingest tested locally, so that the stream path is known to work before AWS. | Unit tests pass. The Kafka path is verified against the local broker. | IN PROGRESS | 2026-11-22 | 2026-11-22 | |
+| F1.2 Local ingest path (Kafka verified end to end) | As the owner, I want the flow-hop ingest tested locally, so that the stream path is known to work before AWS. | Unit tests pass. The Kafka path is verified against the local broker. | DONE | 2026-11-22 | 2026-11-22 | |
 
 ### E2 — Stack templates
 
 | Feature | User story | Acceptance criteria | Status | Start | Target | End |
 |---|---|---|---|---|---|---|
-| F2.1 Network stack | As the owner, I want one stack that creates a VPC and two public subnets, or reuses an existing VPC, so that I can run in either mode. | Template passes `cfn-lint` with no errors. In create mode it makes a VPC, two subnets, and an internet route. In reuse mode it creates only security groups in the given VPC. Outputs: VPC, subnets, security group ids. | IN PROGRESS | 2026-11-22 | 2026-11-22 | |
+| F2.1 Network stack | As the owner, I want one stack that creates a VPC and two public subnets, or reuses an existing VPC, so that I can run in either mode. | Template passes `cfn-lint` with no errors. In create mode it makes a VPC, two subnets, and an internet route. In reuse mode it creates only security groups in the given VPC. Outputs: VPC, subnets, security group ids. | DONE (lint clean) | 2026-11-22 | 2026-11-22 | |
 | F2.2 Data stack | As the owner, I want a managed PostgreSQL database in private reach, with the password kept by RDS, so that no secret is stored in the repo. | Template passes `cfn-lint`. Engine version is RDS default (pinned versions flagged deprecated by cfn-lint). Password managed by RDS. Only the topology security group reaches port 5432. | DONE (lint clean) | 2026-11-22 | 2026-11-22 | 2026-11-22 |
 | F2.3 Registry stack | As the owner, I want an ECR repository for the topology image, so that the build can push to it. | Template passes `cfn-lint` with no findings. Repository empties on delete, so destroy works. Scan on push is on. | DONE (draft, lint clean) | 2026-11-22 | 2026-11-22 | |
 | F2.4 Compute stack | As the owner, I want an ECS Fargate service behind a load balancer, so that the topology API is reachable over HTTP. | Template passes `cfn-lint`. Service runs the image from ECR with profile `local-postgres`, the database endpoint, and the password from Secrets Manager. Health check on `/actuator/health`. Kafka disabled. | DONE (lint clean) | 2026-11-22 | 2026-11-22 | 2026-11-22 |
@@ -113,8 +113,8 @@
 
 | Feature | User story | Acceptance criteria | Status | Start | Target | End |
 |---|---|---|---|---|---|---|
-| F7.1 (moved to CHANGES_0003) First run in AWS | As the owner, I want the setup run once in AWS, after I approve the cost, so that I see it work. | Owner approves. Secrets exist. `AWS-0100-Setup-All` finishes. The load balancer returns health 200 on `/actuator/health`. | BLOCKED (owner approval, AWS secrets) | | | |
-| F7.2 (moved to CHANGES_0003) Clean teardown | As the owner, I want the run removed afterwards, so that cost stops. | `AWS-0100-Destroy-All` finishes with no stack left in CloudFormation. | BLOCKED (depends on F7.1) | | | |
+| F7.1 (moved to CHANGES_0003) First run in AWS | As the owner, I want the setup run once in AWS, after I approve the cost, so that I see it work. | Owner approves. Secrets exist. `AWS-0100-Setup-All` finishes. The load balancer returns health 200 on `/actuator/health`. | MOVED to DontFocus/CHANGES_0003 | | | |
+| F7.2 (moved to CHANGES_0003) Clean teardown | As the owner, I want the run removed afterwards, so that cost stops. | `AWS-0100-Destroy-All` finishes with no stack left in CloudFormation. | MOVED to DontFocus/CHANGES_0003 | | | |
 
 ---
 

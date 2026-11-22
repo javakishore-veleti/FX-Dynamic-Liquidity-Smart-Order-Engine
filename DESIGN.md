@@ -93,3 +93,19 @@ Rules:
 3. Business rules and personas live in `Docs/Requirements/Claude/functional-requirements-business-view.md`.
 4. Superseded documents go to `Docs/Archive/`. Do not keep duplicate copies.
 5. Do not state a compliance claim as fact unless the business has confirmed it (see PRD §1 note on targets).
+
+## 9. Data classification rules
+
+Every dataset is one of two kinds. The kind decides where it lives and what happens when its owner is down.
+
+| Kind | What it is | Stored where | Read by dependents | If owner is down |
+|---|---|---|---|---|
+| **Master data (initial data)** | Static reference lists known in advance: currency pair master, economic calendar (history, current, future) | Committed JSON in the owner's repo folder, loaded into the owner's DB by its Initial Data workflow | Read from the same committed JSON, bundled with the dependent service | Dependent keeps working from its committed copy |
+| **Transactional data** | Everything else: quotes, orders, fills, and runtime config changed through maker-checker (for example markup schedules, credit limits) | Owner's database only | Always live, through the owner's API | Request fails with HTTP 500. No fallback, nothing is saved |
+
+Rules:
+1. Only master data is committed to the repo. Transactional data is never committed.
+2. Markup schedules are not master data. They are not part of the initial load and are created later through maker-checker.
+3. Each master dataset is one JSON file, one dataset per file, with its schema described next to it. The file is easy to read for humans and agents.
+4. Dependent services reference master data by its system-unique code (for example the pair code `EURUSD`). They store the code as a plain column, with no cross-service database foreign key. Within one service's own tables, real foreign keys still apply.
+5. A committed master file changes only through a code change and review. A runtime change to master data is not allowed.

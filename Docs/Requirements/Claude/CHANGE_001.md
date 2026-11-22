@@ -119,3 +119,16 @@ Columns follow the requested view. "None" means the item does not touch that are
 5. End-to-end run of the button (F4.10, T-23) not yet done.
 6. Old Reference Data pages remain routable but are no longer in the left nav.
 7. Admin uses a flat layout; DESIGN.md §2 defines the rules for new admin code.
+
+---
+
+## 6. Decisions recorded 2026-11-22
+
+| Decision | Detail | Status |
+|---|---|---|
+| Data classification | Master data (committed JSON, initial load) vs transactional data (owner API only, HTTP 500 if owner is down). Recorded in `DESIGN.md` §9. | DONE (docs) |
+| Initial data scope | Currency pair master (28 pairs) and economic calendar (last 20 years, next 5 years). Markup schedules are not initial data. | DECIDED |
+| Pair master ownership | `fx-quote-service`. Dependent services store the pair code as a plain column; validation by owner API or committed JSON, per DESIGN §9. | DECIDED |
+| Remove EURUSD markup seed from quote startup | Markup seed inserts in `002-seed-eurusd-spread-schedules.yaml` and `003-spread-schedule-status-and-macro-seed.yaml` load markups at startup. Should be removed, because markups are not initial data. | PENDING APPROVAL |
+| Calendar source | Event dates need an authoritative published source per event type (Fed FOMC, BLS for NFP, ECB). Not yet chosen. | PENDING |
+| Pair master settlement attributes | CLS eligibility, cutoff, clip sizes, restricted flag per pair are business data, not in the spec. | PENDING business input |

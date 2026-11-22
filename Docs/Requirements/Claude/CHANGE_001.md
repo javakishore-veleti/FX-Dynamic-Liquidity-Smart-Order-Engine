@@ -255,3 +255,4 @@ New downloads go to `FMOC-Meeings/YYYY-MM-DD-HH-MM-SS/`, one folder per download
 |---|---|---|
 | 2026-11-22 | Credit lines moved to committed master data and workflow; qualify startup seed removed | `2ad1e4c` |
 | 2026-11-22 | LP top-of-book starter moved to committed master data; startup seed and hidden EURUSD fallback removed in quote; `INIT_LP_BOOK` workflow (changeset 009) | `dd47688` (quote), admin commit below |
+| 2026-11-22 | LP top-of-book verified end to end: 0 → 3 rows, verify 3 of 3, repeat 409 | `aacde79` |

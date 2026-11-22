@@ -1,12 +1,12 @@
 package com.jk.apps.banking.fx.sor.topology.mcp.config;
 
+import java.net.http.HttpClient;
 import java.time.Duration;
 
-import org.springframework.boot.web.client.ClientHttpRequestFactories;
-import org.springframework.boot.web.client.ClientHttpRequestFactorySettings;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
@@ -29,9 +29,11 @@ public class RestClientConfig {
     }
 
     private static ClientHttpRequestFactory requestFactory(McpClientProperties props) {
-        ClientHttpRequestFactorySettings settings = ClientHttpRequestFactorySettings.DEFAULTS
-                .withConnectTimeout(Duration.ofMillis(props.getConnectTimeoutMs()))
-                .withReadTimeout(Duration.ofMillis(props.getReadTimeoutMs()));
-        return ClientHttpRequestFactories.get(settings);
+        HttpClient http = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofMillis(props.getConnectTimeoutMs()))
+                .build();
+        JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(http);
+        factory.setReadTimeout(Duration.ofMillis(props.getReadTimeoutMs()));
+        return factory;
     }
 }

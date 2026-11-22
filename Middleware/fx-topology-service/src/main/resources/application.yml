@@ -1,6 +1,9 @@
 spring:
   application:
     name: fx-topology-service
+  grpc:
+    server:
+      port: 9085
   threads:
     virtual:
       enabled: true
@@ -133,13 +136,6 @@ spring:
       group-id: fx-topology
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-grpc:
-  server:
-    port: 9085
-  client:
-    topology:
-      address: static://localhost:9085
-      negotiation-type: plaintext
 
 fx:
   topology:

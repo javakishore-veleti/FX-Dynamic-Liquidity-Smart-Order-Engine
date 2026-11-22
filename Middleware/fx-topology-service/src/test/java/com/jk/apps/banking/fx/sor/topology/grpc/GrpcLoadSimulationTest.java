@@ -2,10 +2,10 @@ package com.jk.apps.banking.fx.sor.topology.grpc;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
-import io.grpc.CallOptions;
 import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
-import io.grpc.stub.ClientCalls;
+import com.jk.apps.banking.fx.sor.topology.grpc.v1.NetworkGraphRequest;
+import com.jk.apps.banking.fx.sor.topology.grpc.v1.TopologyReadGrpc;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,15 +33,14 @@ class GrpcLoadSimulationTest {
         ManagedChannel channel = ManagedChannelBuilder.forAddress(host, port).usePlaintext().build();
         ExecutorService pool = Executors.newFixedThreadPool(clients);
         List<Future<List<Long>>> futures = new ArrayList<>();
-        String[] methods = {ReadMethods.NETWORK, ReadMethods.MERGED, ReadMethods.ROOT_SOURCE, ReadMethods.IPC};
+        TopologyReadGrpc.TopologyReadBlockingStub stub = TopologyReadGrpc.newBlockingStub(channel);
         try {
             for (int c = 0; c < clients; c++) {
                 futures.add(pool.submit(() -> {
                     List<Long> latencies = new ArrayList<>();
                     for (int i = 0; i < callsPerClient; i++) {
-                        String method = methods[i % methods.length];
                         long t0 = System.nanoTime();
-                        ClientCalls.blockingUnaryCall(channel, ReadMethods.method(method), CallOptions.DEFAULT, "{}");
+                        stub.networkGraph(NetworkGraphRequest.newBuilder().setDepth(3).build());
                         latencies.add((System.nanoTime() - t0) / 1_000_000);
                     }
                     return latencies;

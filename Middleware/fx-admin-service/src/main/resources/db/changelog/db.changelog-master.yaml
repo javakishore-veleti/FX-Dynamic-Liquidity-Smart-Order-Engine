@@ -17,3 +17,5 @@ databaseChangeLog:
       file: db/changelog/changes/008-credit-workflow.yaml
   - include:
       file: db/changelog/changes/009-lp-book-workflow.yaml
+  - include:
+      file: db/changelog/changes/010-lp-rankings-workflow.yaml

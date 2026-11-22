@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-010-seed-initial-data-workflow-lp-rankings
+      author: fx-sor
+      comment: Master definition for the Initial Data workflow (LP rankings starter). Purpose marks it as seed.
+      changes:
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: INIT_LP_RANKINGS }
+              - column: { name: name, value: "Initial Data · LP Rankings" }
+              - column:
+                  name: description
+                  value: "Load the starter LP ranking into fx-route-exec and verify it"
+              - column: { name: bpmn_resource, value: bpmn/init-lp-rankings.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: ADMIN }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: INITIAL_DATA }
+              - column: { name: purpose, value: INITIAL_DATA_SETUP }

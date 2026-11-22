@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_LP_RANKINGS">
+  <process id="INIT_LP_RANKINGS" name="Initial Data - LP Rankings" isExecutable="true">
+    <startEvent id="start_lprank" name="Start"/>
+    <sequenceFlow id="f_lprank_1" sourceRef="start_lprank" targetRef="task_init_load_lprank"/>
+    <serviceTask id="task_init_load_lprank" name="Load LP rankings into route-exec"/>
+    <sequenceFlow id="f_lprank_2" sourceRef="task_init_load_lprank" targetRef="task_init_verify_lprank"/>
+    <serviceTask id="task_init_verify_lprank" name="Verify LP rankings in route-exec"/>
+    <sequenceFlow id="f_lprank_3" sourceRef="task_init_verify_lprank" targetRef="end_lprank"/>
+    <endEvent id="end_lprank" name="Done"/>
+  </process>
+</definitions>

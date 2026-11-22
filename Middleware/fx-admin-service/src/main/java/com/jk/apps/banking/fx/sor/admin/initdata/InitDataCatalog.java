@@ -12,6 +12,7 @@ public final class InitDataCatalog {
     public static final String SETTLEMENT_WORKFLOW = "INIT_SETTLEMENT_POLICIES";
     public static final String CREDIT_WORKFLOW = "INIT_CREDIT_LINES";
     public static final String LP_BOOK_WORKFLOW = "INIT_LP_BOOK";
+    public static final String LP_RANKINGS_WORKFLOW = "INIT_LP_RANKINGS";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
@@ -32,6 +33,13 @@ public final class InitDataCatalog {
                     "fx-quote-service",
                     PAIRS_WORKFLOW,
                     "fx-quote-service master/currency-pairs.json"),
+            new Dataset(
+                    "LP_RANKINGS",
+                    "LP Rankings",
+                    "Ranked, enabled liquidity providers used by route-exec, with the scoring rule version. Owner: route-exec.",
+                    "fx-route-exec-service",
+                    LP_RANKINGS_WORKFLOW,
+                    "fx-route-exec-service master/lp-rankings.json"),
             new Dataset(
                     "LP_BOOK",
                     "LP Top-of-Book",

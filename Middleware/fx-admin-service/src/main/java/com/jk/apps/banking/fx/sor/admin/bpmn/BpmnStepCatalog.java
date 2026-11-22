@@ -46,6 +46,10 @@ public final class BpmnStepCatalog {
             new Step("task_init_load_lpbook", "Load LP top-of-book starter into quote", TaskType.SERVICE),
             new Step("task_init_verify_lpbook", "Verify LP top-of-book rows in quote", TaskType.SERVICE));
 
+    private static final List<Step> INIT_LP_RANKINGS = List.of(
+            new Step("task_init_load_lprank", "Load LP rankings into route-exec", TaskType.SERVICE),
+            new Step("task_init_verify_lprank", "Verify LP rankings in route-exec", TaskType.SERVICE));
+
     private static final Map<String, List<Step>> BY_KEY = Map.of(
             Fr01BpmnDefinition.PROCESS_KEY,
             FR01_ADMIN,
@@ -62,6 +66,8 @@ public final class BpmnStepCatalog {
             INIT_CREDIT_LINES,
             InitDataCatalog.LP_BOOK_WORKFLOW,
             INIT_LP_BOOK,
+            InitDataCatalog.LP_RANKINGS_WORKFLOW,
+            INIT_LP_RANKINGS,
             InitDataCatalog.CALENDAR_WORKFLOW,
             INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",

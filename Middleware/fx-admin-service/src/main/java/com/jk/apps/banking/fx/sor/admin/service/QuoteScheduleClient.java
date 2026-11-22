@@ -185,6 +185,14 @@ public class QuoteScheduleClient {
                 .toBodilessEntity();
     }
 
+    public Map<String, Object> loadLpRankings() {
+        return routeExecRestClient.post()
+                .uri("/api/v1/fx/reference/lp-rankings/load")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
     public List<Map<String, Object>> listLpRankings() {
         return routeExecRestClient.get()
                 .uri("/api/v1/fx/reference/lp-rankings")

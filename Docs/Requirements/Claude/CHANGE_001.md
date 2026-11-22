@@ -44,8 +44,8 @@
 | E4 Initial Data workflows | F4.9 Admin trigger | Run setup button on Workflows → Master List, shown for rows with purpose `INITIAL_DATA_SETUP`. Built and compiled; clicked through the API, not in a browser. The earlier Initial Data page was removed at the owner's request | DESIGN §6 | DONE (button built; API path verified) | 2026-11-22 | 2026-11-22 |
 | E4 Initial Data workflows | F4.10 Build and test | Admin and quote compile and pass tests; pair and calendar setups run end to end | DESIGN §7.5 | VERIFIED | 2026-11-21 | 2026-11-22 |
 | E4 Initial Data workflows | F4.11 Remaining datasets | Settlement policies done (synthetic). Credit lines, LP top-of-book, LP rankings remain. Owned by other services; need business confirmation of the data | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
-| E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | BLOCKED (source needed) | | |
-| E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | BLOCKED (depends on F7.1) | | |
+| E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | DONE (FOMC from Fed sources; NFP and ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
+| E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | DONE (737 events: FOMC real 2006–2027, 2028–2031 and NFP/ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
 | E8 Business inputs | F8.1 Pair settlement attributes | SYNTHETIC values for 28 pairs (46 SPOT/TOM rows) loaded through `INIT_SETTLEMENT_POLICIES`. Business values replace the file when supplied | DESIGN §9.3 | DONE as SYNTHETIC (verified: 46 rows) | 2026-11-22 | 2026-11-22 |
 | E8 Business inputs | F8.2 Open business questions | Seven questions in functional view §6 answered with ASSUMPTIONS (section 7) so the build can proceed | — | ASSUMED (confirm with business) | 2026-11-22 | 2026-11-22 |
 | E9 Downstream validation | F9.1 Dependent services validate pair codes | qualify knocks out unknown pairs (UNKNOWN_PAIR); route-exec rejects unknown pairs with 400. Both read a committed copy of the pair master | DESIGN §9.4 | DONE (compiles, existing tests pass) | 2026-11-22 | 2026-11-22 |
@@ -93,11 +93,11 @@
 | T-35 | F4.4 | `purpose` column on `workflows` (changeset 006); engine and portal filter by purpose | DONE | 2026-11-22 | 2026-11-22 | `c0afc58` |
 | T-36 | F4.7 | End-to-end calendar setup: 8 rows loaded and verified; repeat run returns 409 | DONE | 2026-11-22 | 2026-11-22 | test run only |
 | T-37 | F4.11 | Other datasets | DEFERRED | | | |
-| T-38 | F7.1 | Choose calendar source per event type | BLOCKED | | | |
-| T-39 | F7.2 | Write the 20-year history and 5-year forward calendar seed | BLOCKED (depends on T-38) | | | |
-| T-40 | F8.1 | Pair settlement attributes from business | BLOCKED | | | |
-| T-41 | F8.2 | Answers to the seven business questions | BLOCKED | | | |
-| T-42 | F9.1 | Pair-code validation in qualify and route-exec | DEFERRED | | | |
+| T-38 | F7.1 | Choose calendar source per event type | DONE | 2026-11-22 | 2026-11-22 | `53356f0` |
+| T-39 | F7.2 | 20-year history and 5-year forward calendar seed, from generator and Fed sources | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `(calendar re-run)` |
+| T-40 | F8.1 | Pair settlement attributes (SYNTHETIC until business values arrive) | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da` |
+| T-41 | F8.2 | Business questions answered with assumptions (section 7) | DONE (assumed) | 2026-11-22 | 2026-11-22 | `f190518` |
+| T-42 | F9.1 | Pair-code validation in qualify (UNKNOWN_PAIR) and route-exec (400) | DONE | 2026-11-22 | 2026-11-22 | `809b3f3`, `d9e64fd` |
 | T-43 | F8.1 | Settlement seed (SYNTHETIC, 46 rows): generator, qualify changeset 003 removes startup EURUSD seed, qualify load endpoint, admin workflow `INIT_SETTLEMENT_POLICIES` | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da`, `982941f` |
 | T-44 | F4.6 | Purpose column: seeds start on `purpose`, not key prefix | DONE | 2026-11-22 | 2026-11-22 | `c0afc58` |
 
@@ -215,4 +215,28 @@ These answers are the repo owner's delegated decisions, so the build can continu
 | Settlement policies | Generated for 28 pairs | SYNTHETIC file name `settlement-policies.synthetic.json` |
 
 Replacing synthetic data with business or published data is a file change: regenerate or edit the committed JSON, then run the setup again on a fresh environment.
+
+## 9. Final state (2026-11-22)
+
+| Area | State | Verification |
+|---|---|---|
+| Currency pair master (28 pairs) | DONE | Setup run through the API: 28 loaded, 28 found |
+| Settlement policies (46 rows, SYNTHETIC) | DONE | Setup run through the API: 46 loaded, 46 found |
+| Economic calendar (737 events) | DONE | Setup run through the API: 737 upserted, 737 found |
+| Markup seed removal | DONE | 0 markups after restart |
+| Trigger for each setup | DONE | Run setup button on Workflows → Master List (purpose `INITIAL_DATA_SETUP`) |
+| Repeat setup refused | DONE | HTTP 409 for pairs, settlement, and calendar |
+| Pair-code validation | DONE | qualify: UNKNOWN_PAIR knock-out; route-exec: HTTP 400 |
+| Typed reason removed | DONE | Seed starts need only `triggeredBy` |
+| BPMN definitions | DONE | Three files: pairs, calendar, settlement |
+| Calendar persisted | DONE | `economic_calendar_events` in quote (changeset 007) |
+| Business assumptions | ASSUMED | Section 7 |
+
+### Still open (real gaps, not hidden)
+1. **NFP and ECB dates are SYNTHETIC.** Replace with published schedules by editing the committed calendar file.
+2. **Settlement values are SYNTHETIC.** Replace with business values in the committed file.
+3. **Slippage limit is a placeholder (5 bps)** and is not yet enforced in route-exec.
+4. **Qualify still seeds credit lines at startup** (`seedCreditLines`). This predates the change and conflicts with the master-data rule. Move it to an Initial Data workflow in a follow-up.
+5. **Remaining datasets (F4.11):** credit lines, LP top-of-book, LP rankings. Each needs its own file and loader.
+6. **Browser click-through** of the Run setup button has not been done. The API path is verified.
 

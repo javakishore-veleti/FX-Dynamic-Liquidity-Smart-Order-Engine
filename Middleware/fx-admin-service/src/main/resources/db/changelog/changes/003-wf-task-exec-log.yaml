@@ -1,0 +1,114 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-003-wf-task-exec-log
+      author: fx-sor
+      comment: One row per task executed inside a wf_exec_log run (input and output as JSON)
+      changes:
+        - createTable:
+            tableName: wf_task_exec_log
+            columns:
+              - column:
+                  name: task_exec_id
+                  type: uuid
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_wf_task_exec_log
+                    nullable: false
+              - column:
+                  name: wf_exec_id
+                  type: uuid
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_seq
+                  type: int
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_id
+                  type: varchar(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: task_name
+                  type: varchar(200)
+              - column:
+                  name: task_type
+                  type: varchar(20)
+              - column:
+                  name: status
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: input_json
+                  type: clob
+              - column:
+                  name: output_json
+                  type: clob
+              - column:
+                  name: error_details
+                  type: clob
+              - column:
+                  name: started_at
+                  type: timestamp with time zone
+              - column:
+                  name: completed_at
+                  type: timestamp with time zone
+              - column:
+                  name: duration_ms
+                  type: bigint
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(100)
+                  defaultValue: SYSTEM
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: varchar(100)
+                  defaultValue: SYSTEM
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: wf_task_exec_log
+            baseColumnNames: wf_exec_id
+            constraintName: fk_wf_task_exec_log_exec
+            referencedTableName: wf_exec_log
+            referencedColumnNames: wf_exec_id
+            onDelete: CASCADE
+        - createIndex:
+            tableName: wf_task_exec_log
+            indexName: idx_wf_task_exec_log_exec_seq
+            columns:
+              - column:
+                  name: wf_exec_id
+              - column:
+                  name: task_seq
+  - changeSet:
+      id: admin-003b-wf-task-exec-log-jsonb-postgres
+      author: fx-sor
+      dbms: postgresql
+      comment: Promote task JSON columns to JSONB on PostgreSQL
+      changes:
+        - sql:
+            sql: |
+              ALTER TABLE wf_task_exec_log
+                ALTER COLUMN input_json TYPE jsonb USING CASE
+                  WHEN input_json IS NULL OR input_json = '' THEN NULL
+                  ELSE input_json::jsonb END,
+                ALTER COLUMN output_json TYPE jsonb USING CASE
+                  WHEN output_json IS NULL OR output_json = '' THEN NULL
+                  ELSE output_json::jsonb END;

@@ -3,7 +3,6 @@ package com.jk.apps.banking.fx.sor.quote.business.facade;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
-import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -40,7 +39,10 @@ public class EconomicCalendarFacade {
         this.clock = clock;
     }
 
-    @PostConstruct
+    /**
+     * Loads the classpath seed. Not run at startup: the calendar is loaded only by the
+     * admin "Initial Data" setup button (INIT_ECONOMIC_CALENDAR), which upserts via the API.
+     */
     void loadCalendar() {
         try (InputStream in = new ClassPathResource("fr01/economic-calendar.json").getInputStream()) {
             List<RawEvent> raw = objectMapper.readValue(in, new TypeReference<>() {

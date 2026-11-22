@@ -3,3 +3,7 @@ databaseChangeLog:
       file: db/changelog/changes/001-wf-exec-log.yaml
   - include:
       file: db/changelog/changes/002-workflows-master.yaml
+  - include:
+      file: db/changelog/changes/003-wf-task-exec-log.yaml
+  - include:
+      file: db/changelog/changes/004-initial-data-workflows.yaml

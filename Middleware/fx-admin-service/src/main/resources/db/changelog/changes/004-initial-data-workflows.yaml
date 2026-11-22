@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-004-seed-initial-data-workflow-economic-calendar
+      author: fx-sor
+      comment: Master definition for the Initial Data setup workflow (economic calendar). Data itself loads only via the admin button.
+      changes:
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: INIT_ECONOMIC_CALENDAR }
+              - column: { name: name, value: "Initial Data · Economic Calendar" }
+              - column:
+                  name: description
+                  value: "Load the FOMC/NFP/ECB calendar into fx-quote-service and verify the rows are present"
+              - column: { name: bpmn_resource, value: bpmn/init-economic-calendar.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: ADMIN }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: INITIAL_DATA }

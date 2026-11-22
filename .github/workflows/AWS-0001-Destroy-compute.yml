@@ -1,0 +1,36 @@
+name: AWS-0001-Destroy-compute
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type DESTROY to confirm"
+        required: true
+        type: string
+  workflow_call:
+    inputs:
+      confirm:
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  compute:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm
+        run: |
+          if [ "${{ inputs.confirm }}" != "DESTROY" ]; then echo "Refusing: type DESTROY to confirm"; exit 1; fi
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Delete compute stack
+        run: |
+          if ! aws cloudformation describe-stacks --stack-name fx-topology-compute >/dev/null 2>&1; then echo "No compute stack"; exit 0; fi
+          aws cloudformation delete-stack --stack-name fx-topology-compute
+          aws cloudformation wait stack-delete-complete --stack-name fx-topology-compute

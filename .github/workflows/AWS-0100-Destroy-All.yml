@@ -1,0 +1,40 @@
+name: AWS-0100-Destroy-All
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type DESTROY to remove everything"
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  compute:
+    uses: ./.github/workflows/AWS-0001-Destroy-compute.yml
+    with:
+      confirm: ${{ inputs.confirm }}
+    secrets: inherit
+
+  data:
+    needs: [compute]
+    uses: ./.github/workflows/AWS-0001-Destroy-data.yml
+    with:
+      confirm: ${{ inputs.confirm }}
+    secrets: inherit
+
+  ecr:
+    needs: [data]
+    uses: ./.github/workflows/AWS-0001-Destroy-ecr.yml
+    with:
+      confirm: ${{ inputs.confirm }}
+    secrets: inherit
+
+  network:
+    needs: [ecr]
+    uses: ./.github/workflows/AWS-0001-Destroy-network.yml
+    with:
+      confirm: ${{ inputs.confirm }}
+    secrets: inherit

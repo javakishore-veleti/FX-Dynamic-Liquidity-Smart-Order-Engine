@@ -1,0 +1,43 @@
+name: AWS-0001-Setup-network
+
+on:
+  workflow_dispatch:
+    inputs:
+      use_existing_vpc:
+        description: "Reuse the VPC in secrets VPC_ID (no = create a new VPC)"
+        type: choice
+        options: ["no", "yes"]
+        default: "no"
+  workflow_call:
+    inputs:
+      use_existing_vpc:
+        type: string
+        default: "no"
+
+permissions:
+  contents: read
+
+jobs:
+  network:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy network stack
+        env:
+          REUSE: ${{ inputs.use_existing_vpc }}
+          VPC_ID: ${{ secrets.VPC_ID }}
+          SUBNET_A: ${{ secrets.REUSE_PUBLIC_SUBNET_A }}
+          SUBNET_B: ${{ secrets.REUSE_PUBLIC_SUBNET_B }}
+        run: |
+          if [ "$REUSE" = "yes" ]; then
+            if [ -z "$VPC_ID" ] || [ -z "$SUBNET_A" ] || [ -z "$SUBNET_B" ]; then echo "Reuse needs VPC_ID and both subnet secrets"; exit 1; fi
+            PARAMS="VpcId=$VPC_ID PublicSubnetA=$SUBNET_A PublicSubnetB=$SUBNET_B"
+          else
+            PARAMS="VpcId="
+          fi
+          aws cloudformation deploy --stack-name fx-topology-network --template-file CICD/AWS/cfn/01-network.yaml --parameter-overrides $PARAMS --no-fail-on-empty-changeset

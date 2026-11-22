@@ -1,0 +1,27 @@
+name: AWS-0001-Setup-data
+
+on:
+  workflow_dispatch:
+
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  data:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: Deploy data stack
+        run: |
+          out() { aws cloudformation describe-stacks --stack-name "$1" --query "Stacks[0].Outputs[?OutputKey=='$2'].OutputValue" --output text; }
+          SUBNET_A=$(out fx-topology-network SubnetA)
+          SUBNET_B=$(out fx-topology-network SubnetB)
+          DB_SG=$(out fx-topology-network DbSecurityGroupId)
+          aws cloudformation deploy --stack-name fx-topology-data --template-file CICD/AWS/cfn/02-data.yaml --parameter-overrides SubnetA=$SUBNET_A SubnetB=$SUBNET_B DbSecurityGroupId=$DB_SG --no-fail-on-empty-changeset

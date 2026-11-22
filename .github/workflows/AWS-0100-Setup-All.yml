@@ -1,0 +1,40 @@
+name: AWS-0100-Setup-All
+
+on:
+  workflow_dispatch:
+    inputs:
+      use_existing_vpc:
+        description: "Reuse the VPC in secrets VPC_ID (no = create a new VPC)"
+        type: choice
+        options: ["no", "yes"]
+        default: "no"
+
+permissions:
+  contents: read
+
+jobs:
+  network:
+    uses: ./.github/workflows/AWS-0001-Setup-network.yml
+    with:
+      use_existing_vpc: ${{ inputs.use_existing_vpc }}
+    secrets: inherit
+
+  data:
+    needs: [network]
+    uses: ./.github/workflows/AWS-0001-Setup-data.yml
+    secrets: inherit
+
+  ecr:
+    needs: [data]
+    uses: ./.github/workflows/AWS-0001-Setup-ecr.yml
+    secrets: inherit
+
+  app:
+    needs: [ecr]
+    uses: ./.github/workflows/AWS-0001-Setup-app.yml
+    secrets: inherit
+
+  compute:
+    needs: [app]
+    uses: ./.github/workflows/AWS-0001-Setup-compute.yml
+    secrets: inherit

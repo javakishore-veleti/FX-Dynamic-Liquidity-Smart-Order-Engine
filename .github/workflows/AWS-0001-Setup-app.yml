@@ -1,0 +1,36 @@
+name: AWS-0001-Setup-app
+
+on:
+  workflow_dispatch:
+
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+          cache: maven
+      - name: Build jar
+        run: mvn -B -pl Middleware/fx-topology-service -am -DskipTests package
+      - name: Build and push image
+        run: |
+          out() { aws cloudformation describe-stacks --stack-name "$1" --query "Stacks[0].Outputs[?OutputKey=='$2'].OutputValue" --output text; }
+          REPO=$(out fx-topology-ecr RepositoryUri)
+          REGISTRY=${REPO%%/*}
+          aws ecr get-login-password | docker login --username AWS --password-stdin "$REGISTRY"
+          docker build -t "$REPO:${{ github.sha }}" -t "$REPO:latest" Middleware/fx-topology-service
+          docker push "$REPO:${{ github.sha }}"
+          docker push "$REPO:latest"

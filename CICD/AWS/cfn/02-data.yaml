@@ -32,7 +32,6 @@ Resources:
     Properties:
       DBInstanceIdentifier: !Sub "${ProjectName}-db"
       Engine: postgres
-      EngineVersion: "16"
       DBInstanceClass: !Ref DbInstanceClass
       AllocatedStorage: !Ref DbAllocatedStorageGb
       StorageType: gp3

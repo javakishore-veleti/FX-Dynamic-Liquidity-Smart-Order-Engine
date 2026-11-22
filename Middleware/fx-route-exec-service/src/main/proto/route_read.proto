@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-// Read-only route-exec API (LP rankings). REST and gRPC kept in step.
+// Read-only route-exec API: LP rankings and order trace. REST and gRPC kept in step.
 package fx.route.v1;
 
 option java_multiple_files = true;
@@ -9,6 +9,7 @@ option java_outer_classname = "RouteReadProto";
 
 service RouteRead {
   rpc ListLpRankings(Empty) returns (LpRankingList);
+  rpc GetOrderTrace(OrderTraceRequest) returns (OrderTrace);
 }
 
 message Empty {}
@@ -22,4 +23,20 @@ message LpRanking {
 
 message LpRankingList {
   repeated LpRanking rankings = 1;
+}
+
+message OrderTraceRequest {
+  string client_order_id = 1;
+}
+
+message OrderTrace {
+  string client_order_id = 1;
+  string order_id = 2;
+  string status = 3;
+  string execution_mode = 4;
+  string executed_rate = 5;
+  string slippage_bps = 6;
+  string drools_rule_version = 7;
+  repeated string evaluated_lps = 8;
+  repeated string knockout_codes = 9;
 }

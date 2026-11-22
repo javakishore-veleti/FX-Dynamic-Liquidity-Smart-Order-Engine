@@ -5,6 +5,10 @@ import com.jk.apps.banking.fx.sor.exec.dto.LpRankingEntryDto;
 import com.jk.apps.banking.fx.sor.exec.grpc.v1.Empty;
 import com.jk.apps.banking.fx.sor.exec.grpc.v1.LpRanking;
 import com.jk.apps.banking.fx.sor.exec.grpc.v1.LpRankingList;
+import com.jk.apps.banking.fx.sor.exec.grpc.v1.OrderTrace;
+import com.jk.apps.banking.fx.sor.exec.grpc.v1.OrderTraceRequest;
+import com.jk.apps.banking.fx.sor.exec.service.RouteExecService;
+import com.jk.apps.banking.fx.sor.exec.dto.OrderTraceResponse;
 import com.jk.apps.banking.fx.sor.exec.grpc.v1.RouteReadGrpc;
 import io.grpc.Status;
 import io.grpc.stub.StreamObserver;
@@ -17,9 +21,37 @@ import org.springframework.grpc.server.service.GrpcService;
 public class RouteReadServer extends RouteReadGrpc.RouteReadImplBase {
 
     private final LpRankingConfigFacade rankings;
+    private final RouteExecService routeExec;
 
-    public RouteReadServer(LpRankingConfigFacade rankings) {
+    public RouteReadServer(LpRankingConfigFacade rankings, RouteExecService routeExec) {
         this.rankings = rankings;
+        this.routeExec = routeExec;
+    }
+
+    @Override
+    public void getOrderTrace(OrderTraceRequest r, StreamObserver<OrderTrace> o) {
+        try {
+            OrderTraceResponse t = routeExec.trace(r.getClientOrderId());
+            var b = OrderTrace.newBuilder()
+                    .setClientOrderId(nz(t.getClientOrderId())).setOrderId(String.valueOf(t.getOrderId()))
+                    .setStatus(nz(t.getStatus())).setExecutionMode(nz(t.getExecutionMode()))
+                    .setExecutedRate(String.valueOf(t.getExecutedRate())).setSlippageBps(String.valueOf(t.getSlippageBps()))
+                    .setDroolsRuleVersion(nz(t.getDroolsRuleVersion()));
+            if (t.getEvaluatedLps() != null) {
+                b.addAllEvaluatedLps(t.getEvaluatedLps());
+            }
+            if (t.getKnockoutCodes() != null) {
+                b.addAllKnockoutCodes(t.getKnockoutCodes());
+            }
+            o.onNext(b.build());
+            o.onCompleted();
+        } catch (Exception ex) {
+            o.onError(io.grpc.Status.NOT_FOUND.withDescription(ex.getMessage()).asRuntimeException());
+        }
+    }
+
+    private static String nz(String s) {
+        return s == null ? "" : s;
     }
 
     @Override

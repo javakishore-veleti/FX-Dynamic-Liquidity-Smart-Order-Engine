@@ -1,7 +1,9 @@
 syntax = "proto3";
 
-// Read-only admin API (workflow catalog and Initial Data status). REST and gRPC kept in step.
+// Read-only admin API. Loosely typed control-plane payloads use google.protobuf.Struct.
 package fx.admin.v1;
+
+import "google/protobuf/struct.proto";
 
 option java_multiple_files = true;
 option java_package = "com.jk.apps.banking.fx.sor.admin.grpc.v1";
@@ -10,9 +12,36 @@ option java_outer_classname = "AdminReadProto";
 service AdminRead {
   rpc ListWorkflowDefinitions(WorkflowFilter) returns (WorkflowDefinitionList);
   rpc ListInitialData(Empty) returns (InitialDataList);
+  rpc ListSpreadSchedules(Empty) returns (StructList);
+  rpc GetMacroFlag(Empty) returns (google.protobuf.Struct);
+  rpc ListEconomicCalendar(Empty) returns (StructList);
+  rpc ListLpBook(Empty) returns (StructList);
+  rpc ListLpRankings(Empty) returns (StructList);
+  rpc ListSettlementPolicies(Empty) returns (StructList);
+  rpc ListCreditLines(Empty) returns (StructList);
+  rpc ListWorkflows(WorkflowsRequest) returns (StructList);
+  rpc GetWorkflow(WorkflowId) returns (google.protobuf.Struct);
+  rpc GetBpmnExecution(WorkflowId) returns (google.protobuf.Struct);
 }
 
 message Empty {}
+
+message StructList {
+  repeated google.protobuf.Struct items = 1;
+}
+
+message WorkflowId {
+  string wf_exec_id = 1;
+}
+
+message WorkflowsRequest {
+  string status = 1;
+  string workflow_type = 2;
+  string workflow_key = 3;
+  string triggered_by = 4;
+  int32 page = 5;
+  int32 size = 6;
+}
 
 message WorkflowFilter {
   string portal_scope = 1;

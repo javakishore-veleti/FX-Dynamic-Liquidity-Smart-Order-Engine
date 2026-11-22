@@ -9,6 +9,9 @@ import com.jk.apps.banking.fx.sor.quote.cache.LpQuote;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.CalendarEvent;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.CalendarEventList;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.Empty;
+import com.jk.apps.banking.fx.sor.quote.grpc.v1.RateRequest;
+import com.jk.apps.banking.fx.sor.quote.grpc.v1.RateSnapshot;
+import com.jk.apps.banking.fx.sor.quote.dto.RateSnapshotResponse;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.LpQuoteList;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.MacroFlag;
 import com.jk.apps.banking.fx.sor.quote.grpc.v1.QuoteReadGrpc;
@@ -104,6 +107,18 @@ public class QuoteReadServer extends QuoteReadGrpc.QuoteReadImplBase {
                     .setSessionRegime(nz(c.getSessionRegime())).setMacroActive(c.isMacroActive())
                     .setLastLookPenaltyWeight(String.valueOf(c.getLastLookPenaltyWeight()))
                     .setSampleMarkupBps(String.valueOf(c.getSampleMarkupBps())).build();
+        });
+    }
+
+    @Override
+    public void getRate(RateRequest r, StreamObserver<RateSnapshot> o) {
+        run(o, () -> {
+            RateSnapshotResponse s = quote.rates(r.getCcyPair());
+            return RateSnapshot.newBuilder()
+                    .setCcyPair(nz(s.getCcyPair())).setBid(String.valueOf(s.getBid()))
+                    .setAsk(String.valueOf(s.getAsk())).setMid(String.valueOf(s.getMid()))
+                    .setActiveLpCount(s.getActiveLpCount()).setSessionRegime(nz(s.getSessionRegime()))
+                    .build();
         });
     }
 

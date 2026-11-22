@@ -13,6 +13,7 @@ service QuoteRead {
   rpc ListEconomicCalendar(Empty) returns (CalendarEventList);
   rpc GetMacroFlag(Empty) returns (MacroFlag);
   rpc RegimeContext(RegimeContextRequest) returns (RegimeContextReply);
+  rpc GetRate(RateRequest) returns (RateSnapshot);
 }
 
 message Empty {}
@@ -80,4 +81,17 @@ message RegimeContextReply {
   bool macro_active = 2;
   string last_look_penalty_weight = 3;
   string sample_markup_bps = 4;
+}
+
+message RateRequest {
+  string ccy_pair = 1;
+}
+
+message RateSnapshot {
+  string ccy_pair = 1;
+  string bid = 2;
+  string ask = 3;
+  string mid = 4;
+  int32 active_lp_count = 5;
+  string session_regime = 6;
 }

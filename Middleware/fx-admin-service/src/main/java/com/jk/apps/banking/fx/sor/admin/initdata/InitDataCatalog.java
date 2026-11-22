@@ -11,6 +11,7 @@ public final class InitDataCatalog {
     public static final String PAIRS_WORKFLOW = "INIT_CURRENCY_PAIRS";
     public static final String SETTLEMENT_WORKFLOW = "INIT_SETTLEMENT_POLICIES";
     public static final String CREDIT_WORKFLOW = "INIT_CREDIT_LINES";
+    public static final String LP_BOOK_WORKFLOW = "INIT_LP_BOOK";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
@@ -31,6 +32,13 @@ public final class InitDataCatalog {
                     "fx-quote-service",
                     PAIRS_WORKFLOW,
                     "fx-quote-service master/currency-pairs.json"),
+            new Dataset(
+                    "LP_BOOK",
+                    "LP Top-of-Book",
+                    "Starter top-of-book quotes for EUR/USD from three banks. Expires after its TTL; live feeds replace it. Owner: quote.",
+                    "fx-quote-service",
+                    LP_BOOK_WORKFLOW,
+                    "fx-quote-service master/lp-book.json"),
             new Dataset(
                     "CREDIT_LINES",
                     "Credit Lines",

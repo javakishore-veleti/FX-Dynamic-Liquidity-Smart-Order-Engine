@@ -110,6 +110,14 @@ public class QuoteScheduleClient {
                 });
     }
 
+    public Map<String, Object> loadLpBook() {
+        return quoteRestClient.post()
+                .uri("/api/v1/fx/lp-book/load")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
     public List<Map<String, Object>> listCurrencyPairs() {
         return quoteRestClient.get()
                 .uri("/api/v1/fx/pairs")

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_LP_BOOK">
+  <process id="INIT_LP_BOOK" name="Initial Data - LP Top-of-Book" isExecutable="true">
+    <startEvent id="start_lpbook" name="Start"/>
+    <sequenceFlow id="f_lpbook_1" sourceRef="start_lpbook" targetRef="task_init_load_lpbook"/>
+    <serviceTask id="task_init_load_lpbook" name="Load LP top-of-book starter into quote"/>
+    <sequenceFlow id="f_lpbook_2" sourceRef="task_init_load_lpbook" targetRef="task_init_verify_lpbook"/>
+    <serviceTask id="task_init_verify_lpbook" name="Verify LP top-of-book rows in quote"/>
+    <sequenceFlow id="f_lpbook_3" sourceRef="task_init_verify_lpbook" targetRef="end_lpbook"/>
+    <endEvent id="end_lpbook" name="Done"/>
+  </process>
+</definitions>

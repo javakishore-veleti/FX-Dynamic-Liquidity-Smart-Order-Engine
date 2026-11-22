@@ -75,3 +75,8 @@ __pycache__/
 venv/
 uv.toml
 .python-version.local
+
+# Local environment files (may contain secrets)
+.env
+.env.*
+!.env.example

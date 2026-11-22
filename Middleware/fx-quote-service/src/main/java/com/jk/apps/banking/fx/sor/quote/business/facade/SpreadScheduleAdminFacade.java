@@ -97,6 +97,10 @@ public class SpreadScheduleAdminFacade {
         row.setEffectiveFrom(request.getEffectiveFrom() == null ? Instant.now() : request.getEffectiveFrom());
         row.setApprovedBy(approvedBy);
         row.setStatus(status);
+        if (request.getPurposeNote() != null) {
+            String note = request.getPurposeNote().trim();
+            row.setPurposeNote(note.isEmpty() ? null : note.substring(0, Math.min(note.length(), 500)));
+        }
         ClientTierSpreadSchedule saved = repository.save(row);
         scheduleCache.put(saved);
         return saved;
@@ -112,6 +116,7 @@ public class SpreadScheduleAdminFacade {
         dto.setEffectiveFrom(row.getEffectiveFrom());
         dto.setApprovedBy(row.getApprovedBy());
         dto.setStatus(row.getStatus() == null ? "ACTIVE" : row.getStatus());
+        dto.setPurposeNote(row.getPurposeNote());
         return dto;
     }
 }

@@ -1,3 +1,5 @@
+# Source of truth is pyproject.toml — use: uv sync
+# Kept for reference / non-uv environments:
 pydantic>=2.9.0,<3.0.0
 pyyaml>=6.0.2,<7.0.0
 import-linter>=2.1,<3.0

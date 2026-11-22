@@ -22,12 +22,17 @@ Rules (ADR-034):
 
 ## Run
 
+Requires [`uv`](https://docs.astral.sh/uv/). Startup runs `uv init` (if needed) + `uv sync`, then `uv run`.
+
 ```bash
+# from repo root (preferred)
+npm run local:agent-orchestrator:python
+
+# or directly
 cd Agentic-Python/fx-agent-orchestrator-service
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+uv sync
 export FX_MCP_BASE_URL=http://localhost:8091
-uvicorn fx_agent_orchestrator.app:app --host 0.0.0.0 --port 8192 --reload
+uv run uvicorn fx_agent_orchestrator.app:app --host 0.0.0.0 --port 8192 --reload
 ```
 
 Default port **8192** (Java sibling uses **8092**).

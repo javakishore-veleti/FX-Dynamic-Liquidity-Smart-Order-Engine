@@ -21,13 +21,18 @@ Rules (ADR-034):
 
 ## Run
 
+Requires [`uv`](https://docs.astral.sh/uv/). Startup runs `uv init` (if needed) + `uv sync`, then `uv run`.
+
 ```bash
+# from repo root (preferred)
+npm run local:topology-mcp:python
+
+# or directly
 cd Agentic-Python/fx-topology-mcp-server
-python -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
+uv sync
 export TOPOLOGY_BASE_URL=http://localhost:8085
 export ADMIN_BASE_URL=http://localhost:8084
-uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8191 --reload
+uv run uvicorn fx_topology_mcp.app:app --host 0.0.0.0 --port 8191 --reload
 ```
 
 Default port **8191** (Java sibling uses **8091**; Java agent orchestrator uses **8092**).

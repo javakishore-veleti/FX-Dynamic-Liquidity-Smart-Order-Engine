@@ -99,6 +99,14 @@ npm run local:portals:all:start
 
 ### 2.6 Python dual-stack (optional)
 
+Requires [`uv`](https://docs.astral.sh/uv/) on `PATH`. Each start script runs `uv init` (only if `pyproject.toml` is missing) then `uv sync` before `uv run`, so new/changed deps install cleanly.
+
+Sync all three projects without starting:
+
+```bash
+npm run local:python:uv:sync
+```
+
 Default (SQLite):
 
 ```bash

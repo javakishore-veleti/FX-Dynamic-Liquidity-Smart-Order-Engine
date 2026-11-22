@@ -316,3 +316,13 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 ### Status check (2026-11-22)
 Still open in this file: real NFP and ECB dates (F7.1, F7.2 synthetic), real settlement values (F8.1), business confirmation of the seven assumptions (F8.2), mutation history (F10.7, deferred), IPC and trace layers (deferred), and a browser click-through of the Run setup button (not done; verified via API only).
 
+### Completion update (2026-11-22, later)
+
+| Item | Result | Commit |
+|---|---|---|
+| IPC layer (P1): `IpcCallIngest` on `fx.topology.ipc-call.v1`, enriched with tier and owner, stale calls dropped | Built and unit tested | `77da9e8`, `432ba50` |
+| Trace layer (P1): `TraceSpanIngest` on `fx.topology.span.v1`, parent-to-child edges in `topology_trace_edges` (changeset 003), included in the merged view | Built and unit tested; topology healthy after restart | `18d4224`, `432ba50` |
+| Time travel (P10): `GET /api/v1/topology/graph/network/at?bucket=` | Built; endpoint verified after restart (200) | `1adf716` |
+| Mutation history (F10.7) | Delivered as bucketed history: each edge write is kept per 5-minute bucket and can be queried by bucket. Full property-level mutation log is not built | `1adf716` |
+| Browser check of Run setup | Verified in the admin portal's Workflows Master List: button loaded the 28 currency pairs, banner "Currency Pairs: COMPLETED", API confirms 28 | this commit |
+

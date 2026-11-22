@@ -1,14 +1,19 @@
 package com.jk.apps.banking.fx.sor.qual.business.facade;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.qual.dto.SettlementPolicyDto;
 import com.jk.apps.banking.fx.sor.qual.entity.SettlementCutoffPolicy;
 import com.jk.apps.banking.fx.sor.qual.entity.SettlementCutoffPolicyId;
 import com.jk.apps.banking.fx.sor.qual.repository.SettlementCutoffPolicyRepository;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,10 +23,30 @@ import org.springframework.web.server.ResponseStatusException;
 @Component
 public class SettlementPolicyAdminFacade {
 
-    private final SettlementCutoffPolicyRepository repository;
+    static final String MASTER_RESOURCE = "master/settlement-policies.synthetic.json";
 
-    public SettlementPolicyAdminFacade(SettlementCutoffPolicyRepository repository) {
+    private final SettlementCutoffPolicyRepository repository;
+    private final ObjectMapper mapper;
+
+    public SettlementPolicyAdminFacade(SettlementCutoffPolicyRepository repository, ObjectMapper mapper) {
         this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    /** Loads the committed settlement seed through the same upsert used by the API. Idempotent. */
+    @Transactional
+    public int loadCommitted() {
+        List<SettlementPolicyDto> rows;
+        try (InputStream in = new ClassPathResource(MASTER_RESOURCE).getInputStream()) {
+            rows = mapper.readValue(in, new TypeReference<List<SettlementPolicyDto>>() {
+            });
+        } catch (IOException ex) {
+            throw new IllegalStateException("cannot read " + MASTER_RESOURCE, ex);
+        }
+        for (SettlementPolicyDto r : rows) {
+            upsert(r);
+        }
+        return rows.size();
     }
 
     public List<SettlementPolicyDto> listAll() {

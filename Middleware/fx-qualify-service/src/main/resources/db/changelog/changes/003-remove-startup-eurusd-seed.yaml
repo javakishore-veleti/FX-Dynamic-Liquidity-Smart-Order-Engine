@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: qualify-003-remove-startup-eurusd-seed
+      author: fx-sor
+      comment: Settlement policies are initial data loaded by the admin workflow, not by startup seed. Remove the EURUSD startup rows.
+      changes:
+        - delete:
+            tableName: settlement_cutoffs_and_policies
+            where: ccy_pair = 'EURUSD'

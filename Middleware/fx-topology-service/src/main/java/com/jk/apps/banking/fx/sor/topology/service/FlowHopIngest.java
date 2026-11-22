@@ -37,18 +37,27 @@ public class FlowHopIngest {
     private final IntermediaryResolver resolver;
     private final IngestQueue<FlowHop> queue;
     private final EdgeEnrich enrich;
+    private final Freshness freshness;
+    private final java.util.concurrent.atomic.AtomicLong stale = new java.util.concurrent.atomic.AtomicLong();
 
     @Autowired
     public FlowHopIngest(
             ObjectMapper mapper,
             TopologyNetworkEdgeRepository repository,
             EdgeEnrich enrich,
-            @Value("${fx.topology.intermediaries:}") List<String> intermediaries) {
-        this(mapper, repository, enrich, Set.copyOf(intermediaries), 10_000);
+            @Value("${fx.topology.intermediaries:}") List<String> intermediaries,
+            @Value("${fx.topology.freshness-minutes:10}") long freshnessMinutes) {
+        this(mapper, repository, enrich, Set.copyOf(intermediaries), 10_000, freshnessMinutes);
     }
 
     FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
                   Set<String> intermediaries, int capacity) {
+        this(mapper, repository, enrich, intermediaries, capacity, 10);
+    }
+
+    FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
+                  Set<String> intermediaries, int capacity, long freshnessMinutes) {
+        this.freshness = new Freshness(Duration.ofMinutes(freshnessMinutes));
         this.mapper = mapper;
         this.repository = repository;
         this.enrich = enrich;
@@ -58,9 +67,28 @@ public class FlowHopIngest {
 
     /** Parses one message and queues it. Blocks while the queue is full. */
     public void accept(String json) throws InterruptedException {
+        Instant observed = observedAt(json);
+        if (observed != null && !freshness.isFresh(observed, Instant.now())) {
+            stale.incrementAndGet();
+            return;
+        }
         FlowHop hop = parse(json);
         while (!queue.offer(hop)) {
             Thread.sleep(10);
+        }
+    }
+
+    /** Hops older than the freshness window are dropped at ingest and counted, never silently. */
+    public long staleCount() {
+        return stale.get();
+    }
+
+    private Instant observedAt(String json) {
+        try {
+            JsonNode n = mapper.readTree(json).get("observedAt");
+            return n == null ? null : Instant.parse(n.asText());
+        } catch (Exception ex) {
+            return null;
         }
     }
 

@@ -31,8 +31,9 @@ public class TopologyController {
     @GetMapping("/graph/network")
     public NetworkGraphResponse networkGraph(
             @RequestParam(name = "service", required = false) String service,
-            @RequestParam(name = "depth", defaultValue = "3") int depth) {
-        return topologyQueryService.networkGraph(service, depth);
+            @RequestParam(name = "depth", defaultValue = "3") int depth,
+            @RequestParam(name = "freshMinutes", defaultValue = "0") int freshMinutes) {
+        return topologyQueryService.networkGraph(service, depth, freshMinutes);
     }
 
     @GetMapping("/graph/merged")

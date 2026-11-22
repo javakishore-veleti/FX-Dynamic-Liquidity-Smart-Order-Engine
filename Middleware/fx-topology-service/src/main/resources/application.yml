@@ -136,6 +136,7 @@ fx:
   topology:
     flow-topic: fx.topology.flow-hop.v1
     drain-ms: 5000
+    freshness-minutes: 10
     intermediaries: []
   features:
     kafka-enabled: true

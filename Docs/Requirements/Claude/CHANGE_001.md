@@ -305,3 +305,11 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | 2026-11-22 | F10.2 wired: merged endpoint verified after restart. Enrichment (F10.3) and freshness on the ingest path are still open: no metadata source yet | (this commit) |
 | 2026-11-22 | F10.3 wired: service catalog, enrichment on each edge write, schema changeset 002, tests. Topology healthy after restart | (this commit) |
 
+### E10 closing decisions (2026-11-22)
+
+| Open item | Decision | Result |
+|---|---|---|
+| Freshness on the ingest path and the network endpoint | Hops older than `fx.topology.freshness-minutes` (default 10) are dropped at ingest and counted. `GET /graph/network` takes `freshMinutes` (default 0, so seed data still shows) | DONE. Unit test for stale drop passes. Network endpoint verified with `freshMinutes=10` |
+| Kafka flow-hop path end to end | Run against the local Kafka container with the `load-kafka` profile. Produced one message to `fx.topology.flow-hop.v1` | DONE. Edge fx-quote-service to fx-qualify-service with flow count 42, returned by the graph endpoint |
+| IPC and trace layers hold seed data only | Deferred. No real source exists for IPC metrics or traces in this repo. Next source: OpenTelemetry spans from the FX services | DEFERRED (recorded decision) |
+

@@ -68,4 +68,13 @@ class FlowHopIngestTest {
         FlowHopIngest ingest = new FlowHopIngest(new ObjectMapper(), mock(TopologyNetworkEdgeRepository.class), new EdgeEnrich(Map.of()), Set.of(), 10);
         assertThrows(IllegalArgumentException.class, () -> ingest.parse("{not json"));
     }
+
+    @Test
+    void dropsStaleHopAtIngestAndCountsIt() throws Exception {
+        TopologyNetworkEdgeRepository repo = mock(TopologyNetworkEdgeRepository.class);
+        FlowHopIngest ingest = new FlowHopIngest(new ObjectMapper(), repo, new EdgeEnrich(Map.of()), Set.of(), 10, 10);
+        ingest.accept("{\"src\":\"A\",\"dst\":\"B\",\"flows\":1,\"observedAt\":\"2000-01-01T00:00:00Z\"}");
+        assertEquals(1, ingest.staleCount());
+        assertEquals(0, ingest.drainOnce(Instant.now()));
+    }
 }

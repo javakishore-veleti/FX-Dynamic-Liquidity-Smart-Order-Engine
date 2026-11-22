@@ -88,9 +88,18 @@ public class TopologyQueryService {
     }
 
     public NetworkGraphResponse networkGraph(String service, int depth) {
+        return networkGraph(service, depth, 0);
+    }
+
+    /** freshMinutes greater than zero hides network edges not seen within that window (premise P13). */
+    public NetworkGraphResponse networkGraph(String service, int depth, int freshMinutes) {
         Timer.Sample sample = Timer.start();
         try {
-            List<TopologyNetworkEdge> all = networkEdgeRepository.findAll();
+            Instant now = Instant.now();
+            List<TopologyNetworkEdge> all = networkEdgeRepository.findAll().stream()
+                    .filter(e -> freshMinutes <= 0
+                            || new Freshness(java.time.Duration.ofMinutes(freshMinutes)).isFresh(e.getObservedAt(), now))
+                    .toList();
             List<TopologyNetworkEdge> scoped = expandNetwork(all, service, depth);
             metrics.networkGraphQueries().increment();
             return new NetworkGraphResponse(service, depth, scoped.stream().map(this::toNetworkDto).toList());

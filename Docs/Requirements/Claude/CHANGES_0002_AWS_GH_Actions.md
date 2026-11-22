@@ -113,8 +113,8 @@
 
 | Feature | User story | Acceptance criteria | Status | Start | Target | End |
 |---|---|---|---|---|---|---|
-| F7.1 First run in AWS | As the owner, I want the setup run once in AWS, after I approve the cost, so that I see it work. | Owner approves. Secrets exist. `AWS-0100-Setup-All` finishes. The load balancer returns health 200 on `/actuator/health`. | BLOCKED (owner approval, AWS secrets) | | | |
-| F7.2 Clean teardown | As the owner, I want the run removed afterwards, so that cost stops. | `AWS-0100-Destroy-All` finishes with no stack left in CloudFormation. | BLOCKED (depends on F7.1) | | | |
+| F7.1 (moved to CHANGES_0003) First run in AWS | As the owner, I want the setup run once in AWS, after I approve the cost, so that I see it work. | Owner approves. Secrets exist. `AWS-0100-Setup-All` finishes. The load balancer returns health 200 on `/actuator/health`. | BLOCKED (owner approval, AWS secrets) | | | |
+| F7.2 (moved to CHANGES_0003) Clean teardown | As the owner, I want the run removed afterwards, so that cost stops. | `AWS-0100-Destroy-All` finishes with no stack left in CloudFormation. | BLOCKED (depends on F7.1) | | | |
 
 ---
 
@@ -199,8 +199,8 @@ All GitHub Actions and CloudFormation coding for the AWS deployment is written. 
 
 | Item | Owner action |
 |---|---|
-| F7.1 First run in AWS | Approve cost; create the secrets in §1 |
-| F7.2 Clean teardown | Run `AWS-0100-Destroy-All` after F7.1 |
+| F7.1 (moved to CHANGES_0003) First run in AWS | Approve cost; create the secrets in §1 |
+| F7.2 (moved to CHANGES_0003) Clean teardown | Run `AWS-0100-Destroy-All` after F7.1 |
 
 ### 6.6 Progress log
 

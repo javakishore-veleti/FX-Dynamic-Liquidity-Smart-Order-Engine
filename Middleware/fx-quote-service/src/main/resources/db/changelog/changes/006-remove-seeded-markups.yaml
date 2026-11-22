@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: quote-006-remove-seeded-markups
+      author: fx-sor
+      comment: Markup schedules are not initial data. Remove the startup SYSTEM_SEED rows; markups are created through maker-checker.
+      changes:
+        - delete:
+            tableName: client_tier_spread_schedules
+            where: approved_by = 'SYSTEM_SEED'

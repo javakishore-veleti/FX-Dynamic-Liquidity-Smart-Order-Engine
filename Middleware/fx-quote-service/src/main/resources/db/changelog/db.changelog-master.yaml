@@ -7,3 +7,7 @@ databaseChangeLog:
       file: db/changelog/changes/003-spread-schedule-status-and-macro-seed.yaml
   - include:
       file: db/changelog/changes/004-schedule-purpose-note.yaml
+  - include:
+      file: db/changelog/changes/005-currency-pairs.yaml
+  - include:
+      file: db/changelog/changes/006-remove-seeded-markups.yaml

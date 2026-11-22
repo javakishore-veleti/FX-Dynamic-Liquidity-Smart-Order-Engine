@@ -43,10 +43,10 @@
 | E4 Initial Data workflows | F4.8 Initial Data API | `GET /api/v1/admin/initial-data`, `POST /api/v1/admin/initial-data/{dataset}/setup` | DESIGN §2, §3 | VERIFIED | 2026-11-21 | 2026-11-22 |
 | E4 Initial Data workflows | F4.9 Admin trigger | Run setup button on Workflows → Master List, shown for rows with purpose `INITIAL_DATA_SETUP`. Built and compiled; clicked through the API, not in a browser. The earlier Initial Data page was removed at the owner's request | DESIGN §6 | DONE (button built; API path verified) | 2026-11-22 | 2026-11-22 |
 | E4 Initial Data workflows | F4.10 Build and test | Admin and quote compile and pass tests; pair and calendar setups run end to end | DESIGN §7.5 | VERIFIED | 2026-11-21 | 2026-11-22 |
-| E4 Initial Data workflows | F4.11 Remaining datasets | Settlement policies, credit lines, LP top-of-book, LP rankings. Owned by other services; need business confirmation of the data | DESIGN §2 | DEFERRED (business to confirm) | | |
+| E4 Initial Data workflows | F4.11 Remaining datasets | Settlement policies done (synthetic). Credit lines, LP top-of-book, LP rankings remain. Owned by other services; need business confirmation of the data | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
 | E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | BLOCKED (source needed) | | |
 | E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | BLOCKED (depends on F7.1) | | |
-| E8 Business inputs | F8.1 Pair settlement attributes | CLS eligibility, cutoff, clip sizes, restricted flag per pair | — | BLOCKED (business input) | | |
+| E8 Business inputs | F8.1 Pair settlement attributes | SYNTHETIC values for 28 pairs (46 SPOT/TOM rows) loaded through `INIT_SETTLEMENT_POLICIES`. Business values replace the file when supplied | DESIGN §9.3 | DONE as SYNTHETIC (verified: 46 rows) | 2026-11-22 | 2026-11-22 |
 | E8 Business inputs | F8.2 Open business questions | Seven questions in functional view §6 | — | BLOCKED (business input) | | |
 | E9 Downstream validation | F9.1 Dependent services validate pair codes | qualify and route-exec check `pair_code` against the master (committed file or owner API) | DESIGN §9.4 | DEFERRED (follows F8.1 for those services) | | |
 
@@ -98,6 +98,8 @@
 | T-40 | F8.1 | Pair settlement attributes from business | BLOCKED | | | |
 | T-41 | F8.2 | Answers to the seven business questions | BLOCKED | | | |
 | T-42 | F9.1 | Pair-code validation in qualify and route-exec | DEFERRED | | | |
+| T-43 | F8.1 | Settlement seed (SYNTHETIC, 46 rows): generator, qualify changeset 003 removes startup EURUSD seed, qualify load endpoint, admin workflow `INIT_SETTLEMENT_POLICIES` | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da`, `982941f` |
+| T-44 | F4.6 | Purpose column: seeds start on `purpose`, not key prefix | DONE | 2026-11-22 | 2026-11-22 | `c0afc58` |
 
 ---
 

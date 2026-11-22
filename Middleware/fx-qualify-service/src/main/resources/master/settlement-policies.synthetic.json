@@ -1,0 +1,416 @@
+[
+  {
+    "ccyPair": "EURUSD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURUSD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPUSD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPUSD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDCHF",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDCHF",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDUSD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDUSD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDCAD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDCAD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "NZDUSD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "NZDUSD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURGBP",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURGBP",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURCHF",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURCHF",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURAUD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURAUD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURCAD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "EURCAD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPCHF",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "GBPCHF",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "CADJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "CADJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "CHFJPY",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "CHFJPY",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDNZD",
+    "tenor": "SPOT",
+    "clsEligible": true,
+    "cutoffTimeUtc": "23:55:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 50000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "AUDNZD",
+    "tenor": "TOM",
+    "clsEligible": true,
+    "cutoffTimeUtc": "16:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 25000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDMXN",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDSGD",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDHKD",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDZAR",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDTRY",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDCNH",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDINR",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": true
+  },
+  {
+    "ccyPair": "USDBRL",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": true
+  },
+  {
+    "ccyPair": "USDKRW",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  },
+  {
+    "ccyPair": "USDPLN",
+    "tenor": "SPOT",
+    "clsEligible": false,
+    "cutoffTimeUtc": "15:00:00",
+    "minClipUsd": 100000.0,
+    "maxClipUsd": 10000000.0,
+    "restrictedFlag": false
+  }
+]

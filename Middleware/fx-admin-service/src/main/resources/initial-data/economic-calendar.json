@@ -1,58 +1,5098 @@
 [
   {
-    "source": "FOMC",
-    "severity": 1.35,
-    "start": "2026-01-29T18:00:00Z",
-    "end": "2026-01-29T22:00:00Z",
-    "label": "FOMC rate decision Jan 2026"
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-01-06T13:30:00Z",
+    "end": "2006-01-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2006"
   },
   {
-    "source": "NFP",
-    "severity": 1.40,
-    "start": "2026-02-06T13:30:00Z",
-    "end": "2026-02-06T16:30:00Z",
-    "label": "US Non-Farm Payrolls Feb 2026"
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-01-25T18:00:00Z",
+    "end": "2006-01-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2006"
   },
   {
     "source": "ECB",
-    "severity": 1.30,
-    "start": "2026-03-12T12:45:00Z",
-    "end": "2026-03-12T16:45:00Z",
-    "label": "ECB monetary policy Mar 2026"
+    "severity": 1.3,
+    "start": "2006-02-01T12:45:00Z",
+    "end": "2006-02-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-02-03T13:30:00Z",
+    "end": "2006-02-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-03-03T13:30:00Z",
+    "end": "2006-03-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-03-15T12:45:00Z",
+    "end": "2006-03-15T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-03-15T18:00:00Z",
+    "end": "2006-03-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-04-07T13:30:00Z",
+    "end": "2006-04-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-04-12T12:45:00Z",
+    "end": "2006-04-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-04-26T18:00:00Z",
+    "end": "2006-04-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-05-05T13:30:00Z",
+    "end": "2006-05-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-06-02T13:30:00Z",
+    "end": "2006-06-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-06-07T12:45:00Z",
+    "end": "2006-06-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-06-14T18:00:00Z",
+    "end": "2006-06-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-07-05T12:45:00Z",
+    "end": "2006-07-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-07-07T13:30:00Z",
+    "end": "2006-07-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-07-26T18:00:00Z",
+    "end": "2006-07-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-08-04T13:30:00Z",
+    "end": "2006-08-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-09-01T13:30:00Z",
+    "end": "2006-09-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-09-06T12:45:00Z",
+    "end": "2006-09-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-09-13T18:00:00Z",
+    "end": "2006-09-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-10-06T13:30:00Z",
+    "end": "2006-10-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-10-11T12:45:00Z",
+    "end": "2006-10-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-10-25T18:00:00Z",
+    "end": "2006-10-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-11-03T13:30:00Z",
+    "end": "2006-11-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2006-12-01T13:30:00Z",
+    "end": "2006-12-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2006"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2006-12-06T12:45:00Z",
+    "end": "2006-12-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2006"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2006-12-13T18:00:00Z",
+    "end": "2006-12-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2006"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-01-05T13:30:00Z",
+    "end": "2007-01-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-01-24T18:00:00Z",
+    "end": "2007-01-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-01-31T12:45:00Z",
+    "end": "2007-01-31T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-02-02T13:30:00Z",
+    "end": "2007-02-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-03-02T13:30:00Z",
+    "end": "2007-03-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-03-14T12:45:00Z",
+    "end": "2007-03-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-03-14T18:00:00Z",
+    "end": "2007-03-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-04-06T13:30:00Z",
+    "end": "2007-04-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-04-11T12:45:00Z",
+    "end": "2007-04-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-04-25T18:00:00Z",
+    "end": "2007-04-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-05-04T13:30:00Z",
+    "end": "2007-05-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-06-01T13:30:00Z",
+    "end": "2007-06-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-06-06T12:45:00Z",
+    "end": "2007-06-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-06-13T18:00:00Z",
+    "end": "2007-06-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-07-04T12:45:00Z",
+    "end": "2007-07-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-07-06T13:30:00Z",
+    "end": "2007-07-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-07-25T18:00:00Z",
+    "end": "2007-07-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-08-03T13:30:00Z",
+    "end": "2007-08-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-09-05T12:45:00Z",
+    "end": "2007-09-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-09-07T13:30:00Z",
+    "end": "2007-09-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-09-12T18:00:00Z",
+    "end": "2007-09-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-10-05T13:30:00Z",
+    "end": "2007-10-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-10-10T12:45:00Z",
+    "end": "2007-10-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-10-24T18:00:00Z",
+    "end": "2007-10-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-11-02T13:30:00Z",
+    "end": "2007-11-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2007"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2007-12-05T12:45:00Z",
+    "end": "2007-12-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2007-12-07T13:30:00Z",
+    "end": "2007-12-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2007"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2007-12-12T18:00:00Z",
+    "end": "2007-12-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2007"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-01-04T13:30:00Z",
+    "end": "2008-01-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-01-23T18:00:00Z",
+    "end": "2008-01-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-01-30T12:45:00Z",
+    "end": "2008-01-30T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-02-01T13:30:00Z",
+    "end": "2008-02-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-03-07T13:30:00Z",
+    "end": "2008-03-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-03-12T12:45:00Z",
+    "end": "2008-03-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-03-12T18:00:00Z",
+    "end": "2008-03-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-04-04T13:30:00Z",
+    "end": "2008-04-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-04-09T12:45:00Z",
+    "end": "2008-04-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-04-23T18:00:00Z",
+    "end": "2008-04-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-05-02T13:30:00Z",
+    "end": "2008-05-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-06-04T12:45:00Z",
+    "end": "2008-06-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-06-06T13:30:00Z",
+    "end": "2008-06-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-06-11T18:00:00Z",
+    "end": "2008-06-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-07-02T12:45:00Z",
+    "end": "2008-07-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-07-04T13:30:00Z",
+    "end": "2008-07-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-07-23T18:00:00Z",
+    "end": "2008-07-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-08-01T13:30:00Z",
+    "end": "2008-08-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-09-03T12:45:00Z",
+    "end": "2008-09-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-09-05T13:30:00Z",
+    "end": "2008-09-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-09-10T18:00:00Z",
+    "end": "2008-09-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-10-03T13:30:00Z",
+    "end": "2008-10-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-10-08T12:45:00Z",
+    "end": "2008-10-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-10-22T18:00:00Z",
+    "end": "2008-10-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-11-07T13:30:00Z",
+    "end": "2008-11-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2008"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2008-12-03T12:45:00Z",
+    "end": "2008-12-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2008-12-05T13:30:00Z",
+    "end": "2008-12-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2008"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2008-12-10T18:00:00Z",
+    "end": "2008-12-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2008"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-01-02T13:30:00Z",
+    "end": "2009-01-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-01-21T18:00:00Z",
+    "end": "2009-01-21T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-01-28T12:45:00Z",
+    "end": "2009-01-28T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-02-06T13:30:00Z",
+    "end": "2009-02-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-03-06T13:30:00Z",
+    "end": "2009-03-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-03-11T12:45:00Z",
+    "end": "2009-03-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-03-11T18:00:00Z",
+    "end": "2009-03-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-04-03T13:30:00Z",
+    "end": "2009-04-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-04-08T12:45:00Z",
+    "end": "2009-04-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-04-22T18:00:00Z",
+    "end": "2009-04-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-05-01T13:30:00Z",
+    "end": "2009-05-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-06-03T12:45:00Z",
+    "end": "2009-06-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-06-05T13:30:00Z",
+    "end": "2009-06-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-06-10T18:00:00Z",
+    "end": "2009-06-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-07-01T12:45:00Z",
+    "end": "2009-07-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-07-03T13:30:00Z",
+    "end": "2009-07-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-07-22T18:00:00Z",
+    "end": "2009-07-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-08-07T13:30:00Z",
+    "end": "2009-08-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-09-02T12:45:00Z",
+    "end": "2009-09-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-09-04T13:30:00Z",
+    "end": "2009-09-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-09-09T18:00:00Z",
+    "end": "2009-09-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-10-02T13:30:00Z",
+    "end": "2009-10-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-10-07T12:45:00Z",
+    "end": "2009-10-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-10-21T18:00:00Z",
+    "end": "2009-10-21T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-11-06T13:30:00Z",
+    "end": "2009-11-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2009"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2009-12-02T12:45:00Z",
+    "end": "2009-12-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2009-12-04T13:30:00Z",
+    "end": "2009-12-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2009"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2009-12-09T18:00:00Z",
+    "end": "2009-12-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2009"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-01-01T13:30:00Z",
+    "end": "2010-01-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-01-27T18:00:00Z",
+    "end": "2010-01-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-02-03T12:45:00Z",
+    "end": "2010-02-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-02-05T13:30:00Z",
+    "end": "2010-02-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-03-05T13:30:00Z",
+    "end": "2010-03-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-03-17T12:45:00Z",
+    "end": "2010-03-17T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-03-17T18:00:00Z",
+    "end": "2010-03-17T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-04-02T13:30:00Z",
+    "end": "2010-04-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-04-14T12:45:00Z",
+    "end": "2010-04-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-04-28T18:00:00Z",
+    "end": "2010-04-28T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-05-07T13:30:00Z",
+    "end": "2010-05-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-06-04T13:30:00Z",
+    "end": "2010-06-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-06-09T12:45:00Z",
+    "end": "2010-06-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-06-16T18:00:00Z",
+    "end": "2010-06-16T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-07-02T13:30:00Z",
+    "end": "2010-07-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-07-07T12:45:00Z",
+    "end": "2010-07-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-07-28T18:00:00Z",
+    "end": "2010-07-28T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-08-06T13:30:00Z",
+    "end": "2010-08-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-09-03T13:30:00Z",
+    "end": "2010-09-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-09-08T12:45:00Z",
+    "end": "2010-09-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-09-15T18:00:00Z",
+    "end": "2010-09-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-10-01T13:30:00Z",
+    "end": "2010-10-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-10-13T12:45:00Z",
+    "end": "2010-10-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-10-27T18:00:00Z",
+    "end": "2010-10-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-11-05T13:30:00Z",
+    "end": "2010-11-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2010-12-03T13:30:00Z",
+    "end": "2010-12-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2010"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2010-12-08T12:45:00Z",
+    "end": "2010-12-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2010"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2010-12-15T18:00:00Z",
+    "end": "2010-12-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2010"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-01-07T13:30:00Z",
+    "end": "2011-01-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-01-26T18:00:00Z",
+    "end": "2011-01-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-02-02T12:45:00Z",
+    "end": "2011-02-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-02-04T13:30:00Z",
+    "end": "2011-02-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-03-04T13:30:00Z",
+    "end": "2011-03-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-03-16T12:45:00Z",
+    "end": "2011-03-16T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-03-16T18:00:00Z",
+    "end": "2011-03-16T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-04-01T13:30:00Z",
+    "end": "2011-04-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-04-13T12:45:00Z",
+    "end": "2011-04-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-04-27T18:00:00Z",
+    "end": "2011-04-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-05-06T13:30:00Z",
+    "end": "2011-05-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-06-03T13:30:00Z",
+    "end": "2011-06-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-06-08T12:45:00Z",
+    "end": "2011-06-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-06-15T18:00:00Z",
+    "end": "2011-06-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-07-01T13:30:00Z",
+    "end": "2011-07-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-07-06T12:45:00Z",
+    "end": "2011-07-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-07-27T18:00:00Z",
+    "end": "2011-07-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-08-05T13:30:00Z",
+    "end": "2011-08-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-09-02T13:30:00Z",
+    "end": "2011-09-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-09-07T12:45:00Z",
+    "end": "2011-09-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-09-14T18:00:00Z",
+    "end": "2011-09-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-10-07T13:30:00Z",
+    "end": "2011-10-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-10-12T12:45:00Z",
+    "end": "2011-10-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-10-26T18:00:00Z",
+    "end": "2011-10-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-11-04T13:30:00Z",
+    "end": "2011-11-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2011-12-02T13:30:00Z",
+    "end": "2011-12-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2011"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2011-12-07T12:45:00Z",
+    "end": "2011-12-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2011"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2011-12-14T18:00:00Z",
+    "end": "2011-12-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2011"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-01-06T13:30:00Z",
+    "end": "2012-01-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-01-25T18:00:00Z",
+    "end": "2012-01-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-02-01T12:45:00Z",
+    "end": "2012-02-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-02-03T13:30:00Z",
+    "end": "2012-02-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-03-02T13:30:00Z",
+    "end": "2012-03-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-03-14T12:45:00Z",
+    "end": "2012-03-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-03-14T18:00:00Z",
+    "end": "2012-03-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-04-06T13:30:00Z",
+    "end": "2012-04-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-04-11T12:45:00Z",
+    "end": "2012-04-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-04-25T18:00:00Z",
+    "end": "2012-04-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-05-04T13:30:00Z",
+    "end": "2012-05-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-06-01T13:30:00Z",
+    "end": "2012-06-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-06-06T12:45:00Z",
+    "end": "2012-06-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-06-13T18:00:00Z",
+    "end": "2012-06-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-07-04T12:45:00Z",
+    "end": "2012-07-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-07-06T13:30:00Z",
+    "end": "2012-07-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-07-25T18:00:00Z",
+    "end": "2012-07-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-08-03T13:30:00Z",
+    "end": "2012-08-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-09-05T12:45:00Z",
+    "end": "2012-09-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-09-07T13:30:00Z",
+    "end": "2012-09-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-09-12T18:00:00Z",
+    "end": "2012-09-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-10-05T13:30:00Z",
+    "end": "2012-10-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-10-10T12:45:00Z",
+    "end": "2012-10-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-10-24T18:00:00Z",
+    "end": "2012-10-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-11-02T13:30:00Z",
+    "end": "2012-11-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2012"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2012-12-05T12:45:00Z",
+    "end": "2012-12-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2012-12-07T13:30:00Z",
+    "end": "2012-12-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2012"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2012-12-12T18:00:00Z",
+    "end": "2012-12-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2012"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-01-04T13:30:00Z",
+    "end": "2013-01-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-01-23T18:00:00Z",
+    "end": "2013-01-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-01-30T12:45:00Z",
+    "end": "2013-01-30T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-02-01T13:30:00Z",
+    "end": "2013-02-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-03-01T13:30:00Z",
+    "end": "2013-03-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-03-13T12:45:00Z",
+    "end": "2013-03-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-03-13T18:00:00Z",
+    "end": "2013-03-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-04-05T13:30:00Z",
+    "end": "2013-04-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-04-10T12:45:00Z",
+    "end": "2013-04-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-04-24T18:00:00Z",
+    "end": "2013-04-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-05-03T13:30:00Z",
+    "end": "2013-05-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-06-05T12:45:00Z",
+    "end": "2013-06-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-06-07T13:30:00Z",
+    "end": "2013-06-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-06-12T18:00:00Z",
+    "end": "2013-06-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-07-03T12:45:00Z",
+    "end": "2013-07-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-07-05T13:30:00Z",
+    "end": "2013-07-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-07-24T18:00:00Z",
+    "end": "2013-07-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-08-02T13:30:00Z",
+    "end": "2013-08-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-09-04T12:45:00Z",
+    "end": "2013-09-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-09-06T13:30:00Z",
+    "end": "2013-09-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-09-11T18:00:00Z",
+    "end": "2013-09-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-10-04T13:30:00Z",
+    "end": "2013-10-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-10-09T12:45:00Z",
+    "end": "2013-10-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-10-23T18:00:00Z",
+    "end": "2013-10-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-11-01T13:30:00Z",
+    "end": "2013-11-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2013"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2013-12-04T12:45:00Z",
+    "end": "2013-12-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2013-12-06T13:30:00Z",
+    "end": "2013-12-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2013"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2013-12-11T18:00:00Z",
+    "end": "2013-12-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2013"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-01-03T13:30:00Z",
+    "end": "2014-01-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-01-22T18:00:00Z",
+    "end": "2014-01-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-01-29T12:45:00Z",
+    "end": "2014-01-29T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-02-07T13:30:00Z",
+    "end": "2014-02-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-03-07T13:30:00Z",
+    "end": "2014-03-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-03-12T12:45:00Z",
+    "end": "2014-03-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-03-12T18:00:00Z",
+    "end": "2014-03-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-04-04T13:30:00Z",
+    "end": "2014-04-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-04-09T12:45:00Z",
+    "end": "2014-04-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-04-23T18:00:00Z",
+    "end": "2014-04-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-05-02T13:30:00Z",
+    "end": "2014-05-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-06-04T12:45:00Z",
+    "end": "2014-06-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-06-06T13:30:00Z",
+    "end": "2014-06-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-06-11T18:00:00Z",
+    "end": "2014-06-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-07-02T12:45:00Z",
+    "end": "2014-07-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-07-04T13:30:00Z",
+    "end": "2014-07-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-07-23T18:00:00Z",
+    "end": "2014-07-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-08-01T13:30:00Z",
+    "end": "2014-08-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-09-03T12:45:00Z",
+    "end": "2014-09-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-09-05T13:30:00Z",
+    "end": "2014-09-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-09-10T18:00:00Z",
+    "end": "2014-09-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-10-03T13:30:00Z",
+    "end": "2014-10-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-10-08T12:45:00Z",
+    "end": "2014-10-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-10-22T18:00:00Z",
+    "end": "2014-10-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-11-07T13:30:00Z",
+    "end": "2014-11-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2014"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2014-12-03T12:45:00Z",
+    "end": "2014-12-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2014-12-05T13:30:00Z",
+    "end": "2014-12-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2014"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2014-12-10T18:00:00Z",
+    "end": "2014-12-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2014"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-01-02T13:30:00Z",
+    "end": "2015-01-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-01-21T18:00:00Z",
+    "end": "2015-01-21T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-01-28T12:45:00Z",
+    "end": "2015-01-28T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-02-06T13:30:00Z",
+    "end": "2015-02-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-03-06T13:30:00Z",
+    "end": "2015-03-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-03-11T12:45:00Z",
+    "end": "2015-03-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-03-11T18:00:00Z",
+    "end": "2015-03-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-04-03T13:30:00Z",
+    "end": "2015-04-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-04-08T12:45:00Z",
+    "end": "2015-04-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-04-22T18:00:00Z",
+    "end": "2015-04-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-05-01T13:30:00Z",
+    "end": "2015-05-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-06-03T12:45:00Z",
+    "end": "2015-06-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-06-05T13:30:00Z",
+    "end": "2015-06-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-06-10T18:00:00Z",
+    "end": "2015-06-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-07-01T12:45:00Z",
+    "end": "2015-07-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-07-03T13:30:00Z",
+    "end": "2015-07-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-07-22T18:00:00Z",
+    "end": "2015-07-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-08-07T13:30:00Z",
+    "end": "2015-08-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-09-02T12:45:00Z",
+    "end": "2015-09-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-09-04T13:30:00Z",
+    "end": "2015-09-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-09-09T18:00:00Z",
+    "end": "2015-09-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-10-02T13:30:00Z",
+    "end": "2015-10-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-10-07T12:45:00Z",
+    "end": "2015-10-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-10-21T18:00:00Z",
+    "end": "2015-10-21T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-11-06T13:30:00Z",
+    "end": "2015-11-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2015"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2015-12-02T12:45:00Z",
+    "end": "2015-12-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2015-12-04T13:30:00Z",
+    "end": "2015-12-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2015"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2015-12-09T18:00:00Z",
+    "end": "2015-12-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2015"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-01-01T13:30:00Z",
+    "end": "2016-01-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-01-27T18:00:00Z",
+    "end": "2016-01-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-02-03T12:45:00Z",
+    "end": "2016-02-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-02-05T13:30:00Z",
+    "end": "2016-02-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-03-04T13:30:00Z",
+    "end": "2016-03-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-03-16T12:45:00Z",
+    "end": "2016-03-16T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-03-16T18:00:00Z",
+    "end": "2016-03-16T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-04-01T13:30:00Z",
+    "end": "2016-04-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-04-13T12:45:00Z",
+    "end": "2016-04-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-04-27T18:00:00Z",
+    "end": "2016-04-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-05-06T13:30:00Z",
+    "end": "2016-05-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-06-03T13:30:00Z",
+    "end": "2016-06-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-06-08T12:45:00Z",
+    "end": "2016-06-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-06-15T18:00:00Z",
+    "end": "2016-06-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-07-01T13:30:00Z",
+    "end": "2016-07-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-07-06T12:45:00Z",
+    "end": "2016-07-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-07-27T18:00:00Z",
+    "end": "2016-07-27T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-08-05T13:30:00Z",
+    "end": "2016-08-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-09-02T13:30:00Z",
+    "end": "2016-09-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-09-07T12:45:00Z",
+    "end": "2016-09-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-09-14T18:00:00Z",
+    "end": "2016-09-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-10-07T13:30:00Z",
+    "end": "2016-10-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-10-12T12:45:00Z",
+    "end": "2016-10-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-10-26T18:00:00Z",
+    "end": "2016-10-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-11-04T13:30:00Z",
+    "end": "2016-11-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2016-12-02T13:30:00Z",
+    "end": "2016-12-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2016"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2016-12-07T12:45:00Z",
+    "end": "2016-12-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2016"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2016-12-14T18:00:00Z",
+    "end": "2016-12-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2016"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-01-06T13:30:00Z",
+    "end": "2017-01-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-01-25T18:00:00Z",
+    "end": "2017-01-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-02-01T12:45:00Z",
+    "end": "2017-02-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-02-03T13:30:00Z",
+    "end": "2017-02-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-03-03T13:30:00Z",
+    "end": "2017-03-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-03-15T12:45:00Z",
+    "end": "2017-03-15T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-03-15T18:00:00Z",
+    "end": "2017-03-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-04-07T13:30:00Z",
+    "end": "2017-04-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-04-12T12:45:00Z",
+    "end": "2017-04-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-04-26T18:00:00Z",
+    "end": "2017-04-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-05-05T13:30:00Z",
+    "end": "2017-05-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-06-02T13:30:00Z",
+    "end": "2017-06-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-06-07T12:45:00Z",
+    "end": "2017-06-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-06-14T18:00:00Z",
+    "end": "2017-06-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-07-05T12:45:00Z",
+    "end": "2017-07-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-07-07T13:30:00Z",
+    "end": "2017-07-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-07-26T18:00:00Z",
+    "end": "2017-07-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-08-04T13:30:00Z",
+    "end": "2017-08-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-09-01T13:30:00Z",
+    "end": "2017-09-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-09-06T12:45:00Z",
+    "end": "2017-09-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-09-13T18:00:00Z",
+    "end": "2017-09-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-10-06T13:30:00Z",
+    "end": "2017-10-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-10-11T12:45:00Z",
+    "end": "2017-10-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-10-25T18:00:00Z",
+    "end": "2017-10-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-11-03T13:30:00Z",
+    "end": "2017-11-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2017-12-01T13:30:00Z",
+    "end": "2017-12-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2017"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2017-12-06T12:45:00Z",
+    "end": "2017-12-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2017"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2017-12-13T18:00:00Z",
+    "end": "2017-12-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2017"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-01-05T13:30:00Z",
+    "end": "2018-01-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-01-24T18:00:00Z",
+    "end": "2018-01-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-01-31T12:45:00Z",
+    "end": "2018-01-31T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-02-02T13:30:00Z",
+    "end": "2018-02-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-03-02T13:30:00Z",
+    "end": "2018-03-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-03-14T12:45:00Z",
+    "end": "2018-03-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-03-14T18:00:00Z",
+    "end": "2018-03-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-04-06T13:30:00Z",
+    "end": "2018-04-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-04-11T12:45:00Z",
+    "end": "2018-04-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-04-25T18:00:00Z",
+    "end": "2018-04-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-05-04T13:30:00Z",
+    "end": "2018-05-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-06-01T13:30:00Z",
+    "end": "2018-06-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-06-06T12:45:00Z",
+    "end": "2018-06-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-06-13T18:00:00Z",
+    "end": "2018-06-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-07-04T12:45:00Z",
+    "end": "2018-07-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-07-06T13:30:00Z",
+    "end": "2018-07-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-07-25T18:00:00Z",
+    "end": "2018-07-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-08-03T13:30:00Z",
+    "end": "2018-08-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-09-05T12:45:00Z",
+    "end": "2018-09-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-09-07T13:30:00Z",
+    "end": "2018-09-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-09-12T18:00:00Z",
+    "end": "2018-09-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-10-05T13:30:00Z",
+    "end": "2018-10-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-10-10T12:45:00Z",
+    "end": "2018-10-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-10-24T18:00:00Z",
+    "end": "2018-10-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-11-02T13:30:00Z",
+    "end": "2018-11-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2018"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2018-12-05T12:45:00Z",
+    "end": "2018-12-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2018-12-07T13:30:00Z",
+    "end": "2018-12-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2018"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2018-12-12T18:00:00Z",
+    "end": "2018-12-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2018"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-01-04T13:30:00Z",
+    "end": "2019-01-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-01-23T18:00:00Z",
+    "end": "2019-01-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-01-30T12:45:00Z",
+    "end": "2019-01-30T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-02-01T13:30:00Z",
+    "end": "2019-02-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-03-01T13:30:00Z",
+    "end": "2019-03-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-03-13T12:45:00Z",
+    "end": "2019-03-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-03-13T18:00:00Z",
+    "end": "2019-03-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-04-05T13:30:00Z",
+    "end": "2019-04-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-04-10T12:45:00Z",
+    "end": "2019-04-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-04-24T18:00:00Z",
+    "end": "2019-04-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-05-03T13:30:00Z",
+    "end": "2019-05-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-06-05T12:45:00Z",
+    "end": "2019-06-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-06-07T13:30:00Z",
+    "end": "2019-06-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-06-12T18:00:00Z",
+    "end": "2019-06-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-07-03T12:45:00Z",
+    "end": "2019-07-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-07-05T13:30:00Z",
+    "end": "2019-07-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-07-24T18:00:00Z",
+    "end": "2019-07-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-08-02T13:30:00Z",
+    "end": "2019-08-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-09-04T12:45:00Z",
+    "end": "2019-09-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-09-06T13:30:00Z",
+    "end": "2019-09-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-09-11T18:00:00Z",
+    "end": "2019-09-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-10-04T13:30:00Z",
+    "end": "2019-10-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-10-09T12:45:00Z",
+    "end": "2019-10-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-10-23T18:00:00Z",
+    "end": "2019-10-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-11-01T13:30:00Z",
+    "end": "2019-11-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2019"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2019-12-04T12:45:00Z",
+    "end": "2019-12-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2019-12-06T13:30:00Z",
+    "end": "2019-12-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2019"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2019-12-11T18:00:00Z",
+    "end": "2019-12-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2019"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-01-03T13:30:00Z",
+    "end": "2020-01-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-01-22T18:00:00Z",
+    "end": "2020-01-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-01-29T12:45:00Z",
+    "end": "2020-01-29T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-02-07T13:30:00Z",
+    "end": "2020-02-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-03-06T13:30:00Z",
+    "end": "2020-03-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-03-11T12:45:00Z",
+    "end": "2020-03-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-03-11T18:00:00Z",
+    "end": "2020-03-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-04-03T13:30:00Z",
+    "end": "2020-04-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-04-08T12:45:00Z",
+    "end": "2020-04-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-04-22T18:00:00Z",
+    "end": "2020-04-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-05-01T13:30:00Z",
+    "end": "2020-05-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-06-03T12:45:00Z",
+    "end": "2020-06-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-06-05T13:30:00Z",
+    "end": "2020-06-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-06-10T18:00:00Z",
+    "end": "2020-06-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-07-01T12:45:00Z",
+    "end": "2020-07-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-07-03T13:30:00Z",
+    "end": "2020-07-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-07-22T18:00:00Z",
+    "end": "2020-07-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-08-07T13:30:00Z",
+    "end": "2020-08-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-09-02T12:45:00Z",
+    "end": "2020-09-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-09-04T13:30:00Z",
+    "end": "2020-09-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-09-09T18:00:00Z",
+    "end": "2020-09-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-10-02T13:30:00Z",
+    "end": "2020-10-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-10-07T12:45:00Z",
+    "end": "2020-10-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-10-21T18:00:00Z",
+    "end": "2020-10-21T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-11-06T13:30:00Z",
+    "end": "2020-11-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2020"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2020-12-02T12:45:00Z",
+    "end": "2020-12-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2020-12-04T13:30:00Z",
+    "end": "2020-12-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2020"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2020-12-09T18:00:00Z",
+    "end": "2020-12-09T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2020"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-01-01T13:30:00Z",
+    "end": "2021-01-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-01-27T18:00:00Z",
+    "end": "2021-01-27T22:00:00Z",
+    "label": "FOMC rate decision Jan 27, 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-02-03T12:45:00Z",
+    "end": "2021-02-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-02-05T13:30:00Z",
+    "end": "2021-02-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-03-05T13:30:00Z",
+    "end": "2021-03-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-03-17T12:45:00Z",
+    "end": "2021-03-17T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-03-17T18:00:00Z",
+    "end": "2021-03-17T22:00:00Z",
+    "label": "FOMC rate decision Mar 17, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-04-02T13:30:00Z",
+    "end": "2021-04-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-04-14T12:45:00Z",
+    "end": "2021-04-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-04-28T18:00:00Z",
+    "end": "2021-04-28T22:00:00Z",
+    "label": "FOMC rate decision Apr 28, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-05-07T13:30:00Z",
+    "end": "2021-05-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-06-04T13:30:00Z",
+    "end": "2021-06-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-06-09T12:45:00Z",
+    "end": "2021-06-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-06-16T18:00:00Z",
+    "end": "2021-06-16T22:00:00Z",
+    "label": "FOMC rate decision Jun 16, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-07-02T13:30:00Z",
+    "end": "2021-07-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-07-07T12:45:00Z",
+    "end": "2021-07-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-07-28T18:00:00Z",
+    "end": "2021-07-28T22:00:00Z",
+    "label": "FOMC rate decision Jul 28, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-08-06T13:30:00Z",
+    "end": "2021-08-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-09-03T13:30:00Z",
+    "end": "2021-09-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-09-08T12:45:00Z",
+    "end": "2021-09-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-09-22T18:00:00Z",
+    "end": "2021-09-22T22:00:00Z",
+    "label": "FOMC rate decision Sep 22, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-10-01T13:30:00Z",
+    "end": "2021-10-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-10-13T12:45:00Z",
+    "end": "2021-10-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-11-03T18:00:00Z",
+    "end": "2021-11-03T22:00:00Z",
+    "label": "FOMC rate decision Nov 03, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-11-05T13:30:00Z",
+    "end": "2021-11-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2021-12-03T13:30:00Z",
+    "end": "2021-12-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2021"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2021-12-08T12:45:00Z",
+    "end": "2021-12-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2021"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2021-12-15T18:00:00Z",
+    "end": "2021-12-15T22:00:00Z",
+    "label": "FOMC rate decision Dec 15, 2021"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-01-07T13:30:00Z",
+    "end": "2022-01-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-01-26T18:00:00Z",
+    "end": "2022-01-26T22:00:00Z",
+    "label": "FOMC rate decision Jan 26, 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-02-02T12:45:00Z",
+    "end": "2022-02-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-02-04T13:30:00Z",
+    "end": "2022-02-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-03-04T13:30:00Z",
+    "end": "2022-03-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-03-16T12:45:00Z",
+    "end": "2022-03-16T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-03-16T18:00:00Z",
+    "end": "2022-03-16T22:00:00Z",
+    "label": "FOMC rate decision Mar 16, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-04-01T13:30:00Z",
+    "end": "2022-04-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-04-13T12:45:00Z",
+    "end": "2022-04-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-05-04T18:00:00Z",
+    "end": "2022-05-04T22:00:00Z",
+    "label": "FOMC rate decision May 04, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-05-06T13:30:00Z",
+    "end": "2022-05-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-06-03T13:30:00Z",
+    "end": "2022-06-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-06-08T12:45:00Z",
+    "end": "2022-06-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-06-15T18:00:00Z",
+    "end": "2022-06-15T22:00:00Z",
+    "label": "FOMC rate decision Jun 15, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-07-01T13:30:00Z",
+    "end": "2022-07-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-07-06T12:45:00Z",
+    "end": "2022-07-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-07-27T18:00:00Z",
+    "end": "2022-07-27T22:00:00Z",
+    "label": "FOMC rate decision Jul 27, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-08-05T13:30:00Z",
+    "end": "2022-08-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-09-02T13:30:00Z",
+    "end": "2022-09-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-09-07T12:45:00Z",
+    "end": "2022-09-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-09-21T18:00:00Z",
+    "end": "2022-09-21T22:00:00Z",
+    "label": "FOMC rate decision Sep 21, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-10-07T13:30:00Z",
+    "end": "2022-10-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-10-12T12:45:00Z",
+    "end": "2022-10-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-11-02T18:00:00Z",
+    "end": "2022-11-02T22:00:00Z",
+    "label": "FOMC rate decision Nov 02, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-11-04T13:30:00Z",
+    "end": "2022-11-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2022-12-02T13:30:00Z",
+    "end": "2022-12-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2022"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2022-12-07T12:45:00Z",
+    "end": "2022-12-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2022"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2022-12-14T18:00:00Z",
+    "end": "2022-12-14T22:00:00Z",
+    "label": "FOMC rate decision Dec 14, 2022"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-01-06T13:30:00Z",
+    "end": "2023-01-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-02-01T12:45:00Z",
+    "end": "2023-02-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-02-01T18:00:00Z",
+    "end": "2023-02-01T22:00:00Z",
+    "label": "FOMC rate decision Feb 01, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-02-03T13:30:00Z",
+    "end": "2023-02-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-03-03T13:30:00Z",
+    "end": "2023-03-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-03-15T12:45:00Z",
+    "end": "2023-03-15T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-03-22T18:00:00Z",
+    "end": "2023-03-22T22:00:00Z",
+    "label": "FOMC rate decision Mar 22, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-04-07T13:30:00Z",
+    "end": "2023-04-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-04-12T12:45:00Z",
+    "end": "2023-04-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-05-03T18:00:00Z",
+    "end": "2023-05-03T22:00:00Z",
+    "label": "FOMC rate decision May 03, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-05-05T13:30:00Z",
+    "end": "2023-05-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-06-02T13:30:00Z",
+    "end": "2023-06-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-06-07T12:45:00Z",
+    "end": "2023-06-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-06-14T18:00:00Z",
+    "end": "2023-06-14T22:00:00Z",
+    "label": "FOMC rate decision Jun 14, 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-07-05T12:45:00Z",
+    "end": "2023-07-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-07-07T13:30:00Z",
+    "end": "2023-07-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-07-26T18:00:00Z",
+    "end": "2023-07-26T22:00:00Z",
+    "label": "FOMC rate decision Jul 26, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-08-04T13:30:00Z",
+    "end": "2023-08-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-09-01T13:30:00Z",
+    "end": "2023-09-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-09-06T12:45:00Z",
+    "end": "2023-09-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-09-20T18:00:00Z",
+    "end": "2023-09-20T22:00:00Z",
+    "label": "FOMC rate decision Sep 20, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-10-06T13:30:00Z",
+    "end": "2023-10-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-10-11T12:45:00Z",
+    "end": "2023-10-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-11-01T18:00:00Z",
+    "end": "2023-11-01T22:00:00Z",
+    "label": "FOMC rate decision Nov 01, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-11-03T13:30:00Z",
+    "end": "2023-11-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2023-12-01T13:30:00Z",
+    "end": "2023-12-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2023"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2023-12-06T12:45:00Z",
+    "end": "2023-12-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2023"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2023-12-13T18:00:00Z",
+    "end": "2023-12-13T22:00:00Z",
+    "label": "FOMC rate decision Dec 13, 2023"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-01-05T13:30:00Z",
+    "end": "2024-01-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-01-31T12:45:00Z",
+    "end": "2024-01-31T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-01-31T18:00:00Z",
+    "end": "2024-01-31T22:00:00Z",
+    "label": "FOMC rate decision Jan 31, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-02-02T13:30:00Z",
+    "end": "2024-02-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-03-01T13:30:00Z",
+    "end": "2024-03-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-03-13T12:45:00Z",
+    "end": "2024-03-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-03-20T18:00:00Z",
+    "end": "2024-03-20T22:00:00Z",
+    "label": "FOMC rate decision Mar 20, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-04-05T13:30:00Z",
+    "end": "2024-04-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-04-10T12:45:00Z",
+    "end": "2024-04-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-05-01T18:00:00Z",
+    "end": "2024-05-01T22:00:00Z",
+    "label": "FOMC rate decision May 01, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-05-03T13:30:00Z",
+    "end": "2024-05-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-06-05T12:45:00Z",
+    "end": "2024-06-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-06-07T13:30:00Z",
+    "end": "2024-06-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-06-12T18:00:00Z",
+    "end": "2024-06-12T22:00:00Z",
+    "label": "FOMC rate decision Jun 12, 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-07-03T12:45:00Z",
+    "end": "2024-07-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-07-05T13:30:00Z",
+    "end": "2024-07-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-07-31T18:00:00Z",
+    "end": "2024-07-31T22:00:00Z",
+    "label": "FOMC rate decision Jul 31, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-08-02T13:30:00Z",
+    "end": "2024-08-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-09-04T12:45:00Z",
+    "end": "2024-09-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-09-06T13:30:00Z",
+    "end": "2024-09-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-09-18T18:00:00Z",
+    "end": "2024-09-18T22:00:00Z",
+    "label": "FOMC rate decision Sep 18, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-10-04T13:30:00Z",
+    "end": "2024-10-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-10-09T12:45:00Z",
+    "end": "2024-10-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-11-01T13:30:00Z",
+    "end": "2024-11-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-11-07T18:00:00Z",
+    "end": "2024-11-07T22:00:00Z",
+    "label": "FOMC rate decision Nov 07, 2024"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2024-12-04T12:45:00Z",
+    "end": "2024-12-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2024-12-06T13:30:00Z",
+    "end": "2024-12-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2024"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2024-12-18T18:00:00Z",
+    "end": "2024-12-18T22:00:00Z",
+    "label": "FOMC rate decision Dec 18, 2024"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-01-03T13:30:00Z",
+    "end": "2025-01-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-01-29T12:45:00Z",
+    "end": "2025-01-29T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-01-29T18:00:00Z",
+    "end": "2025-01-29T22:00:00Z",
+    "label": "FOMC rate decision Jan 29, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-02-07T13:30:00Z",
+    "end": "2025-02-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-03-07T13:30:00Z",
+    "end": "2025-03-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-03-12T12:45:00Z",
+    "end": "2025-03-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-03-19T18:00:00Z",
+    "end": "2025-03-19T22:00:00Z",
+    "label": "FOMC rate decision Mar 19, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-04-04T13:30:00Z",
+    "end": "2025-04-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-04-09T12:45:00Z",
+    "end": "2025-04-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-05-02T13:30:00Z",
+    "end": "2025-05-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-05-07T18:00:00Z",
+    "end": "2025-05-07T22:00:00Z",
+    "label": "FOMC rate decision May 07, 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-06-04T12:45:00Z",
+    "end": "2025-06-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-06-06T13:30:00Z",
+    "end": "2025-06-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-06-18T18:00:00Z",
+    "end": "2025-06-18T22:00:00Z",
+    "label": "FOMC rate decision Jun 18, 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-07-02T12:45:00Z",
+    "end": "2025-07-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-07-04T13:30:00Z",
+    "end": "2025-07-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-07-30T18:00:00Z",
+    "end": "2025-07-30T22:00:00Z",
+    "label": "FOMC rate decision Jul 30, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-08-01T13:30:00Z",
+    "end": "2025-08-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-09-03T12:45:00Z",
+    "end": "2025-09-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-09-05T13:30:00Z",
+    "end": "2025-09-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-09-17T18:00:00Z",
+    "end": "2025-09-17T22:00:00Z",
+    "label": "FOMC rate decision Sep 17, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-10-03T13:30:00Z",
+    "end": "2025-10-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-10-08T12:45:00Z",
+    "end": "2025-10-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-10-29T18:00:00Z",
+    "end": "2025-10-29T22:00:00Z",
+    "label": "FOMC rate decision Oct 29, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-11-07T13:30:00Z",
+    "end": "2025-11-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2025"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2025-12-03T12:45:00Z",
+    "end": "2025-12-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2025-12-05T13:30:00Z",
+    "end": "2025-12-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2025"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2025-12-10T18:00:00Z",
+    "end": "2025-12-10T22:00:00Z",
+    "label": "FOMC rate decision Dec 10, 2025"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-01-02T13:30:00Z",
+    "end": "2026-01-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-01-28T12:45:00Z",
+    "end": "2026-01-28T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-01-28T18:00:00Z",
+    "end": "2026-01-28T22:00:00Z",
+    "label": "FOMC rate decision Jan 28, 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-02-06T13:30:00Z",
+    "end": "2026-02-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-03-06T13:30:00Z",
+    "end": "2026-03-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-03-11T12:45:00Z",
+    "end": "2026-03-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2026"
   },
   {
     "source": "FOMC",
     "severity": 1.35,
     "start": "2026-03-18T18:00:00Z",
     "end": "2026-03-18T22:00:00Z",
-    "label": "FOMC rate decision Mar 2026"
+    "label": "FOMC rate decision Mar 18, 2026"
   },
   {
     "source": "NFP",
-    "severity": 1.40,
-    "start": "2026-11-06T13:30:00Z",
-    "end": "2026-11-06T16:30:00Z",
-    "label": "US Non-Farm Payrolls Nov 2026"
+    "severity": 1.4,
+    "start": "2026-04-03T13:30:00Z",
+    "end": "2026-04-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-04-08T12:45:00Z",
+    "end": "2026-04-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2026"
   },
   {
     "source": "FOMC",
     "severity": 1.35,
-    "start": "2026-11-21T18:00:00Z",
-    "end": "2026-11-22T00:00:00Z",
-    "label": "FOMC / macro window Nov 21–22 2026"
-  },
-  {
-    "source": "ECB",
-    "severity": 1.30,
-    "start": "2026-12-18T12:45:00Z",
-    "end": "2026-12-18T16:45:00Z",
-    "label": "ECB monetary policy Dec 2026"
+    "start": "2026-04-29T18:00:00Z",
+    "end": "2026-04-29T22:00:00Z",
+    "label": "FOMC rate decision Apr 29, 2026"
   },
   {
     "source": "NFP",
-    "severity": 1.40,
+    "severity": 1.4,
+    "start": "2026-05-01T13:30:00Z",
+    "end": "2026-05-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-06-03T12:45:00Z",
+    "end": "2026-06-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-06-05T13:30:00Z",
+    "end": "2026-06-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-06-17T18:00:00Z",
+    "end": "2026-06-17T22:00:00Z",
+    "label": "FOMC rate decision Jun 17, 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-07-01T12:45:00Z",
+    "end": "2026-07-01T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-07-03T13:30:00Z",
+    "end": "2026-07-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-07-29T18:00:00Z",
+    "end": "2026-07-29T22:00:00Z",
+    "label": "FOMC rate decision Jul 29, 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-08-07T13:30:00Z",
+    "end": "2026-08-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-09-02T12:45:00Z",
+    "end": "2026-09-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-09-04T13:30:00Z",
+    "end": "2026-09-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-09-16T18:00:00Z",
+    "end": "2026-09-16T22:00:00Z",
+    "label": "FOMC rate decision Sep 16, 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-10-02T13:30:00Z",
+    "end": "2026-10-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-10-07T12:45:00Z",
+    "end": "2026-10-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-10-28T18:00:00Z",
+    "end": "2026-10-28T22:00:00Z",
+    "label": "FOMC rate decision Oct 28, 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2026-11-06T13:30:00Z",
+    "end": "2026-11-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2026"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2026-12-02T12:45:00Z",
+    "end": "2026-12-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
     "start": "2026-12-04T13:30:00Z",
     "end": "2026-12-04T16:30:00Z",
-    "label": "US Non-Farm Payrolls Dec 2026"
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2026"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2026-12-09T18:00:00Z",
+    "end": "2026-12-09T22:00:00Z",
+    "label": "FOMC rate decision Dec 09, 2026"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-01-01T13:30:00Z",
+    "end": "2027-01-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-01-27T18:00:00Z",
+    "end": "2027-01-27T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Jan 27, 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-02-03T12:45:00Z",
+    "end": "2027-02-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-02-05T13:30:00Z",
+    "end": "2027-02-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-03-05T13:30:00Z",
+    "end": "2027-03-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-03-17T12:45:00Z",
+    "end": "2027-03-17T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-03-17T18:00:00Z",
+    "end": "2027-03-17T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Mar 17, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-04-02T13:30:00Z",
+    "end": "2027-04-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-04-14T12:45:00Z",
+    "end": "2027-04-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-04-28T18:00:00Z",
+    "end": "2027-04-28T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Apr 28, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-05-07T13:30:00Z",
+    "end": "2027-05-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-06-04T13:30:00Z",
+    "end": "2027-06-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-06-09T12:45:00Z",
+    "end": "2027-06-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-06-09T18:00:00Z",
+    "end": "2027-06-09T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Jun 09, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-07-02T13:30:00Z",
+    "end": "2027-07-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-07-07T12:45:00Z",
+    "end": "2027-07-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-07-28T18:00:00Z",
+    "end": "2027-07-28T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Jul 28, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-08-06T13:30:00Z",
+    "end": "2027-08-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-09-03T13:30:00Z",
+    "end": "2027-09-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-09-08T12:45:00Z",
+    "end": "2027-09-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-09-15T18:00:00Z",
+    "end": "2027-09-15T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Sep 15, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-10-01T13:30:00Z",
+    "end": "2027-10-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-10-13T12:45:00Z",
+    "end": "2027-10-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-10-27T18:00:00Z",
+    "end": "2027-10-27T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Oct 27, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-11-05T13:30:00Z",
+    "end": "2027-11-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2027"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2027-11-17T18:00:00Z",
+    "end": "2027-11-17T22:00:00Z",
+    "label": "[TENTATIVE] FOMC rate decision Nov 17, 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2027-12-03T13:30:00Z",
+    "end": "2027-12-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2027"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2027-12-08T12:45:00Z",
+    "end": "2027-12-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2027"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-01-07T13:30:00Z",
+    "end": "2028-01-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-01-26T18:00:00Z",
+    "end": "2028-01-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-02-02T12:45:00Z",
+    "end": "2028-02-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Feb 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-02-04T13:30:00Z",
+    "end": "2028-02-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-03-03T13:30:00Z",
+    "end": "2028-03-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-03-15T12:45:00Z",
+    "end": "2028-03-15T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-03-15T18:00:00Z",
+    "end": "2028-03-15T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-04-07T13:30:00Z",
+    "end": "2028-04-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-04-12T12:45:00Z",
+    "end": "2028-04-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-04-26T18:00:00Z",
+    "end": "2028-04-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-05-05T13:30:00Z",
+    "end": "2028-05-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-06-02T13:30:00Z",
+    "end": "2028-06-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-06-07T12:45:00Z",
+    "end": "2028-06-07T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-06-14T18:00:00Z",
+    "end": "2028-06-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-07-05T12:45:00Z",
+    "end": "2028-07-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-07-07T13:30:00Z",
+    "end": "2028-07-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-07-26T18:00:00Z",
+    "end": "2028-07-26T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-08-04T13:30:00Z",
+    "end": "2028-08-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-09-01T13:30:00Z",
+    "end": "2028-09-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-09-06T12:45:00Z",
+    "end": "2028-09-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-09-13T18:00:00Z",
+    "end": "2028-09-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-10-06T13:30:00Z",
+    "end": "2028-10-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-10-11T12:45:00Z",
+    "end": "2028-10-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-10-25T18:00:00Z",
+    "end": "2028-10-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-11-03T13:30:00Z",
+    "end": "2028-11-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2028-12-01T13:30:00Z",
+    "end": "2028-12-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2028"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2028-12-06T12:45:00Z",
+    "end": "2028-12-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2028"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2028-12-13T18:00:00Z",
+    "end": "2028-12-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2028"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-01-05T13:30:00Z",
+    "end": "2029-01-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-01-24T18:00:00Z",
+    "end": "2029-01-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-01-31T12:45:00Z",
+    "end": "2029-01-31T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-02-02T13:30:00Z",
+    "end": "2029-02-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-03-02T13:30:00Z",
+    "end": "2029-03-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-03-14T12:45:00Z",
+    "end": "2029-03-14T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-03-14T18:00:00Z",
+    "end": "2029-03-14T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-04-06T13:30:00Z",
+    "end": "2029-04-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-04-11T12:45:00Z",
+    "end": "2029-04-11T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-04-25T18:00:00Z",
+    "end": "2029-04-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-05-04T13:30:00Z",
+    "end": "2029-05-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-06-01T13:30:00Z",
+    "end": "2029-06-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-06-06T12:45:00Z",
+    "end": "2029-06-06T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-06-13T18:00:00Z",
+    "end": "2029-06-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-07-04T12:45:00Z",
+    "end": "2029-07-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-07-06T13:30:00Z",
+    "end": "2029-07-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-07-25T18:00:00Z",
+    "end": "2029-07-25T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-08-03T13:30:00Z",
+    "end": "2029-08-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-09-05T12:45:00Z",
+    "end": "2029-09-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-09-07T13:30:00Z",
+    "end": "2029-09-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-09-12T18:00:00Z",
+    "end": "2029-09-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-10-05T13:30:00Z",
+    "end": "2029-10-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-10-10T12:45:00Z",
+    "end": "2029-10-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-10-24T18:00:00Z",
+    "end": "2029-10-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-11-02T13:30:00Z",
+    "end": "2029-11-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2029"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2029-12-05T12:45:00Z",
+    "end": "2029-12-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2029-12-07T13:30:00Z",
+    "end": "2029-12-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2029"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2029-12-12T18:00:00Z",
+    "end": "2029-12-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2029"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-01-04T13:30:00Z",
+    "end": "2030-01-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-01-23T18:00:00Z",
+    "end": "2030-01-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-01-30T12:45:00Z",
+    "end": "2030-01-30T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-02-01T13:30:00Z",
+    "end": "2030-02-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-03-01T13:30:00Z",
+    "end": "2030-03-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-03-13T12:45:00Z",
+    "end": "2030-03-13T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-03-13T18:00:00Z",
+    "end": "2030-03-13T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-04-05T13:30:00Z",
+    "end": "2030-04-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-04-10T12:45:00Z",
+    "end": "2030-04-10T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-04-24T18:00:00Z",
+    "end": "2030-04-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-05-03T13:30:00Z",
+    "end": "2030-05-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-06-05T12:45:00Z",
+    "end": "2030-06-05T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-06-07T13:30:00Z",
+    "end": "2030-06-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-06-12T18:00:00Z",
+    "end": "2030-06-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-07-03T12:45:00Z",
+    "end": "2030-07-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-07-05T13:30:00Z",
+    "end": "2030-07-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-07-24T18:00:00Z",
+    "end": "2030-07-24T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-08-02T13:30:00Z",
+    "end": "2030-08-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-09-04T12:45:00Z",
+    "end": "2030-09-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-09-06T13:30:00Z",
+    "end": "2030-09-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-09-11T18:00:00Z",
+    "end": "2030-09-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-10-04T13:30:00Z",
+    "end": "2030-10-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-10-09T12:45:00Z",
+    "end": "2030-10-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-10-23T18:00:00Z",
+    "end": "2030-10-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-11-01T13:30:00Z",
+    "end": "2030-11-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2030"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2030-12-04T12:45:00Z",
+    "end": "2030-12-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2030-12-06T13:30:00Z",
+    "end": "2030-12-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2030"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2030-12-11T18:00:00Z",
+    "end": "2030-12-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2030"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-01-03T13:30:00Z",
+    "end": "2031-01-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jan 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-01-22T18:00:00Z",
+    "end": "2031-01-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jan 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-01-29T12:45:00Z",
+    "end": "2031-01-29T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jan 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-02-07T13:30:00Z",
+    "end": "2031-02-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Feb 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-03-07T13:30:00Z",
+    "end": "2031-03-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Mar 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-03-12T12:45:00Z",
+    "end": "2031-03-12T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Mar 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-03-12T18:00:00Z",
+    "end": "2031-03-12T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Mar 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-04-04T13:30:00Z",
+    "end": "2031-04-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Apr 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-04-09T12:45:00Z",
+    "end": "2031-04-09T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Apr 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-04-23T18:00:00Z",
+    "end": "2031-04-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Apr 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-05-02T13:30:00Z",
+    "end": "2031-05-02T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls May 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-06-04T12:45:00Z",
+    "end": "2031-06-04T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jun 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-06-06T13:30:00Z",
+    "end": "2031-06-06T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jun 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-06-11T18:00:00Z",
+    "end": "2031-06-11T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jun 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-07-02T12:45:00Z",
+    "end": "2031-07-02T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Jul 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-07-04T13:30:00Z",
+    "end": "2031-07-04T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Jul 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-07-23T18:00:00Z",
+    "end": "2031-07-23T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Jul 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-08-01T13:30:00Z",
+    "end": "2031-08-01T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Aug 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-09-03T12:45:00Z",
+    "end": "2031-09-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Sep 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-09-05T13:30:00Z",
+    "end": "2031-09-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Sep 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-09-10T18:00:00Z",
+    "end": "2031-09-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Sep 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-10-03T13:30:00Z",
+    "end": "2031-10-03T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Oct 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-10-08T12:45:00Z",
+    "end": "2031-10-08T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Oct 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-10-22T18:00:00Z",
+    "end": "2031-10-22T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Oct 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-11-07T13:30:00Z",
+    "end": "2031-11-07T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Nov 2031"
+  },
+  {
+    "source": "ECB",
+    "severity": 1.3,
+    "start": "2031-12-03T12:45:00Z",
+    "end": "2031-12-03T16:45:00Z",
+    "label": "[SYNTHETIC] ECB monetary policy Dec 2031"
+  },
+  {
+    "source": "NFP",
+    "severity": 1.4,
+    "start": "2031-12-05T13:30:00Z",
+    "end": "2031-12-05T16:30:00Z",
+    "label": "[SYNTHETIC] US Non-Farm Payrolls Dec 2031"
+  },
+  {
+    "source": "FOMC",
+    "severity": 1.35,
+    "start": "2031-12-10T18:00:00Z",
+    "end": "2031-12-10T22:00:00Z",
+    "label": "[SYNTHETIC] FOMC rate decision Dec 2031"
   }
 ]

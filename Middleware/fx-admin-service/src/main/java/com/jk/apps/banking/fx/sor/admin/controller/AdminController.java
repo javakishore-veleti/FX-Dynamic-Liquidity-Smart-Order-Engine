@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -187,5 +189,93 @@ public class AdminController {
     @GetMapping("/economic-calendar")
     public List<Map<String, Object>> economicCalendar() {
         return adminWorkflowService.listEconomicCalendar();
+    }
+
+    @PutMapping("/economic-calendar")
+    public Map<String, Object> upsertEconomicCalendar(@RequestBody Map<String, Object> body) {
+        return adminWorkflowService.upsertEconomicCalendar(body);
+    }
+
+    @DeleteMapping("/economic-calendar/{source}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEconomicCalendar(
+            @PathVariable("source") String source, @RequestParam("start") String start) {
+        adminWorkflowService.deleteEconomicCalendar(source, start);
+    }
+
+    @DeleteMapping("/spread-schedules/{tierId}/{ccyPair}/{sessionRegime}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSpreadSchedule(
+            @PathVariable("tierId") String tierId,
+            @PathVariable("ccyPair") String ccyPair,
+            @PathVariable("sessionRegime") String sessionRegime) {
+        adminWorkflowService.deleteSpreadSchedule(tierId, ccyPair, sessionRegime);
+    }
+
+    @GetMapping("/lp-book")
+    public List<Map<String, Object>> listLpBook() {
+        return adminWorkflowService.listLpBook();
+    }
+
+    @PutMapping("/lp-book")
+    public Map<String, Object> upsertLpBook(@RequestBody Map<String, Object> body) {
+        return adminWorkflowService.upsertLpBook(body);
+    }
+
+    @DeleteMapping("/lp-book/{ccyPair}/{lpId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLpBook(
+            @PathVariable("ccyPair") String ccyPair, @PathVariable("lpId") String lpId) {
+        adminWorkflowService.deleteLpBook(ccyPair, lpId);
+    }
+
+    @GetMapping("/lp-rankings")
+    public List<Map<String, Object>> listLpRankings() {
+        return adminWorkflowService.listLpRankings();
+    }
+
+    @PutMapping("/lp-rankings")
+    public Map<String, Object> upsertLpRanking(@RequestBody Map<String, Object> body) {
+        return adminWorkflowService.upsertLpRanking(body);
+    }
+
+    @DeleteMapping("/lp-rankings/{lpId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLpRanking(@PathVariable("lpId") String lpId) {
+        adminWorkflowService.deleteLpRanking(lpId);
+    }
+
+    @GetMapping("/settlement-policies")
+    public List<Map<String, Object>> listSettlementPolicies() {
+        return adminWorkflowService.listSettlementPolicies();
+    }
+
+    @PutMapping("/settlement-policies")
+    public Map<String, Object> upsertSettlementPolicy(@RequestBody Map<String, Object> body) {
+        return adminWorkflowService.upsertSettlementPolicy(body);
+    }
+
+    @DeleteMapping("/settlement-policies/{ccyPair}/{tenor}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSettlementPolicy(
+            @PathVariable("ccyPair") String ccyPair, @PathVariable("tenor") String tenor) {
+        adminWorkflowService.deleteSettlementPolicy(ccyPair, tenor);
+    }
+
+    @GetMapping("/credit-lines")
+    public List<Map<String, Object>> listCreditLines() {
+        return adminWorkflowService.listCreditLines();
+    }
+
+    @PutMapping("/credit-lines")
+    public Map<String, Object> upsertCreditLine(@RequestBody Map<String, Object> body) {
+        return adminWorkflowService.upsertCreditLine(body);
+    }
+
+    @DeleteMapping("/credit-lines/{clientId}/{lpId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteCreditLine(
+            @PathVariable("clientId") String clientId, @PathVariable("lpId") String lpId) {
+        adminWorkflowService.deleteCreditLine(clientId, lpId);
     }
 }

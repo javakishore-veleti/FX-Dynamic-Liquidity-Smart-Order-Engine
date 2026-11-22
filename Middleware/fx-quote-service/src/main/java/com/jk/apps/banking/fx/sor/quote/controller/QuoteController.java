@@ -1,5 +1,6 @@
 package com.jk.apps.banking.fx.sor.quote.controller;
 
+import com.jk.apps.banking.fx.sor.quote.cache.LpQuote;
 import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteRequest;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
@@ -11,12 +12,14 @@ import com.jk.apps.banking.fx.sor.quote.dto.RegimeContextResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.SpreadScheduleDto;
 import com.jk.apps.banking.fx.sor.quote.service.QuoteService;
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +29,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -114,6 +118,32 @@ public class QuoteController {
         return Map.of("status", "INVALIDATED");
     }
 
+    @DeleteMapping("/spread-schedules/{tierId}/{ccyPair}/{sessionRegime}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSchedule(
+            @PathVariable("tierId") String tierId,
+            @PathVariable("ccyPair") String ccyPair,
+            @PathVariable("sessionRegime") String sessionRegime) {
+        quoteService.deleteSchedule(tierId, ccyPair, sessionRegime);
+    }
+
+    @GetMapping("/lp-book")
+    public List<LpQuote> listLpBook() {
+        return quoteService.listLpBook();
+    }
+
+    @PutMapping("/lp-book")
+    public LpQuote upsertLpBook(@RequestBody LpQuote body) {
+        return quoteService.upsertLpBook(body);
+    }
+
+    @DeleteMapping("/lp-book/{ccyPair}/{lpId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLpBook(
+            @PathVariable("ccyPair") String ccyPair, @PathVariable("lpId") String lpId) {
+        quoteService.deleteLpBook(ccyPair, lpId);
+    }
+
     @PutMapping("/macro-flag")
     public MacroFlagResponse putMacroFlag(@RequestBody(required = false) MacroFlagRequest request) {
         return quoteService.ingestMacro(request);
@@ -133,5 +163,17 @@ public class QuoteController {
     @GetMapping("/economic-calendar")
     public List<EconomicCalendarEventDto> economicCalendar() {
         return quoteService.economicCalendar();
+    }
+
+    @PutMapping("/economic-calendar")
+    public EconomicCalendarEventDto upsertEconomicCalendar(@RequestBody EconomicCalendarEventDto body) {
+        return quoteService.upsertEconomicCalendar(body);
+    }
+
+    @DeleteMapping("/economic-calendar/{source}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteEconomicCalendar(
+            @PathVariable("source") String source, @RequestParam("start") Instant start) {
+        quoteService.deleteEconomicCalendar(source, start);
     }
 }

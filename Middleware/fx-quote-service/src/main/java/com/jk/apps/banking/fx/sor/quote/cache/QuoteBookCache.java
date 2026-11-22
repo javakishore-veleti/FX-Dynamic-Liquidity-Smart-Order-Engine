@@ -7,4 +7,8 @@ public interface QuoteBookCache {
     void put(LpQuote quote);
 
     List<LpQuote> getByCcyPair(String ccyPair);
+
+    List<LpQuote> listAll();
+
+    void delete(String ccyPair, String lpId);
 }

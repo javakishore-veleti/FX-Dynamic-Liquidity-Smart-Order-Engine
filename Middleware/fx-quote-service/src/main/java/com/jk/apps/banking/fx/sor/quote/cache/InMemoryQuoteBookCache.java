@@ -24,4 +24,21 @@ public class InMemoryQuoteBookCache implements QuoteBookCache {
         }
         return new ArrayList<>(book.values());
     }
+
+    @Override
+    public List<LpQuote> listAll() {
+        List<LpQuote> all = new ArrayList<>();
+        for (Map<String, LpQuote> book : books.values()) {
+            all.addAll(book.values());
+        }
+        return all;
+    }
+
+    @Override
+    public void delete(String ccyPair, String lpId) {
+        Map<String, LpQuote> book = books.get(ccyPair);
+        if (book != null) {
+            book.remove(lpId);
+        }
+    }
 }

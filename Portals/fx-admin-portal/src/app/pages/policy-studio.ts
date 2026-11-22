@@ -81,6 +81,7 @@ type ScheduleRow = {
                   <th>Markup</th>
                   <th>News×</th>
                   <th>Status</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -92,6 +93,9 @@ type ScheduleRow = {
                     <td>{{ row.markupBps }}</td>
                     <td>{{ row.newsMultiplier }}</td>
                     <td><span class="badge badge-fx">{{ row.status }}</span></td>
+                    <td class="text-end">
+                      <button class="btn btn-fx-outline btn-sm" (click)="remove(row)">Delete</button>
+                    </td>
                   </tr>
                 }
               </tbody>
@@ -163,6 +167,20 @@ export class PolicyStudioPage implements OnInit {
       },
       error: (err) => this.error.set(`Macro clear failed: ${err.message || err.status}`),
     });
+  }
+
+  remove(row: ScheduleRow): void {
+    this.http
+      .delete(
+        `${API.admin}/api/v1/admin/spread-schedules/${row.tierId}/${row.ccyPair}/${row.sessionRegime}`,
+      )
+      .subscribe({
+        next: () => {
+          this.banner.set('Schedule deleted');
+          this.reload();
+        },
+        error: (err) => this.error.set(`Delete failed: ${err.message || err.status}`),
+      });
   }
 
   private post(action: 'draft' | 'submit' | 'approve', body: ScheduleRow): void {

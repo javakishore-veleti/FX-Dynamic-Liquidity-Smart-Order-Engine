@@ -46,6 +46,7 @@ public class AdminWorkflowService {
     private final ServiceMetrics metrics;
     private final DomainEventPublisher domainEvents;
     private final QuoteScheduleClient quoteScheduleClient;
+    private final QualifyReferenceClient qualifyReferenceClient;
     private final Set<UUID> cancelSignals = ConcurrentHashMap.newKeySet();
 
     public AdminWorkflowService(
@@ -54,13 +55,15 @@ public class AdminWorkflowService {
             ObjectMapper objectMapper,
             ServiceMetrics metrics,
             DomainEventPublisher domainEvents,
-            QuoteScheduleClient quoteScheduleClient) {
+            QuoteScheduleClient quoteScheduleClient,
+            QualifyReferenceClient qualifyReferenceClient) {
         this.repository = repository;
         this.workflowExecutor = workflowExecutor;
         this.objectMapper = objectMapper;
         this.metrics = metrics;
         this.domainEvents = domainEvents;
         this.quoteScheduleClient = quoteScheduleClient;
+        this.qualifyReferenceClient = qualifyReferenceClient;
     }
 
     public List<Map<String, Object>> listSpreadSchedules() {
@@ -108,6 +111,93 @@ public class AdminWorkflowService {
 
     public List<Map<String, Object>> listEconomicCalendar() {
         return quoteScheduleClient.listEconomicCalendar();
+    }
+
+    @Transactional
+    public Map<String, Object> upsertEconomicCalendar(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.upsertEconomicCalendar(body);
+        createCompletedOps("ECONOMIC_CALENDAR_UPSERT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public void deleteEconomicCalendar(String source, String start) {
+        quoteScheduleClient.deleteEconomicCalendar(source, start);
+        createCompletedOps("ECONOMIC_CALENDAR_DELETE", source + "|" + start, "{}");
+    }
+
+    @Transactional
+    public void deleteSpreadSchedule(String tierId, String ccyPair, String sessionRegime) {
+        quoteScheduleClient.deleteSchedule(tierId, ccyPair, sessionRegime);
+        createCompletedOps("SPREAD_SCHEDULE_DELETE", tierId + "|" + ccyPair + "|" + sessionRegime, "{}");
+    }
+
+    public List<Map<String, Object>> listLpBook() {
+        return quoteScheduleClient.listLpBook();
+    }
+
+    @Transactional
+    public Map<String, Object> upsertLpBook(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.upsertLpBook(body);
+        createCompletedOps("LP_BOOK_UPSERT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public void deleteLpBook(String ccyPair, String lpId) {
+        quoteScheduleClient.deleteLpBook(ccyPair, lpId);
+        createCompletedOps("LP_BOOK_DELETE", ccyPair + "|" + lpId, "{}");
+    }
+
+    public List<Map<String, Object>> listLpRankings() {
+        return quoteScheduleClient.listLpRankings();
+    }
+
+    @Transactional
+    public Map<String, Object> upsertLpRanking(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.upsertLpRanking(body);
+        createCompletedOps("LP_RANKING_UPSERT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public void deleteLpRanking(String lpId) {
+        quoteScheduleClient.deleteLpRanking(lpId);
+        createCompletedOps("LP_RANKING_DELETE", lpId, "{}");
+    }
+
+    public List<Map<String, Object>> listSettlementPolicies() {
+        return qualifyReferenceClient.listSettlementPolicies();
+    }
+
+    @Transactional
+    public Map<String, Object> upsertSettlementPolicy(Map<String, Object> body) {
+        Map<String, Object> result = qualifyReferenceClient.upsertSettlementPolicy(body);
+        createCompletedOps("SETTLEMENT_POLICY_UPSERT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public void deleteSettlementPolicy(String ccyPair, String tenor) {
+        qualifyReferenceClient.deleteSettlementPolicy(ccyPair, tenor);
+        createCompletedOps("SETTLEMENT_POLICY_DELETE", ccyPair + "|" + tenor, "{}");
+    }
+
+    public List<Map<String, Object>> listCreditLines() {
+        return qualifyReferenceClient.listCreditLines();
+    }
+
+    @Transactional
+    public Map<String, Object> upsertCreditLine(Map<String, Object> body) {
+        Map<String, Object> result = qualifyReferenceClient.upsertCreditLine(body);
+        createCompletedOps("CREDIT_LINE_UPSERT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public void deleteCreditLine(String clientId, String lpId) {
+        qualifyReferenceClient.deleteCreditLine(clientId, lpId);
+        createCompletedOps("CREDIT_LINE_DELETE", clientId + "|" + lpId, "{}");
     }
 
     /** Exposed for BPMN execution list mapping. */

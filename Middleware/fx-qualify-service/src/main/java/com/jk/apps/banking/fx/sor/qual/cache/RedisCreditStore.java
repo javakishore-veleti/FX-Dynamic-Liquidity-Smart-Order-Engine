@@ -68,4 +68,27 @@ public class RedisCreditStore implements CreditStore {
                 notionalUsd.toPlainString());
         return result != null && result == 1L;
     }
+
+    @Override
+    public java.util.List<CreditLine> listAll() {
+        java.util.Set<String> keys = redis.keys(KEY_PREFIX + "*");
+        if (keys == null || keys.isEmpty()) {
+            return java.util.List.of();
+        }
+        java.util.List<CreditLine> out = new java.util.ArrayList<>();
+        for (String redisKey : keys) {
+            String suffix = redisKey.substring(KEY_PREFIX.length());
+            int sep = suffix.indexOf(':');
+            if (sep <= 0) {
+                continue;
+            }
+            get(suffix.substring(0, sep), suffix.substring(sep + 1)).ifPresent(out::add);
+        }
+        return out;
+    }
+
+    @Override
+    public void delete(String clientId, String lpId) {
+        redis.delete(key(clientId, lpId));
+    }
 }

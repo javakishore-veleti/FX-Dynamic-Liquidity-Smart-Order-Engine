@@ -10,6 +10,7 @@ import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteRequest;
 import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteResponse;
 import com.jk.apps.banking.fx.sor.exec.entity.ChildVenueSplit;
 import com.jk.apps.banking.fx.sor.exec.entity.FxExecutionOrder;
+import com.jk.apps.banking.fx.sor.exec.business.facade.LpRankingConfigFacade;
 import com.jk.apps.banking.fx.sor.exec.client.QuoteRegimeClient;
 import com.jk.apps.banking.fx.sor.exec.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.exec.metrics.ServiceMetrics;
@@ -35,8 +36,6 @@ import org.springframework.web.server.ResponseStatusException;
 @Service
 public class RouteExecService {
 
-    private static final List<String> RANKED_LPS = List.of("LP_CITI", "LP_JPM", "LP_GS");
-    private static final String RULE_VERSION = "LP_SCORE_v1.0";
     private static final BigDecimal INTERNALIZE_THRESHOLD = new BigDecimal("1000000");
     private static final String TOPIC_ORDER_ROUTED = "fx.exec.order-routed-provenance.v1";
     private static final String TOPIC_LAST_LOOK_FAILOVER = "fx.exec.last-look-failover.v1";
@@ -48,6 +47,7 @@ public class RouteExecService {
     private final DomainEventPublisher domainEvents;
     private final QuoteRegimeClient quoteRegimeClient;
     private final LastLookPenaltyHintCache lastLookPenaltyHintCache;
+    private final LpRankingConfigFacade lpRankingConfigFacade;
 
     public RouteExecService(
             FxExecutionOrderRepository orderRepository,
@@ -56,7 +56,8 @@ public class RouteExecService {
             ServiceMetrics metrics,
             DomainEventPublisher domainEvents,
             QuoteRegimeClient quoteRegimeClient,
-            LastLookPenaltyHintCache lastLookPenaltyHintCache) {
+            LastLookPenaltyHintCache lastLookPenaltyHintCache,
+            LpRankingConfigFacade lpRankingConfigFacade) {
         this.orderRepository = orderRepository;
         this.splitRepository = splitRepository;
         this.idempotencyStore = idempotencyStore;
@@ -64,6 +65,20 @@ public class RouteExecService {
         this.domainEvents = domainEvents;
         this.quoteRegimeClient = quoteRegimeClient;
         this.lastLookPenaltyHintCache = lastLookPenaltyHintCache;
+        this.lpRankingConfigFacade = lpRankingConfigFacade;
+    }
+
+    private List<String> rankedLps() {
+        List<String> ranked = lpRankingConfigFacade.rankedEnabledLpIds();
+        return ranked.isEmpty() ? List.of("LP_CITI", "LP_JPM", "LP_GS") : ranked;
+    }
+
+    private String ruleVersion() {
+        return lpRankingConfigFacade.listAll().stream()
+                .map(e -> e.getRuleVersion())
+                .filter(v -> v != null && !v.isBlank())
+                .findFirst()
+                .orElse(LpRankingConfigFacade.DEFAULT_RULE_VERSION);
     }
 
     @Transactional
@@ -178,7 +193,7 @@ public class RouteExecService {
         }
         splitRepository.saveAll(existing);
 
-        String backupLp = RANKED_LPS.stream()
+        String backupLp = rankedLps().stream()
                 .filter(lp -> !lp.equals(request.getRejectedLpId()))
                 .findFirst()
                 .orElse("LP_GS");
@@ -222,8 +237,8 @@ public class RouteExecService {
         trace.setExecutionMode(order.getExecutionMode());
         trace.setExecutedRate(order.getExecutedRate());
         trace.setSlippageBps(order.getSlippageBps());
-        trace.setDroolsRuleVersion(RULE_VERSION);
-        trace.setEvaluatedLps(new ArrayList<>(RANKED_LPS));
+        trace.setDroolsRuleVersion(ruleVersion());
+        trace.setEvaluatedLps(new ArrayList<>(rankedLps()));
         trace.setKnockoutCodes(List.of("STALE_QUOTE_OK", "CREDIT_OK", "CLIP_OK"));
         for (ChildVenueSplit split : splits) {
             trace.getChildSplits().add(toDto(split));
@@ -266,15 +281,16 @@ public class RouteExecService {
             splits.add(split);
             return splits;
         }
-        if ("MULTI_LP_SWEEP".equals(mode)) {
+        List<String> ranked = rankedLps();
+        if ("MULTI_LP_SWEEP".equals(mode) && ranked.size() >= 2) {
             BigDecimal half = notional.divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP);
-            // Prefer CITI then JPM; inflate hold on secondary under stress to encode last-look penalty
-            splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.get(0), half, rate, 12));
+            // Prefer primary then secondary; inflate hold on secondary under stress to encode last-look penalty
+            splits.add(baseSplit(tradeDate, orderId, ranked.get(0), half, rate, 12));
             splits.add(baseSplit(
-                    tradeDate, orderId, RANKED_LPS.get(1), notional.subtract(half), rate, 15 + holdScale));
+                    tradeDate, orderId, ranked.get(1), notional.subtract(half), rate, 15 + holdScale));
             return splits;
         }
-        splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.getFirst(), notional, rate, 10 + holdScale / 2));
+        splits.add(baseSplit(tradeDate, orderId, ranked.getFirst(), notional, rate, 10 + holdScale / 2));
         return splits;
     }
 
@@ -355,7 +371,7 @@ public class RouteExecService {
         payload.put("internalized", internalized);
         payload.put("childSplits", childSplits);
         payload.put("slippageBps", order.getSlippageBps());
-        payload.put("droolsRuleVersion", RULE_VERSION);
+        payload.put("droolsRuleVersion", ruleVersion());
         payload.put("sessionRegime", sessionRegime);
         payload.put("lastLookPenaltyWeight", lastLookPenaltyWeight);
         payload.put("timestamp", Instant.now().toString());

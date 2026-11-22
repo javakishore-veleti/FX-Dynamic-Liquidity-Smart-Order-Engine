@@ -77,6 +77,45 @@ public class EconomicCalendarFacade {
         return out;
     }
 
+    /** Runtime overlay upsert (config) — does not rewrite classpath seed JSON. */
+    public synchronized EconomicCalendarEventDto upsert(EconomicCalendarEventDto request) {
+        if (request.getSource() == null || request.getStart() == null || request.getEnd() == null) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.BAD_REQUEST, "source, start, end required");
+        }
+        String source = request.getSource().trim().toUpperCase();
+        CalendarWindow next = new CalendarWindow(
+                source,
+                request.getSeverity() == null ? new BigDecimal("1.25") : request.getSeverity(),
+                request.getStart(),
+                request.getEnd(),
+                request.getLabel() == null || request.getLabel().isBlank() ? source : request.getLabel());
+        List<CalendarWindow> copy = new ArrayList<>(windows);
+        copy.removeIf(w -> w.source().equals(source) && w.start().equals(next.start()));
+        copy.add(next);
+        copy.sort(Comparator.comparing(CalendarWindow::start));
+        windows = List.copyOf(copy);
+        Instant now = clock.instant();
+        return new EconomicCalendarEventDto(
+                next.source(),
+                next.severity(),
+                next.start(),
+                next.end(),
+                next.label(),
+                !now.isBefore(next.start()) && now.isBefore(next.end()));
+    }
+
+    public synchronized void delete(String source, Instant start) {
+        String src = source.trim().toUpperCase();
+        List<CalendarWindow> copy = new ArrayList<>(windows);
+        boolean removed = copy.removeIf(w -> w.source().equals(src) && w.start().equals(start));
+        if (!removed) {
+            throw new org.springframework.web.server.ResponseStatusException(
+                    org.springframework.http.HttpStatus.NOT_FOUND, "calendar event not found");
+        }
+        windows = List.copyOf(copy);
+    }
+
     public Optional<CalendarWindow> activeWindow() {
         Instant now = clock.instant();
         return windows.stream()

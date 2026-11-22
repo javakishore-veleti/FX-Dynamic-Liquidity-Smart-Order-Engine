@@ -28,4 +28,10 @@ public class WebConfig implements WebMvcConfigurer {
             @Value("${fx.route-exec.base-url:http://127.0.0.1:8083}") String routeExecBaseUrl) {
         return RestClient.builder().baseUrl(routeExecBaseUrl).build();
     }
+
+    @Bean(name = "qualifyRestClient")
+    public RestClient qualifyRestClient(
+            @Value("${fx.qualify.base-url:http://127.0.0.1:8082}") String qualifyBaseUrl) {
+        return RestClient.builder().baseUrl(qualifyBaseUrl).build();
+    }
 }

@@ -1,6 +1,7 @@
 package com.jk.apps.banking.fx.sor.qual.cache;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -34,5 +35,15 @@ public class InMemoryCreditStore implements CreditStore {
             return existing;
         });
         return reserved.get();
+    }
+
+    @Override
+    public List<CreditLine> listAll() {
+        return List.copyOf(lines.values());
+    }
+
+    @Override
+    public void delete(String clientId, String lpId) {
+        lines.remove(key(clientId, lpId));
     }
 }

@@ -58,4 +58,41 @@ public class RedisQuoteBookCache implements QuoteBookCache {
         }
         return quotes;
     }
+
+    @Override
+    public List<LpQuote> listAll() {
+        Set<String> keys = redis.keys(KEY_PREFIX + "*");
+        if (keys == null || keys.isEmpty()) {
+            return List.of();
+        }
+        List<LpQuote> quotes = new ArrayList<>();
+        for (String key : keys) {
+            Map<Object, Object> hash = redis.opsForHash().entries(key);
+            if (hash.isEmpty()) {
+                continue;
+            }
+            String withoutPrefix = key.substring(KEY_PREFIX.length());
+            int sep = withoutPrefix.indexOf(':');
+            if (sep <= 0) {
+                continue;
+            }
+            String ccyPair = withoutPrefix.substring(0, sep);
+            String lpId = withoutPrefix.substring(sep + 1);
+            quotes.add(
+                    new LpQuote(
+                            ccyPair,
+                            lpId,
+                            new BigDecimal(String.valueOf(hash.get("bid"))),
+                            new BigDecimal(String.valueOf(hash.get("ask"))),
+                            new BigDecimal(String.valueOf(hash.get("available_size"))),
+                            Long.parseLong(String.valueOf(hash.get("quote_ts"))),
+                            Long.parseLong(String.valueOf(hash.get("ttl_ms")))));
+        }
+        return quotes;
+    }
+
+    @Override
+    public void delete(String ccyPair, String lpId) {
+        redis.delete(KEY_PREFIX + ccyPair + ":" + lpId);
+    }
 }

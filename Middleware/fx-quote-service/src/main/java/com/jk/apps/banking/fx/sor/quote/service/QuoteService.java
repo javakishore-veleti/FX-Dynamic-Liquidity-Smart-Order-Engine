@@ -1,9 +1,11 @@
 package com.jk.apps.banking.fx.sor.quote.service;
 
 import com.jk.apps.banking.fx.sor.quote.business.facade.EconomicCalendarFacade;
+import com.jk.apps.banking.fx.sor.quote.business.facade.LpBookAdminFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.MacroRegimeFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.QuotePricingFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.SpreadScheduleAdminFacade;
+import com.jk.apps.banking.fx.sor.quote.cache.LpQuote;
 import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteRequest;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
@@ -14,6 +16,7 @@ import com.jk.apps.banking.fx.sor.quote.dto.RateSnapshotResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.RegimeContextResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.SpreadScheduleDto;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +30,19 @@ public class QuoteService {
     private final MacroRegimeFacade macroRegimeFacade;
     private final SpreadScheduleAdminFacade scheduleAdminFacade;
     private final EconomicCalendarFacade economicCalendarFacade;
+    private final LpBookAdminFacade lpBookAdminFacade;
 
     public QuoteService(
             QuotePricingFacade pricingFacade,
             MacroRegimeFacade macroRegimeFacade,
             SpreadScheduleAdminFacade scheduleAdminFacade,
-            EconomicCalendarFacade economicCalendarFacade) {
+            EconomicCalendarFacade economicCalendarFacade,
+            LpBookAdminFacade lpBookAdminFacade) {
         this.pricingFacade = pricingFacade;
         this.macroRegimeFacade = macroRegimeFacade;
         this.scheduleAdminFacade = scheduleAdminFacade;
         this.economicCalendarFacade = economicCalendarFacade;
+        this.lpBookAdminFacade = lpBookAdminFacade;
     }
 
     public IndicativeQuoteResponse indicative(IndicativeQuoteRequest request) {
@@ -67,6 +73,30 @@ public class QuoteService {
 
     public List<EconomicCalendarEventDto> economicCalendar() {
         return economicCalendarFacade.listEvents();
+    }
+
+    public EconomicCalendarEventDto upsertEconomicCalendar(EconomicCalendarEventDto request) {
+        return economicCalendarFacade.upsert(request);
+    }
+
+    public void deleteEconomicCalendar(String source, Instant start) {
+        economicCalendarFacade.delete(source, start);
+    }
+
+    public List<LpQuote> listLpBook() {
+        return lpBookAdminFacade.listAll();
+    }
+
+    public LpQuote upsertLpBook(LpQuote request) {
+        return lpBookAdminFacade.upsert(request);
+    }
+
+    public void deleteLpBook(String ccyPair, String lpId) {
+        lpBookAdminFacade.delete(ccyPair, lpId);
+    }
+
+    public void deleteSchedule(String tierId, String ccyPair, String sessionRegime) {
+        scheduleAdminFacade.delete(tierId, ccyPair, sessionRegime);
     }
 
     public MacroFlagResponse clearMacro() {

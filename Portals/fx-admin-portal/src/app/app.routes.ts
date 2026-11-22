@@ -9,6 +9,11 @@ import { AgentsPage } from './pages/agents';
 import { SreDashboardsPage } from './pages/sre-dashboards';
 import { WorkflowsMasterPage } from './pages/workflows-master';
 import { WorkflowsExecutionsPage } from './pages/workflows-executions';
+import { RefLpBookPage } from './pages/ref-lp-book';
+import { RefCalendarPage } from './pages/ref-calendar';
+import { RefSettlementPage } from './pages/ref-settlement';
+import { RefCreditPage } from './pages/ref-credit';
+import { RefLpRankingsPage } from './pages/ref-lp-rankings';
 
 export const routes: Routes = [
   {
@@ -20,6 +25,12 @@ export const routes: Routes = [
       { path: 'topology', component: TopologyPage },
       { path: 'incident-rca', component: IncidentRcaPage },
       { path: 'policy-studio', component: PolicyStudioPage },
+      { path: 'reference', pathMatch: 'full', redirectTo: 'reference/lp-book' },
+      { path: 'reference/lp-book', component: RefLpBookPage },
+      { path: 'reference/calendar', component: RefCalendarPage },
+      { path: 'reference/settlement', component: RefSettlementPage },
+      { path: 'reference/credit', component: RefCreditPage },
+      { path: 'reference/lp-rankings', component: RefLpRankingsPage },
       { path: 'workflows', pathMatch: 'full', redirectTo: 'workflows/master' },
       { path: 'workflows/master', component: WorkflowsMasterPage },
       { path: 'workflows/executions', component: WorkflowsExecutionsPage },

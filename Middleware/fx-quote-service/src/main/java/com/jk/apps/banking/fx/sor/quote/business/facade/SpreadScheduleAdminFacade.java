@@ -66,6 +66,18 @@ public class SpreadScheduleAdminFacade {
         scheduleCache.invalidate();
     }
 
+    @Transactional
+    public void delete(String tierId, String ccyPair, String sessionRegime) {
+        String tier = tierId.trim().toUpperCase(Locale.ROOT);
+        String pair = ccyPair.replace("/", "").toUpperCase(Locale.ROOT);
+        String regime = sessionRegime.trim().toUpperCase(Locale.ROOT);
+        ClientTierSpreadSchedule row = repository
+                .findByTierIdAndCcyPairAndSessionRegime(tier, pair, regime)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "schedule not found"));
+        repository.delete(row);
+        scheduleCache.invalidate();
+    }
+
     private ClientTierSpreadSchedule upsertEntity(SpreadScheduleDto request, String status, String approvedBy) {
         if (request.getTierId() == null || request.getCcyPair() == null || request.getSessionRegime() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "tierId, ccyPair, sessionRegime required");

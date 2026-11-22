@@ -110,6 +110,80 @@ public class QuoteScheduleClient {
                 });
     }
 
+    public Map<String, Object> upsertEconomicCalendar(Map<String, Object> body) {
+        return quoteRestClient.put()
+                .uri("/api/v1/fx/economic-calendar")
+                .body(body)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public void deleteEconomicCalendar(String source, String start) {
+        quoteRestClient.method(org.springframework.http.HttpMethod.DELETE)
+                .uri(uriBuilder -> uriBuilder
+                        .path("/api/v1/fx/economic-calendar/{source}")
+                        .queryParam("start", start)
+                        .build(source))
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public void deleteSchedule(String tierId, String ccyPair, String sessionRegime) {
+        quoteRestClient.method(org.springframework.http.HttpMethod.DELETE)
+                .uri("/api/v1/fx/spread-schedules/{tierId}/{ccyPair}/{sessionRegime}", tierId, ccyPair, sessionRegime)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public List<Map<String, Object>> listLpBook() {
+        return quoteRestClient.get()
+                .uri("/api/v1/fx/lp-book")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public Map<String, Object> upsertLpBook(Map<String, Object> body) {
+        return quoteRestClient.put()
+                .uri("/api/v1/fx/lp-book")
+                .body(body)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public void deleteLpBook(String ccyPair, String lpId) {
+        quoteRestClient.method(org.springframework.http.HttpMethod.DELETE)
+                .uri("/api/v1/fx/lp-book/{ccyPair}/{lpId}", ccyPair, lpId)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
+    public List<Map<String, Object>> listLpRankings() {
+        return routeExecRestClient.get()
+                .uri("/api/v1/fx/reference/lp-rankings")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public Map<String, Object> upsertLpRanking(Map<String, Object> body) {
+        return routeExecRestClient.put()
+                .uri("/api/v1/fx/reference/lp-rankings")
+                .body(body)
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public void deleteLpRanking(String lpId) {
+        routeExecRestClient.method(org.springframework.http.HttpMethod.DELETE)
+                .uri("/api/v1/fx/reference/lp-rankings/{lpId}", lpId)
+                .retrieve()
+                .toBodilessEntity();
+    }
+
     public Map<String, Object> indicative(Map<String, Object> body) {
         return quoteRestClient.post()
                 .uri("/api/v1/fx/quotes/indicative")

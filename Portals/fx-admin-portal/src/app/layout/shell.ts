@@ -14,6 +14,19 @@ export class Shell {
     { path: '/incident-rca', label: 'Incident RCA', icon: 'bi-shield-exclamation' },
     { path: '/policy-studio', label: 'Policy Studio', icon: 'bi-journal-code' },
     {
+      path: '/reference',
+      label: 'Reference Data',
+      icon: 'bi-database',
+      children: [
+        { path: '/policy-studio', label: 'Spread Schedules', icon: 'bi-sliders' },
+        { path: '/reference/lp-book', label: 'LP Top-of-Book', icon: 'bi-book' },
+        { path: '/reference/calendar', label: 'Economic Calendar', icon: 'bi-calendar3' },
+        { path: '/reference/settlement', label: 'Settlement Policies', icon: 'bi-bank' },
+        { path: '/reference/credit', label: 'Credit Lines', icon: 'bi-credit-card' },
+        { path: '/reference/lp-rankings', label: 'LP Rankings', icon: 'bi-sort-numeric-down' },
+      ],
+    },
+    {
       path: '/workflows',
       label: 'Workflows',
       icon: 'bi-diagram-2',

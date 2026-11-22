@@ -9,7 +9,19 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class Shell {
   readonly nav = [
-    { path: '/initial-data', label: 'Initial Data', icon: 'bi-database-up' },
+    {
+      path: '/reference',
+      label: 'Reference Data',
+      icon: 'bi-database',
+      children: [
+        { path: '/reference/schedules', label: 'Client Markup Schedules', icon: 'bi-sliders' },
+        { path: '/reference/lp-book', label: 'LP Top-of-Book', icon: 'bi-book' },
+        { path: '/reference/calendar', label: 'Economic Calendar', icon: 'bi-calendar3' },
+        { path: '/reference/settlement', label: 'Settlement Policies', icon: 'bi-bank' },
+        { path: '/reference/credit', label: 'Credit Lines', icon: 'bi-credit-card' },
+        { path: '/reference/lp-rankings', label: 'LP Rankings', icon: 'bi-sort-numeric-down' },
+      ],
+    },
     { path: '/dashboard', label: 'Command Center', icon: 'bi-speedometer2' },
     { path: '/topology', label: 'Topology Canvas', icon: 'bi-diagram-3' },
     { path: '/incident-rca', label: 'Incident RCA', icon: 'bi-shield-exclamation' },

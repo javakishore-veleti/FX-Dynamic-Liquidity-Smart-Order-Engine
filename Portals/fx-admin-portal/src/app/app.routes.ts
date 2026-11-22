@@ -16,7 +16,6 @@ import { RefCreditPage } from './pages/ref-credit';
 import { RefLpRankingsPage } from './pages/ref-lp-rankings';
 import { RefSchedulesPage } from './pages/ref-schedules';
 import { RefSchedulesCreatePage } from './pages/ref-schedules-create';
-import { InitDataPage } from './pages/initdata/initdata';
 
 export const routes: Routes = [
   {
@@ -28,7 +27,6 @@ export const routes: Routes = [
       { path: 'topology', component: TopologyPage },
       { path: 'incident-rca', component: IncidentRcaPage },
       { path: 'policy-studio', component: PolicyStudioPage },
-      { path: 'initial-data', component: InitDataPage },
       { path: 'reference', pathMatch: 'full', redirectTo: 'reference/schedules' },
       { path: 'reference/schedules', component: RefSchedulesPage },
       { path: 'reference/schedules/create', component: RefSchedulesCreatePage },

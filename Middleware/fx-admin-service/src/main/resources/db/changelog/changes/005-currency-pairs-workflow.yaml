@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-005-seed-initial-data-workflow-currency-pairs
+      author: fx-sor
+      comment: Master definition for the Initial Data workflow (currency pairs). Data loads only via the workflow.
+      changes:
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: INIT_CURRENCY_PAIRS }
+              - column: { name: name, value: "Initial Data · Currency Pairs" }
+              - column:
+                  name: description
+                  value: "Load the 28-pair currency master into fx-quote-service and verify the count"
+              - column: { name: bpmn_resource, value: bpmn/init-currency-pairs.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: ADMIN }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: INITIAL_DATA }

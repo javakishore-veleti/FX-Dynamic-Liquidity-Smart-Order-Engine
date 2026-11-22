@@ -110,6 +110,23 @@ public class QuoteScheduleClient {
                 });
     }
 
+    public List<Map<String, Object>> listCurrencyPairs() {
+        return quoteRestClient.get()
+                .uri("/api/v1/fx/pairs")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
+    public Map<String, Object> loadCurrencyPairs(String actor) {
+        return quoteRestClient.post()
+                .uri("/api/v1/fx/pairs/load")
+                .body(Map.of("actor", actor))
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
     public Map<String, Object> upsertEconomicCalendar(Map<String, Object> body) {
         return quoteRestClient.put()
                 .uri("/api/v1/fx/economic-calendar")

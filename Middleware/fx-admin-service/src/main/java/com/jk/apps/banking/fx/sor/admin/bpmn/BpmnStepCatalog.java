@@ -30,6 +30,10 @@ public final class BpmnStepCatalog {
             new Step("task_init_load_calendar", "Load economic calendar rows into quote", TaskType.SERVICE),
             new Step("task_init_verify_calendar", "Verify calendar rows present in quote", TaskType.SERVICE));
 
+    private static final List<Step> INIT_CURRENCY_PAIRS = List.of(
+            new Step("task_init_load_pairs", "Load currency pair master into quote", TaskType.SERVICE),
+            new Step("task_init_verify_pairs", "Verify currency pair count in quote", TaskType.SERVICE));
+
     private static final Map<String, List<Step>> BY_KEY = Map.of(
             Fr01BpmnDefinition.PROCESS_KEY,
             FR01_ADMIN,
@@ -38,6 +42,8 @@ public final class BpmnStepCatalog {
                     new Step("task_regime_context", "Fetch regime context from quote", TaskType.SERVICE),
                     new Step("task_indicative", "Request indicative quote", TaskType.SERVICE),
                     new Step("task_route_execute", "Route-execute with last-look penalty", TaskType.SERVICE)),
+            InitDataCatalog.PAIRS_WORKFLOW,
+            INIT_CURRENCY_PAIRS,
             InitDataCatalog.CALENDAR_WORKFLOW,
             INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",

@@ -6,6 +6,7 @@ import java.util.Optional;
 /** Initial Data datasets. Each dataset is loaded once, by its setup workflow, from a button click. */
 public final class InitDataCatalog {
 
+    public static final String PAIRS_WORKFLOW = "INIT_CURRENCY_PAIRS";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
@@ -19,6 +20,13 @@ public final class InitDataCatalog {
     }
 
     private static final List<Dataset> DATASETS = List.of(
+            new Dataset(
+                    "CURRENCY_PAIRS",
+                    "Currency Pairs",
+                    "28-pair master: G10 majors, G10 crosses, EM and restricted pairs. Owner: quote.",
+                    "fx-quote-service",
+                    PAIRS_WORKFLOW,
+                    "fx-quote-service master/currency-pairs.json"),
             new Dataset(
                     "ECONOMIC_CALENDAR",
                     "Economic Calendar",

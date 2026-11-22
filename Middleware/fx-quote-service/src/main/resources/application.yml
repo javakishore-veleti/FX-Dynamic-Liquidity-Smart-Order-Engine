@@ -1,6 +1,9 @@
 spring:
   application:
     name: fx-quote-service
+  grpc:
+    server:
+      port: 9081
   threads:
     virtual:
       enabled: true
@@ -40,6 +43,7 @@ fx:
     redis-enabled: false
     kafka-enabled: false
     liquibase-on-startup: ${LIQUIBASE_ON_STARTUP:true}
+    grpc-enabled: ${FX_GRPC_ENABLED:false}
 
 app:
   events:

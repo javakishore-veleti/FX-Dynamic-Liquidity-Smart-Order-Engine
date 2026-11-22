@@ -25,6 +25,7 @@ public class TraceSpanIngest {
     private final Freshness freshness;
     private final AtomicLong stale = new AtomicLong();
 
+    @org.springframework.beans.factory.annotation.Autowired
     public TraceSpanIngest(ObjectMapper mapper, TopologyTraceEdgeRepository repository) {
         this(mapper, repository, 10);
     }

@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-003-trace-edges
+      author: fx-sor
+      comment: Trace layer (premise P1). One row per parent-to-child span hop, from span messages.
+      changes:
+        - createTable:
+            tableName: topology_trace_edges
+            columns:
+              - column: {name: id, type: uuid, constraints: {primaryKey: true, nullable: false}}
+              - column: {name: src_service, type: varchar(120), constraints: {nullable: false}}
+              - column: {name: dst_service, type: varchar(120), constraints: {nullable: false}}
+              - column: {name: trace_id, type: varchar(64), constraints: {nullable: false}}
+              - column: {name: observed_at, type: timestamp with time zone, constraints: {nullable: false}}
+        - createIndex:
+            tableName: topology_trace_edges
+            indexName: idx_trace_edges_src_dst
+            columns:
+              - column: {name: src_service}
+              - column: {name: dst_service}

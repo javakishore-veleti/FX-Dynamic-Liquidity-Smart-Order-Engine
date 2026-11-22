@@ -49,18 +49,21 @@ public class TopologyQueryService {
 
     private final TopologyNetworkEdgeRepository networkEdgeRepository;
     private final TopologyIpcEdgeRepository ipcEdgeRepository;
+    private final com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyTraceEdgeRepository traceEdgeRepository;
     private final TopologyTraceOutlierRepository traceOutlierRepository;
     private final TopologySnapshotRepository snapshotRepository;
     private final ServiceMetrics metrics;
     private final DomainEventPublisher domainEvents;
 
     public TopologyQueryService(TopologyNetworkEdgeRepository networkEdgeRepository,
+                                com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyTraceEdgeRepository traceEdgeRepository,
                                 TopologyIpcEdgeRepository ipcEdgeRepository,
                                 TopologyTraceOutlierRepository traceOutlierRepository,
                                 TopologySnapshotRepository snapshotRepository,
                                 ServiceMetrics metrics,
                                 DomainEventPublisher domainEvents) {
         this.networkEdgeRepository = networkEdgeRepository;
+        this.traceEdgeRepository = traceEdgeRepository;
         this.ipcEdgeRepository = ipcEdgeRepository;
         this.traceOutlierRepository = traceOutlierRepository;
         this.snapshotRepository = snapshotRepository;
@@ -83,6 +86,9 @@ public class TopologyQueryService {
         }
         for (TopologyIpcEdge e : ipcEdgeRepository.findAll()) {
             edges.add(new LayerMerge.Edge("ipc", e.getSrcService(), e.getDstService()));
+        }
+        for (com.jk.apps.banking.fx.sor.topology.domain.entity.TopologyTraceEdge e : traceEdgeRepository.findAll()) {
+            edges.add(new LayerMerge.Edge("trace", e.getSrcService(), e.getDstService()));
         }
         return LayerMerge.merge(edges);
     }

@@ -49,6 +49,8 @@ public class RouteExecService {
     private final LastLookPenaltyHintCache lastLookPenaltyHintCache;
     private final LpRankingConfigFacade lpRankingConfigFacade;
 
+    private final PairMasterFacade pairMaster;
+
     public RouteExecService(
             FxExecutionOrderRepository orderRepository,
             ChildVenueSplitRepository splitRepository,
@@ -57,7 +59,9 @@ public class RouteExecService {
             DomainEventPublisher domainEvents,
             QuoteRegimeClient quoteRegimeClient,
             LastLookPenaltyHintCache lastLookPenaltyHintCache,
-            LpRankingConfigFacade lpRankingConfigFacade) {
+            LpRankingConfigFacade lpRankingConfigFacade,
+            PairMasterFacade pairMaster) {
+        this.pairMaster = pairMaster;
         this.orderRepository = orderRepository;
         this.splitRepository = splitRepository;
         this.idempotencyStore = idempotencyStore;
@@ -87,6 +91,11 @@ public class RouteExecService {
         String clientOrderId = request.getClientOrderId();
         if (clientOrderId == null || clientOrderId.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "clientOrderId required");
+        }
+
+        String rawPair = normalizePair(request.getCcyPair());
+        if (!pairMaster.isKnown(rawPair)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "unknown currency pair " + rawPair);
         }
 
         UUID provisionalId = UUID.randomUUID();

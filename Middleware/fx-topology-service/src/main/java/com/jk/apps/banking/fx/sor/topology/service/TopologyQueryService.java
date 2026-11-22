@@ -71,6 +71,11 @@ public class TopologyQueryService {
         this.domainEvents = domainEvents;
     }
 
+    /** Time travel (premise P10): network edges as they were written in the given 5-minute bucket. */
+    public List<com.jk.apps.banking.fx.sor.topology.api.dto.NetworkEdgeDto> networkAt(String timeBucket) {
+        return networkEdgeRepository.findByTimeBucket(timeBucket).stream().map(this::toNetworkDto).toList();
+    }
+
     /**
      * Premises P1, P8, P13 (Netflix TechBlog): union of the network and IPC layers with agreement counts.
      * freshMinutes greater than zero hides network edges not seen within that window; zero disables it.

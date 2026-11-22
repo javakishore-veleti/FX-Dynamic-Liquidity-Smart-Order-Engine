@@ -18,4 +18,7 @@ public interface TopologyNetworkEdgeRepository extends JpaRepository<TopologyNet
     List<TopologyNetworkEdge> findByService(@Param("service") String service);
 
     List<TopologyNetworkEdge> findBySrcService(String srcService);
+
+    /** Time travel (premise P10): the network edges written in one 5-minute bucket. */
+    List<TopologyNetworkEdge> findByTimeBucket(String timeBucket);
 }

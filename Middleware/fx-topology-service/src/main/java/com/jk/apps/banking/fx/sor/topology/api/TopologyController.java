@@ -36,6 +36,13 @@ public class TopologyController {
         return topologyQueryService.networkGraph(service, depth, freshMinutes);
     }
 
+    /** Time travel: GET /api/v1/topology/graph/network/at?bucket=2026-11-22T16:15 */
+    @GetMapping("/graph/network/at")
+    public java.util.List<com.jk.apps.banking.fx.sor.topology.api.dto.NetworkEdgeDto> networkAt(
+            @RequestParam(name = "bucket") String bucket) {
+        return topologyQueryService.networkAt(bucket);
+    }
+
     @GetMapping("/graph/merged")
     public java.util.List<com.jk.apps.banking.fx.sor.topology.service.LayerMerge.Merged> mergedGraph(
             @RequestParam(name = "freshMinutes", defaultValue = "0") int freshMinutes) {

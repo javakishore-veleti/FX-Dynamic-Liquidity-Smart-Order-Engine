@@ -2,19 +2,26 @@ package com.jk.apps.banking.fx.sor.quote.controller;
 
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteRequest;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
+import com.jk.apps.banking.fx.sor.quote.dto.MacroFlagRequest;
+import com.jk.apps.banking.fx.sor.quote.dto.MacroFlagResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.QuoteTickEvent;
 import com.jk.apps.banking.fx.sor.quote.dto.RateSnapshotResponse;
+import com.jk.apps.banking.fx.sor.quote.dto.RegimeContextResponse;
+import com.jk.apps.banking.fx.sor.quote.dto.SpreadScheduleDto;
 import com.jk.apps.banking.fx.sor.quote.service.QuoteService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,9 +40,9 @@ public class QuoteController {
 
     @GetMapping(value = "/quotes/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter streamQuotes(
-            @RequestParam(required = false) String ccyPairs,
-            @RequestParam(required = false) String clientTier,
-            @RequestParam(required = false, defaultValue = "SPOT") String tenor) {
+            @RequestParam(name = "ccyPairs", required = false) String ccyPairs,
+            @RequestParam(name = "clientTier", required = false) String clientTier,
+            @RequestParam(name = "tenor", required = false, defaultValue = "SPOT") String tenor) {
         SseEmitter emitter = new SseEmitter(30_000L);
         ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
         AtomicInteger ticks = new AtomicInteger();
@@ -69,7 +76,55 @@ public class QuoteController {
     }
 
     @GetMapping("/rates/{ccyPair}")
-    public RateSnapshotResponse rates(@PathVariable String ccyPair) {
+    public RateSnapshotResponse rates(@PathVariable("ccyPair") String ccyPair) {
         return quoteService.rates(ccyPair);
+    }
+
+    @GetMapping("/regime/context")
+    public RegimeContextResponse regimeContext(
+            @RequestParam(name = "clientTier", required = false, defaultValue = "TIER_2") String clientTier,
+            @RequestParam(name = "ccyPair", required = false, defaultValue = "EURUSD") String ccyPair) {
+        return quoteService.regimeContext(clientTier, ccyPair);
+    }
+
+    @GetMapping("/spread-schedules")
+    public List<SpreadScheduleDto> listSchedules() {
+        return quoteService.listSchedules();
+    }
+
+    @PostMapping("/spread-schedules/draft")
+    public SpreadScheduleDto draftSchedule(@RequestBody SpreadScheduleDto request) {
+        return quoteService.draftSchedule(request);
+    }
+
+    @PostMapping("/spread-schedules/submit")
+    public SpreadScheduleDto submitSchedule(@RequestBody SpreadScheduleDto request) {
+        return quoteService.submitSchedule(request);
+    }
+
+    @PostMapping("/spread-schedules/approve")
+    public SpreadScheduleDto approveSchedule(@RequestBody SpreadScheduleDto request) {
+        return quoteService.approveSchedule(request);
+    }
+
+    @PostMapping("/spread-schedules/cache/invalidate")
+    public Map<String, String> invalidateScheduleCache() {
+        quoteService.invalidateScheduleCache();
+        return Map.of("status", "INVALIDATED");
+    }
+
+    @PutMapping("/macro-flag")
+    public MacroFlagResponse putMacroFlag(@RequestBody(required = false) MacroFlagRequest request) {
+        return quoteService.ingestMacro(request);
+    }
+
+    @DeleteMapping("/macro-flag")
+    public MacroFlagResponse clearMacroFlag() {
+        return quoteService.clearMacro();
+    }
+
+    @GetMapping("/macro-flag")
+    public MacroFlagResponse getMacroFlag() {
+        return quoteService.macroStatus();
     }
 }

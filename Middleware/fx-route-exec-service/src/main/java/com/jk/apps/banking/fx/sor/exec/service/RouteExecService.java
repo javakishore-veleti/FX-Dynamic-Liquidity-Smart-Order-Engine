@@ -86,6 +86,15 @@ public class RouteExecService {
         BigDecimal adj = mid.multiply(slippage).divide(new BigDecimal("10000"), 8, RoundingMode.HALF_UP);
         BigDecimal rate = "SELL".equals(side) ? mid.subtract(adj) : mid.add(adj);
 
+        // FR-01: elevate last-look hold / prefer faster LPs when regime penalty > 1
+        BigDecimal penalty = request.getLastLookPenaltyWeight() == null
+                ? BigDecimal.ONE
+                : request.getLastLookPenaltyWeight();
+        String sessionRegime = request.getSessionRegime() == null ? "LONDON_NY_OVERLAP" : request.getSessionRegime();
+        boolean stressedRegime = penalty.compareTo(BigDecimal.ONE) > 0
+                || "NY_ROLLOVER".equals(sessionRegime)
+                || "MACRO_NEWS_HIGH".equals(sessionRegime);
+
         boolean internalize = notional.compareTo(INTERNALIZE_THRESHOLD) <= 0;
         String mode = internalize ? "INTERNALIZED" : (notional.compareTo(new BigDecimal("10000000")) > 0
                 ? "MULTI_LP_SWEEP"
@@ -109,12 +118,12 @@ public class RouteExecService {
         order.setCreatedAt(Instant.now());
         orderRepository.save(order);
 
-        List<ChildVenueSplit> splits = buildSplits(tradeDate, provisionalId, notional, rate, mode);
+        List<ChildVenueSplit> splits = buildSplits(tradeDate, provisionalId, notional, rate, mode, penalty, stressedRegime);
         splitRepository.saveAll(splits);
 
         idempotencyStore.complete(clientOrderId, new IdempotencyRecord("FILLED", provisionalId, rate));
         metrics.auditEventsPublished().increment();
-        emitOrderRoutedProvenance(order, splits, internalize);
+        emitOrderRoutedProvenance(order, splits, internalize, sessionRegime, penalty);
 
         return toExecuteResponse(order, splits, false);
     }
@@ -205,8 +214,18 @@ public class RouteExecService {
     }
 
     private List<ChildVenueSplit> buildSplits(
-            LocalDate tradeDate, UUID orderId, BigDecimal notional, BigDecimal rate, String mode) {
+            LocalDate tradeDate,
+            UUID orderId,
+            BigDecimal notional,
+            BigDecimal rate,
+            String mode,
+            BigDecimal lastLookPenaltyWeight,
+            boolean stressedRegime) {
         List<ChildVenueSplit> splits = new ArrayList<>();
+        // Under stressed regimes, penalize slower last-look holds (scale hold latency for scoring evidence)
+        int holdScale = stressedRegime
+                ? Math.max(1, lastLookPenaltyWeight.multiply(new BigDecimal("10")).intValue())
+                : 0;
         if ("INTERNALIZED".equals(mode)) {
             ChildVenueSplit split = baseSplit(tradeDate, orderId, "INTERNAL_BOOK", notional, rate, 2);
             splits.add(split);
@@ -214,11 +233,13 @@ public class RouteExecService {
         }
         if ("MULTI_LP_SWEEP".equals(mode)) {
             BigDecimal half = notional.divide(new BigDecimal("2"), 2, RoundingMode.HALF_UP);
+            // Prefer CITI then JPM; inflate hold on secondary under stress to encode last-look penalty
             splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.get(0), half, rate, 12));
-            splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.get(1), notional.subtract(half), rate, 15));
+            splits.add(baseSplit(
+                    tradeDate, orderId, RANKED_LPS.get(1), notional.subtract(half), rate, 15 + holdScale));
             return splits;
         }
-        splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.getFirst(), notional, rate, 10));
+        splits.add(baseSplit(tradeDate, orderId, RANKED_LPS.getFirst(), notional, rate, 10 + holdScale / 2));
         return splits;
     }
 
@@ -275,7 +296,11 @@ public class RouteExecService {
     }
 
     private void emitOrderRoutedProvenance(
-            FxExecutionOrder order, List<ChildVenueSplit> splits, boolean internalized) {
+            FxExecutionOrder order,
+            List<ChildVenueSplit> splits,
+            boolean internalized,
+            String sessionRegime,
+            BigDecimal lastLookPenaltyWeight) {
         String winningLpId = splits.isEmpty() ? "INTERNAL_BOOK" : splits.getFirst().getLpId();
         List<Map<String, Object>> childSplits = new ArrayList<>();
         for (ChildVenueSplit split : splits) {
@@ -296,6 +321,8 @@ public class RouteExecService {
         payload.put("childSplits", childSplits);
         payload.put("slippageBps", order.getSlippageBps());
         payload.put("droolsRuleVersion", RULE_VERSION);
+        payload.put("sessionRegime", sessionRegime);
+        payload.put("lastLookPenaltyWeight", lastLookPenaltyWeight);
         payload.put("timestamp", Instant.now().toString());
         domainEvents.publish(TOPIC_ORDER_ROUTED, payload);
     }

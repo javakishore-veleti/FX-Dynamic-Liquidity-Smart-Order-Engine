@@ -45,6 +45,7 @@ public class AdminWorkflowService {
     private final ObjectMapper objectMapper;
     private final ServiceMetrics metrics;
     private final DomainEventPublisher domainEvents;
+    private final QuoteScheduleClient quoteScheduleClient;
     private final Set<UUID> cancelSignals = ConcurrentHashMap.newKeySet();
 
     public AdminWorkflowService(
@@ -52,12 +53,53 @@ public class AdminWorkflowService {
             ExecutorService workflowExecutor,
             ObjectMapper objectMapper,
             ServiceMetrics metrics,
-            DomainEventPublisher domainEvents) {
+            DomainEventPublisher domainEvents,
+            QuoteScheduleClient quoteScheduleClient) {
         this.repository = repository;
         this.workflowExecutor = workflowExecutor;
         this.objectMapper = objectMapper;
         this.metrics = metrics;
         this.domainEvents = domainEvents;
+        this.quoteScheduleClient = quoteScheduleClient;
+    }
+
+    public List<Map<String, Object>> listSpreadSchedules() {
+        return quoteScheduleClient.listSchedules();
+    }
+
+    @Transactional
+    public Map<String, Object> draftSpreadSchedule(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.draft(body);
+        createCompletedOps("SPREAD_SCHEDULE_DRAFT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public Map<String, Object> submitSpreadSchedule(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.submit(body);
+        createCompletedOps("SPREAD_SCHEDULE_SUBMIT", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public Map<String, Object> approveSpreadSchedule(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.approve(body);
+        createCompletedOps("SPREAD_SCHEDULE_APPROVE", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public Map<String, Object> setMacroFlag(Map<String, Object> body) {
+        Map<String, Object> result = quoteScheduleClient.putMacroFlag(body);
+        createCompletedOps("MACRO_FLAG_SET", toJson(body), toJson(result));
+        return result;
+    }
+
+    @Transactional
+    public Map<String, Object> clearMacroFlag() {
+        Map<String, Object> result = quoteScheduleClient.clearMacroFlag();
+        createCompletedOps("MACRO_FLAG_CLEAR", "{}", toJson(result));
+        return result;
     }
 
     public WorkflowAcceptedResponse generateSynthetic(SyntheticGenerateRequest request) {
@@ -153,6 +195,13 @@ public class AdminWorkflowService {
         Map<String, Object> params = new LinkedHashMap<>();
         params.put("cacheKeys", request.getCacheKeys());
         params.put("reason", request.getReason());
+        // FR-01: propagate schedule L1 invalidation to quote (HTTP only)
+        try {
+            quoteScheduleClient.invalidateScheduleCache();
+            params.put("quoteScheduleCache", "INVALIDATED");
+        } catch (Exception ex) {
+            params.put("quoteScheduleCache", "FAILED:" + ex.getMessage());
+        }
         WfExecLog log = createCompletedOps("CACHE_INVALIDATION", toJson(params), toJson(Map.of(
                 "action", "INVALIDATE",
                 "keys", request.getCacheKeys() == null ? List.of() : request.getCacheKeys())));

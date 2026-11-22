@@ -1,6 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { API } from '../api';
+
+type Indicative = {
+  quoteId: string;
+  ccyPair: string;
+  side: string;
+  executableRate: number;
+  allInSpreadBps: number;
+  sessionRegime: string;
+  clientTier: string;
+  quoteTtlMs: number;
+};
+
+type RegimeContext = {
+  sessionRegime: string;
+  macroActive: boolean;
+  lastLookPenaltyWeight: number;
+  sampleMarkupBps: number;
+};
 
 @Component({
   selector: 'app-blotter',
@@ -8,66 +27,118 @@ import { API } from '../api';
   template: `
     <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
       <div>
-        <h1 class="h3 mb-1">Multi-LP Depth Blotter</h1>
+        <h1 class="h3 mb-1">Multi-LP Depth Blotter · FR-01</h1>
         <p class="mb-0" style="color: var(--fx-ink-soft)">
-          Composite depth (LP identities sanitized) · quote {{ api.quote }}
+          Live indicative from quote {{ api.quote }} · session markup applied
         </p>
       </div>
-      <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="pair">
-        <option>EUR/USD</option>
-        <option>GBP/USD</option>
-        <option>USD/JPY</option>
-        <option>AUD/USD</option>
-      </select>
+      <div class="d-flex gap-2 align-items-center">
+        <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="tier">
+          <option>TIER_1</option>
+          <option>TIER_2</option>
+          <option>TIER_3</option>
+        </select>
+        <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="pair">
+          <option>EURUSD</option>
+          <option>EUR/USD</option>
+        </select>
+        <button class="btn btn-fx btn-sm" (click)="refresh()">Refresh quote</button>
+      </div>
     </div>
 
-    <div class="row g-3">
-      <div class="col-lg-6">
-        <div class="fx-card">
-          <h2 class="h5 mb-3">Bids · {{ pair }}</h2>
-          @for (lvl of bids; track lvl.level) {
-            <div class="d-flex align-items-center gap-3 mb-2">
-              <span class="fw-bold" style="width: 5rem">{{ lvl.px }}</span>
-              <div class="flex-grow-1">
-                <div class="depth-bar" [style.width.%]="lvl.depth"></div>
-              </div>
-              <span class="small fw-semibold" style="width: 4rem; text-align: right">{{ lvl.size }}</span>
-              <span class="badge badge-fx">{{ lvl.lp }}</span>
-            </div>
-          }
+    @if (error()) {
+      <div class="alert alert-warning">{{ error() }}</div>
+    }
+
+    <div class="row g-3 mb-3">
+      <div class="col-md-4">
+        <div class="fx-card fx-kpi h-100">
+          <span class="label">Session regime</span>
+          <span class="value" style="font-size: 1.25rem">{{ regime()?.sessionRegime || '—' }}</span>
+          <span class="small" style="color: var(--fx-accent)">
+            macro={{ regime()?.macroActive }} · last-look×{{ regime()?.lastLookPenaltyWeight }}
+          </span>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="fx-card">
-          <h2 class="h5 mb-3">Offers · {{ pair }}</h2>
-          @for (lvl of offers; track lvl.level) {
-            <div class="d-flex align-items-center gap-3 mb-2">
-              <span class="fw-bold" style="width: 5rem">{{ lvl.px }}</span>
-              <div class="flex-grow-1">
-                <div class="depth-bar" [style.width.%]="lvl.depth" style="background: linear-gradient(90deg, var(--fx-warn), var(--fx-gold))"></div>
-              </div>
-              <span class="small fw-semibold" style="width: 4rem; text-align: right">{{ lvl.size }}</span>
-              <span class="badge badge-fx">{{ lvl.lp }}</span>
-            </div>
-          }
+      <div class="col-md-4">
+        <div class="fx-card fx-kpi h-100">
+          <span class="label">Effective markup (bps)</span>
+          <span class="value" style="font-size: 1.25rem">{{ quote()?.allInSpreadBps ?? regime()?.sampleMarkupBps ?? '—' }}</span>
+          <span class="small" style="color: var(--fx-accent)">tier {{ tier }}</span>
         </div>
       </div>
+      <div class="col-md-4">
+        <div class="fx-card fx-kpi h-100">
+          <span class="label">Executable BUY</span>
+          <span class="value" style="font-size: 1.25rem">{{ quote()?.executableRate ?? '—' }}</span>
+          <span class="small" style="color: var(--fx-accent)">{{ quote()?.quoteId || 'request a quote' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="fx-card">
+      <h2 class="h5 mb-3">Rates snapshot</h2>
+      @if (rates()) {
+        <div class="d-flex flex-wrap gap-4">
+          <div><strong>Bid</strong> {{ rates()!.bid }}</div>
+          <div><strong>Ask</strong> {{ rates()!.ask }}</div>
+          <div><strong>Mid</strong> {{ rates()!.mid }}</div>
+          <div><strong>LPs</strong> {{ rates()!.activeLpCount }}</div>
+          <div><strong>Regime</strong> {{ rates()!.sessionRegime }}</div>
+        </div>
+      } @else {
+        <p class="mb-0" style="color: var(--fx-ink-soft)">Click Refresh quote to pull live FR-01 pricing.</p>
+      }
     </div>
   `,
 })
-export class BlotterPage {
+export class BlotterPage implements OnInit {
+  private readonly http = inject(HttpClient);
   readonly api = API;
-  pair = 'EUR/USD';
-  readonly bids = [
-    { level: 1, px: '1.08412', size: '8.0M', depth: 90, lp: 'LP-A' },
-    { level: 2, px: '1.08410', size: '5.5M', depth: 70, lp: 'LP-B' },
-    { level: 3, px: '1.08408', size: '4.0M', depth: 55, lp: 'LP-C' },
-    { level: 4, px: '1.08405', size: '3.2M', depth: 40, lp: 'LP-D' },
-  ];
-  readonly offers = [
-    { level: 1, px: '1.08416', size: '7.5M', depth: 88, lp: 'LP-B' },
-    { level: 2, px: '1.08418', size: '6.0M', depth: 72, lp: 'LP-A' },
-    { level: 3, px: '1.08421', size: '3.8M', depth: 50, lp: 'LP-E' },
-    { level: 4, px: '1.08424', size: '2.5M', depth: 35, lp: 'LP-C' },
-  ];
+  pair = 'EURUSD';
+  tier = 'TIER_2';
+  readonly quote = signal<Indicative | null>(null);
+  readonly regime = signal<RegimeContext | null>(null);
+  readonly rates = signal<{
+    bid: number;
+    ask: number;
+    mid: number;
+    activeLpCount: number;
+    sessionRegime: string;
+  } | null>(null);
+  readonly error = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.refresh();
+  }
+
+  refresh(): void {
+    this.error.set(null);
+    const pair = this.pair.replace('/', '');
+    this.http
+      .get<RegimeContext>(`${API.quote}/api/v1/fx/regime/context`, {
+        params: { clientTier: this.tier, ccyPair: pair },
+      })
+      .subscribe({
+        next: (r) => this.regime.set(r),
+        error: (err) => this.error.set(`Regime context failed: ${err.message || err.status}`),
+      });
+    this.http.get(`${API.quote}/api/v1/fx/rates/${pair}`).subscribe({
+      next: (r: any) => this.rates.set(r),
+      error: (err) => this.error.set(`Rates failed: ${err.message || err.status}`),
+    });
+    this.http
+      .post<Indicative>(`${API.quote}/api/v1/fx/quotes/indicative`, {
+        clientId: 'CORP-100',
+        clientTier: this.tier,
+        ccyPair: pair,
+        side: 'BUY',
+        notional: 1000000,
+        tenor: 'SPOT',
+      })
+      .subscribe({
+        next: (q) => this.quote.set(q),
+        error: (err) => this.error.set(`Indicative failed: ${err.message || err.status}`),
+      });
+  }
 }

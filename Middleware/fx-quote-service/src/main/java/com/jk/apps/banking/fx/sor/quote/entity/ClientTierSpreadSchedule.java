@@ -37,6 +37,10 @@ public class ClientTierSpreadSchedule {
     @Column(name = "approved_by", length = 100, nullable = false)
     private String approvedBy;
 
+    /** DRAFT | PENDING_APPROVAL | ACTIVE | REJECTED */
+    @Column(name = "status", length = 20, nullable = false)
+    private String status = "ACTIVE";
+
     public String getTierId() {
         return tierId;
     }
@@ -91,5 +95,13 @@ public class ClientTierSpreadSchedule {
 
     public void setApprovedBy(String approvedBy) {
         this.approvedBy = approvedBy;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

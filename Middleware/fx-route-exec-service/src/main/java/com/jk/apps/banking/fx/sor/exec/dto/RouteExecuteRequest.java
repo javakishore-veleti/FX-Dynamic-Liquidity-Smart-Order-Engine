@@ -11,6 +11,9 @@ public class RouteExecuteRequest {
     private String side;
     private BigDecimal notional;
     private BigDecimal maxSlippageBps;
+    /** FR-01 enrichment — from quote regime context */
+    private String sessionRegime;
+    private BigDecimal lastLookPenaltyWeight;
 
     public String getClientOrderId() {
         return clientOrderId;
@@ -66,5 +69,21 @@ public class RouteExecuteRequest {
 
     public void setMaxSlippageBps(BigDecimal maxSlippageBps) {
         this.maxSlippageBps = maxSlippageBps;
+    }
+
+    public String getSessionRegime() {
+        return sessionRegime;
+    }
+
+    public void setSessionRegime(String sessionRegime) {
+        this.sessionRegime = sessionRegime;
+    }
+
+    public BigDecimal getLastLookPenaltyWeight() {
+        return lastLookPenaltyWeight;
+    }
+
+    public void setLastLookPenaltyWeight(BigDecimal lastLookPenaltyWeight) {
+        this.lastLookPenaltyWeight = lastLookPenaltyWeight;
     }
 }

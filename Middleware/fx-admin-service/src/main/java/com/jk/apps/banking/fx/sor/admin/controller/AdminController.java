@@ -51,17 +51,17 @@ public class AdminController {
     }
 
     @GetMapping("/workflows/{wfExecId}")
-    public WorkflowStatusResponse getWorkflow(@PathVariable UUID wfExecId) {
+    public WorkflowStatusResponse getWorkflow(@PathVariable("wfExecId") UUID wfExecId) {
         return adminWorkflowService.getWorkflow(wfExecId);
     }
 
     @GetMapping("/workflows")
     public Page<WorkflowStatusResponse> listWorkflows(
-            @RequestParam(required = false) String status,
-            @RequestParam(required = false) String workflowType,
-            @RequestParam(required = false) String triggeredBy,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "workflowType", required = false) String workflowType,
+            @RequestParam(name = "triggeredBy", required = false) String triggeredBy,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
         return adminWorkflowService.listWorkflows(
                 status,
                 workflowType,
@@ -70,14 +70,14 @@ public class AdminController {
     }
 
     @PatchMapping("/workflows/{wfExecId}/cancel")
-    public WorkflowStatusResponse cancel(@PathVariable UUID wfExecId) {
+    public WorkflowStatusResponse cancel(@PathVariable("wfExecId") UUID wfExecId) {
         return adminWorkflowService.cancel(wfExecId);
     }
 
     @DeleteMapping("/workflows/{wfExecId}")
     public ResponseEntity<Void> delete(
-            @PathVariable UUID wfExecId,
-            @RequestParam(defaultValue = "false") boolean purgeSyntheticData) {
+            @PathVariable("wfExecId") UUID wfExecId,
+            @RequestParam(name = "purgeSyntheticData", defaultValue = "false") boolean purgeSyntheticData) {
         adminWorkflowService.delete(wfExecId, purgeSyntheticData);
         return ResponseEntity.noContent().build();
     }
@@ -94,7 +94,38 @@ public class AdminController {
 
     @PostMapping("/venues/{lpId}/halt")
     public WorkflowAcceptedResponse haltVenue(
-            @PathVariable String lpId, @RequestBody(required = false) VenueHaltRequest request) {
+            @PathVariable("lpId") String lpId, @RequestBody(required = false) VenueHaltRequest request) {
         return adminWorkflowService.haltVenue(lpId, request == null ? new VenueHaltRequest() : request);
+    }
+
+    /** FR-01 — Policy Studio proxies to quote (zero-sharing via HTTP). */
+    @GetMapping("/spread-schedules")
+    public java.util.List<java.util.Map<String, Object>> listSpreadSchedules() {
+        return adminWorkflowService.listSpreadSchedules();
+    }
+
+    @PostMapping("/spread-schedules/draft")
+    public java.util.Map<String, Object> draftSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+        return adminWorkflowService.draftSpreadSchedule(body);
+    }
+
+    @PostMapping("/spread-schedules/submit")
+    public java.util.Map<String, Object> submitSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+        return adminWorkflowService.submitSpreadSchedule(body);
+    }
+
+    @PostMapping("/spread-schedules/approve")
+    public java.util.Map<String, Object> approveSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+        return adminWorkflowService.approveSpreadSchedule(body);
+    }
+
+    @PostMapping("/macro-flag")
+    public java.util.Map<String, Object> setMacroFlag(@RequestBody(required = false) java.util.Map<String, Object> body) {
+        return adminWorkflowService.setMacroFlag(body == null ? java.util.Map.of() : body);
+    }
+
+    @DeleteMapping("/macro-flag")
+    public java.util.Map<String, Object> clearMacroFlag() {
+        return adminWorkflowService.clearMacroFlag();
     }
 }

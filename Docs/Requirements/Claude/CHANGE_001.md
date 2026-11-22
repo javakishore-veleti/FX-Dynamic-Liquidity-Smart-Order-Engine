@@ -240,3 +240,11 @@ Replacing synthetic data with business or published data is a file change: regen
 5. **Remaining datasets (F4.11):** credit lines, LP top-of-book, LP rankings. Each needs its own file and loader.
 6. **Browser click-through** of the Run setup button has not been done. The API path is verified.
 
+## 10. Stored source files (no re-download)
+
+| Dataset | Stored at (outside the repo) | Used by |
+|---|---|---|
+| FOMC statements and minutes (Hugging Face `vtasca/fomc-statements-minutes`) | `~/kishore/runtime_data/Github_projects/Datasets/FMOC-Meeings/2026-11-21-23-07-36/communications.csv` (with `SOURCE.md`) | `generate_synthetic_calendar.py --fomc-csv <path>` |
+
+New downloads go to `FMOC-Meeings/YYYY-MM-DD-HH-MM-SS/`, one folder per download, with a `SOURCE.md` recording the URL and date.
+

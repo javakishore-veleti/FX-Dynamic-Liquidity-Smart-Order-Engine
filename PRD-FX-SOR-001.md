@@ -16,7 +16,9 @@ The **FX Dynamic Liquidity & Smart Order Routing (SOR) Engine** is an institutio
 | **Execution Certainty** | Penalizes LPs with elevated last-look rejection rates and hold latency | \> 98.5% first-pass Straight-Through Processing (STP) fill rate |
 | **Low-Latency Decisioning** | Non-blocking rule evaluation and LP ranking on Java 21 Virtual Threads | \< 5 ms internal decisioning (p99); \< 15 ms end-to-end |
 | **Policy Agility** | Maker-checker Drools/DMN decision tables hot-reloaded without downtime | \< 5 minutes policy rollout with shadow-mode replay |
-| **Regulatory Provenance** | Immutable audit trace for every routing and internalization decision | 100% compliance with FX Global Code, Dodd-Frank, and MiFID II RTS-27/28 |
+| **Regulatory Provenance** | Immutable audit trace for every routing and internalization decision | Compliance with FX Global Code (incl. Principle 17 last-look disclosure); MiFID II RTS-27/28 and Dodd-Frank applicability to be confirmed by Compliance |
+
+> **Note on numeric targets:** the figures in the table above are internal design targets. They are not sourced industry benchmarks. Each must be validated by the business and by performance testing before it is used as an acceptance criterion.
 
 ## **2\. Monorepo & Microservice Topology (Zero Cross-Module Sharing)**
 
@@ -50,6 +52,7 @@ Each microservice enforces strict top-down layer isolation so external transport
 > * **FR-02 Atomic Bilateral Credit & NOP Protection:** Verify and reserve counterparty credit lines in Redis using atomic Lua/pipeline operations prior to external order dispatch.  
 > * **FR-03 Multi-LP Sweep & Waterfall Failover:** Split institutional block orders across top-ranked LPs to minimize market impact; cascade rejected remainders automatically within the order slippage budget.  
 > * **FR-04 Dealing Desk Escalation:** Route fat-finger alerts, restricted emerging-market currencies, or zero-liquidity exceptions to NY/London dealing desks with full diagnostic context.  
+> * **Cross-cutting: Last-look disclosure:** Where last look is used, it is disclosed to clients, and last-look rejection reasons are recorded per order. This follows FX Global Code Principle 17. Owners: `fx-qualify-service` (rejection reasons) and `fx-route-exec-service` (rejection recording).
 > * **FR-05 Policy Authoring Lifecycle:** All Drools/DMN rule updates require four-eyes Maker-Checker approval and historical shadow-mode replay validation before hot-reloading into live pods.
 
 ## **4.1 PRD → Repo Microservice / Component Map**

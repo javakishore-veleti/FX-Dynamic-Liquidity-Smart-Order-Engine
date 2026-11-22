@@ -17,7 +17,7 @@
 **Target Namespace:** com.jk.apps.banking.fx.sor  
 **Architecture Style:** Dynamic Liquidity Provider & Smart Order Routing (SOR)  
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  
-*A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and guarantee regulatory best execution in sub-10 milliseconds.*
+*A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and support best-execution evidence with a sub-10 millisecond decisioning target.*
 
 **Table of Contents**
 
@@ -66,7 +66,7 @@ FX is fragmented by design: there is no single global exchange for spot. Liquidi
 | **Configurable routing rules** | Eligible venues, size thresholds, internalization preference, fallback/waterfall behaviour | Drools/DMN policy tables + knock-out rules in `fx-qualify-service` / `fx-route-exec-service` with maker-checker hot reload |
 | **Real-time market intelligence** | Bid/ask, depth, venue latency, liquidity availability, restrictions | LP quote aggregation & session regime guards in `fx-quote-service` (Caffeine L1 + optional Redis L2) |
 | **Execution tactics & order slicing** | Child orders, IOC/limit-style venue interaction, multi-venue sweep | Single-LP best-ex, multi-LP sweep, and waterfall failover inside the OrderRoutingFacade pipeline |
-| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code / MiFID II RTS-27/28) |
+| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code; MiFID II RTS-27/28 applicability to confirm) |
 | **Adaptive venue intelligence** | Refine routing from historical fill quality / toxicity rather than static rank alone | Composite LP scoring using fill ratio, last-look hold latency, and markout toxicity projections |
 
 ### SOR vs algorithmic trading
@@ -113,13 +113,15 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
 
 **2\. Strategic Value & Business Outcomes**
 
+> **Note on numeric targets:** the figures below are internal design targets, not sourced industry benchmarks. Validate them before using them as acceptance criteria.
+
 | Strategic Pillar | Business Impact for the Bank | Target Operational Benchmark |
 | :---- | :---- | :---- |
 | **Margin Preservation** | Eliminates spread leakage by dynamically selecting the tightest all-in wholesale liquidity | **\+0.35 to \+0.80 bps** net spread capture improvement per \$1M traded |
 | **Execution Certainty** | Penalizes LPs with high last-look rejection rates and slow hold times | **\> 98.5%** first-pass Straight-Through Processing (STP) fill rate |
 | **Low-Latency Decisioning** | Real-time rule qualification and composite LP ranking without blocking I/O | **\< 5 ms** internal decisioning (p99); **\< 15 ms** end-to-end |
 | **Business Agility** | New York & London eFX desks adjust weights and session guardrails declaratively | **\< 5 minutes** zero-downtime policy updates (vs. multi-week release cycles) |
-| **Regulatory Provenance** | Captures an immutable explainability trace for every routing decision | **100%** compliance with **FX Global Code**, **Dodd-Frank**, and **MiFID II RTS-27/28** |
+| **Regulatory Provenance** | Captures an immutable explainability trace for every routing decision | Compliance with **FX Global Code** (incl. last-look disclosure); **MiFID II RTS-27/28** and **Dodd-Frank** applicability to be confirmed |
 
 **3\. Core Domain Capabilities**
 
@@ -225,7 +227,7 @@ To sustain institutional peak volumes (targeting up to **1M aggregate RPS** acro
 **Target Namespace:** com.jk.apps.banking.fx.sor  
 **Architecture Style:** Dynamic Liquidity Provider & Smart Order Routing (SOR)  
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  
-*A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and guarantee regulatory best execution in sub-10 milliseconds.*
+*A deterministic, policy-driven Foreign Exchange (FX) qualification and Smart Order Routing (SOR) platform designed for a major U.S. Tier-1 Commercial & Investment Bank to eliminate spread leakage, mitigate last-look rejections, and support best-execution evidence with a sub-10 millisecond decisioning target.*
 
 ## **Table of Contents**
 
@@ -274,7 +276,7 @@ FX is fragmented by design: there is no single global exchange for spot. Liquidi
 | **Configurable routing rules** | Eligible venues, size thresholds, internalization preference, fallback/waterfall behaviour | Drools/DMN policy tables + knock-out rules in `fx-qualify-service` / `fx-route-exec-service` with maker-checker hot reload |
 | **Real-time market intelligence** | Bid/ask, depth, venue latency, liquidity availability, restrictions | LP quote aggregation & session regime guards in `fx-quote-service` (Caffeine L1 + optional Redis L2) |
 | **Execution tactics & order slicing** | Child orders, IOC/limit-style venue interaction, multi-venue sweep | Single-LP best-ex, multi-LP sweep, and waterfall failover inside the OrderRoutingFacade pipeline |
-| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code / MiFID II RTS-27/28) |
+| **Risk & governance controls** | Pre-trade credit/compliance checks, venue eligibility, immutable audit trails | Bilateral credit/NOP checks, restricted-ccy escalation, Kafka provenance (FX Global Code; MiFID II RTS-27/28 applicability to confirm) |
 | **Adaptive venue intelligence** | Refine routing from historical fill quality / toxicity rather than static rank alone | Composite LP scoring using fill ratio, last-look hold latency, and markout toxicity projections |
 
 ### SOR vs algorithmic trading
@@ -321,13 +323,15 @@ The **FX Dynamic Liquidity & Smart Order Routing Engine** solves these challenge
 
 ## **2\. Strategic Value & Business Outcomes**
 
+> **Note on numeric targets:** the figures below are internal design targets, not sourced industry benchmarks. Validate them before using them as acceptance criteria.
+
 | Strategic Pillar | Business Impact for the Bank | Target Operational Benchmark   |
 | :---- | :---- | :---- |
 | **Margin Preservation** | Eliminates spread leakage by dynamically selecting the tightest all-in wholesale liquidity | **\+0.35 to \+0.80 bps** net spread capture improvement per \$1M traded |
 | **Execution Certainty** | Penalizes LPs with high last-look rejection rates and slow hold times | **\> 98.5%** first-pass Straight-Through Processing (STP) fill rate |
 | **Low-Latency Decisioning** | Real-time rule qualification and composite LP ranking without blocking I/O | **\< 5 ms** internal decisioning (p99); **\< 15 ms** end-to-end |
 | **Business Agility** | New York & London eFX desks adjust weights and session guardrails declaratively | **\< 5 minutes** zero-downtime policy updates (vs. multi-week release cycles) |
-| **Regulatory Provenance** | Captures an immutable explainability trace for every routing decision | **100%** compliance with **FX Global Code**, **Dodd-Frank**, and **MiFID II RTS-27/28** |
+| **Regulatory Provenance** | Captures an immutable explainability trace for every routing decision | Compliance with **FX Global Code** (incl. last-look disclosure); **MiFID II RTS-27/28** and **Dodd-Frank** applicability to be confirmed |
 
 ## **3\. Core Domain Capabilities**
 

@@ -117,12 +117,17 @@ This is a business-level read of the seed and reference data. It is not a techni
 
 ---
 
-## 7. How FR-01 to FR-05 map to this view
+## 7. Impact by requirement: services and portals
 
-| FR | Functions | Main data | Main rules |
-|---|---|---|---|
-| FR-01 Session & regime guardrails | F1, F7, F8 | Markup table, sessions, economic calendar | Markup, session, event window, four eyes |
-| FR-02 Credit & exposure | F2, F6 | Credit limits, clients | Knock-out (credit), credit reservation |
-| FR-03 Split & failover | F3, F4 | Liquidity providers, quality data | Ranking, split, failover |
-| FR-04 Dealing desk escalation | F2, F5 | Restricted currencies, dealers | Knock-out (restricted), escalation |
-| FR-05 Policy authoring lifecycle | F8, F9 | Staff roles, change history | Four eyes |
+"Primary" is the service that owns the requirement. "Impacted" services and portals need a change or a display for it to work. Items marked **(confirm)** are inferred from the PRD and need business or architecture sign-off.
+
+| FR | Functions | Main data | Main rules | Primary microservice | Other microservices impacted | Portals impacted |
+|---|---|---|---|---|---|---|
+| FR-01 Session & regime guardrails | F1, F7, F8 | Markup table, sessions, economic calendar | Markup, session, event window, four eyes | `fx-quote-service` | `fx-admin-service` (macro workflow, arm/clear); `fx-route-exec-service` (last-look penalty); `fx-agent-orchestrator-service` (MacroGuard assist) | **Admin:** Policy Studio, markup schedules, economic calendar, workflows. **Corporate:** blotter shows regime and markup. **Retail:** convert shows regime and markup. |
+| FR-02 Credit & exposure | F2, F6 | Credit limits, clients | Knock-out (credit), credit reservation | `fx-qualify-service` | `fx-admin-service` (credit lines, credit override); `fx-route-exec-service` (uses reservation result, **confirm**) | **Admin:** credit lines, credit override. **Corporate:** shows credit reject reason (**confirm**). |
+| FR-03 Split & failover | F3, F4 | Liquidity providers, quality data | Ranking, split, failover | `fx-route-exec-service` | `fx-quote-service` (prices feed ranking); `fx-qualify-service` (knock-outs feed candidates); `fx-admin-service` (LP book, LP rankings) | **Corporate:** blotter and execution views show child splits. **Admin:** LP book, LP rankings, TCA. |
+| FR-04 Dealing desk escalation | F2, F5 | Restricted currencies, dealers | Knock-out (restricted), escalation | `fx-qualify-service` | `fx-admin-service` (venue halt, dealer queue); `fx-route-exec-service` (escalated remainder, **confirm**) | **Admin:** dealing desk queue, venue halt. **Corporate and Retail:** show escalation status to the client (**confirm**). |
+| FR-05 Policy authoring lifecycle | F8, F9 | Staff roles, change history | Four eyes | `fx-admin-service` | `fx-quote-service` (spread schedule draft, submit, approve, live cache); `fx-agent-orchestrator-service` (policy authoring assist) | **Admin:** Policy Studio, workflows master list and executions. |
+| Cross-cutting: Initial Data setup (new) | — | Reference data for all services | Setup once, by button only | `fx-admin-service` | `fx-quote-service`, `fx-qualify-service`, `fx-route-exec-service` (remove auto-seeds, accept loads) | **Admin:** Initial Data. |
+
+**Not impacted by these five requirements:** `fx-topology-service`, `fx-topology-mcp-server`. They support observability and root-cause analysis only.

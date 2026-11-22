@@ -279,7 +279,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | Feature | Summary | Status |
 |---|---|---|
 | F10.0 Premises and gap analysis | Thirteen premises from both posts, each with current state | DONE (docs) |
-| F10.1 Intermediary resolution (P4) | Pure function, unit tested | TODO |
+| F10.1 Intermediary resolution (P4) | `IntermediaryResolver`: pure function, six unit tests (single LB, pass-through, chain of two, sum across paths, dead end, empty) | DONE (tests pass) |
 | F10.2 Layer tag and merged view (P1, P8) | Union of layers with agreement counts | TODO |
 | F10.3 Enrichment at write (P9) | Tier, domain, owner applied on write | TODO |
 | F10.4 Freshness window (P13) | `last_seen` and read-time expiry | TODO |
@@ -290,4 +290,4 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | Date | Change | Commit |
 |---|---|---|
 | 2026-11-22 | Topology premises document and epic E10 | (this commit) |
-
+| 2026-11-22 | F10.1: intermediary resolver with six unit tests; first attempt resolved intermediaries in one batch and failed the chain test, fixed by resolving one intermediary at a time | (this commit) |

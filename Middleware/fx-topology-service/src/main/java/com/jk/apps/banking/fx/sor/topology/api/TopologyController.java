@@ -24,9 +24,12 @@ public class TopologyController {
 
     private final TopologyQueryService topologyQueryService;
     private final com.jk.apps.banking.fx.sor.topology.service.RootSourceQuery rootSourceQuery;
+    private final com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyEdgeMutationRepository mutationRepository;
 
     public TopologyController(TopologyQueryService topologyQueryService,
-                              com.jk.apps.banking.fx.sor.topology.service.RootSourceQuery rootSourceQuery) {
+                              com.jk.apps.banking.fx.sor.topology.service.RootSourceQuery rootSourceQuery,
+                              com.jk.apps.banking.fx.sor.topology.domain.repository.TopologyEdgeMutationRepository mutationRepository) {
+        this.mutationRepository = mutationRepository;
         this.topologyQueryService = topologyQueryService;
         this.rootSourceQuery = rootSourceQuery;
     }
@@ -68,6 +71,13 @@ public class TopologyController {
         return java.util.Map.of(
                 "page", pageIndex, "size", pageSize, "total", all.size(),
                 "edges", all.subList(from, to));
+    }
+
+    /** Mutation history for one edge (premise P10): GET /api/v1/topology/mutations?src=&dst= */
+    @GetMapping("/mutations")
+    public java.util.List<com.jk.apps.banking.fx.sor.topology.domain.entity.TopologyEdgeMutation> mutations(
+            @RequestParam(name = "src") String src, @RequestParam(name = "dst") String dst) {
+        return mutationRepository.findBySrcServiceAndDstServiceOrderByChangedAtAsc(src, dst);
     }
 
     @GetMapping("/graph/merged")

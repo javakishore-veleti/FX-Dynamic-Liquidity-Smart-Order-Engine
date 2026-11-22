@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-004-edge-mutations
+      author: fx-sor
+      comment: Property-level mutation log for topology edges (premise P10).
+      changes:
+        - createTable:
+            tableName: topology_edge_mutations
+            columns:
+              - column: {name: id, type: uuid, constraints: {primaryKey: true, nullable: false}}
+              - column: {name: src_service, type: varchar(120), constraints: {nullable: false}}
+              - column: {name: dst_service, type: varchar(120), constraints: {nullable: false}}
+              - column: {name: property, type: varchar(64), constraints: {nullable: false}}
+              - column: {name: old_value, type: varchar(255)}
+              - column: {name: new_value, type: varchar(255), constraints: {nullable: false}}
+              - column: {name: changed_at, type: timestamp with time zone, constraints: {nullable: false}}
+        - createIndex:
+            tableName: topology_edge_mutations
+            indexName: idx_edge_mutations_pair
+            columns:
+              - column: {name: src_service}
+              - column: {name: dst_service}

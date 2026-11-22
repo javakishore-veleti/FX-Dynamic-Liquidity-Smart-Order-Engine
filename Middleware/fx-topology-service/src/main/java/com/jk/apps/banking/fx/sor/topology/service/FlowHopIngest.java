@@ -39,6 +39,12 @@ public class FlowHopIngest {
     private final EdgeEnrich enrich;
     private final Freshness freshness;
     private final IngestPartition partition;
+    private EdgeMutationLog mutationLog;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    public void setMutationLog(EdgeMutationLog mutationLog) {
+        this.mutationLog = mutationLog;
+    }
     private final java.util.concurrent.atomic.AtomicLong notOwned = new java.util.concurrent.atomic.AtomicLong();
     private final java.util.concurrent.atomic.AtomicLong stale = new java.util.concurrent.atomic.AtomicLong();
 
@@ -155,6 +161,9 @@ public class FlowHopIngest {
             row.setDstTier(meta.dstTier());
             row.setDomain(meta.domain());
             repository.save(row);
+            if (mutationLog != null) {
+                mutationLog.observeFlowCount(e.src(), e.dst(), e.flows(), now);
+            }
         }
         return edges.size();
     }

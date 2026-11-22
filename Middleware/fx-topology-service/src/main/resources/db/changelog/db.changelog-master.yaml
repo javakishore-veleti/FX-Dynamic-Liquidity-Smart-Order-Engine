@@ -7,3 +7,5 @@ databaseChangeLog:
       file: db/changelog/changes/002-network-edge-enrichment.yaml
   - include:
       file: db/changelog/changes/003-trace-edges.yaml
+  - include:
+      file: db/changelog/changes/004-edge-mutations.yaml

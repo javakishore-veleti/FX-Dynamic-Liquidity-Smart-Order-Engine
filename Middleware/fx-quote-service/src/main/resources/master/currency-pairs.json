@@ -1,0 +1,142 @@
+[
+  {
+    "pairCode": "EURUSD",
+    "baseCcy": "EUR",
+    "quoteCcy": "USD"
+  },
+  {
+    "pairCode": "USDJPY",
+    "baseCcy": "USD",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "GBPUSD",
+    "baseCcy": "GBP",
+    "quoteCcy": "USD"
+  },
+  {
+    "pairCode": "USDCHF",
+    "baseCcy": "USD",
+    "quoteCcy": "CHF"
+  },
+  {
+    "pairCode": "AUDUSD",
+    "baseCcy": "AUD",
+    "quoteCcy": "USD"
+  },
+  {
+    "pairCode": "USDCAD",
+    "baseCcy": "USD",
+    "quoteCcy": "CAD"
+  },
+  {
+    "pairCode": "NZDUSD",
+    "baseCcy": "NZD",
+    "quoteCcy": "USD"
+  },
+  {
+    "pairCode": "EURGBP",
+    "baseCcy": "EUR",
+    "quoteCcy": "GBP"
+  },
+  {
+    "pairCode": "EURJPY",
+    "baseCcy": "EUR",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "EURCHF",
+    "baseCcy": "EUR",
+    "quoteCcy": "CHF"
+  },
+  {
+    "pairCode": "EURAUD",
+    "baseCcy": "EUR",
+    "quoteCcy": "AUD"
+  },
+  {
+    "pairCode": "EURCAD",
+    "baseCcy": "EUR",
+    "quoteCcy": "CAD"
+  },
+  {
+    "pairCode": "GBPJPY",
+    "baseCcy": "GBP",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "GBPCHF",
+    "baseCcy": "GBP",
+    "quoteCcy": "CHF"
+  },
+  {
+    "pairCode": "AUDJPY",
+    "baseCcy": "AUD",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "CADJPY",
+    "baseCcy": "CAD",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "CHFJPY",
+    "baseCcy": "CHF",
+    "quoteCcy": "JPY"
+  },
+  {
+    "pairCode": "AUDNZD",
+    "baseCcy": "AUD",
+    "quoteCcy": "NZD"
+  },
+  {
+    "pairCode": "USDMXN",
+    "baseCcy": "USD",
+    "quoteCcy": "MXN"
+  },
+  {
+    "pairCode": "USDSGD",
+    "baseCcy": "USD",
+    "quoteCcy": "SGD"
+  },
+  {
+    "pairCode": "USDHKD",
+    "baseCcy": "USD",
+    "quoteCcy": "HKD"
+  },
+  {
+    "pairCode": "USDZAR",
+    "baseCcy": "USD",
+    "quoteCcy": "ZAR"
+  },
+  {
+    "pairCode": "USDTRY",
+    "baseCcy": "USD",
+    "quoteCcy": "TRY"
+  },
+  {
+    "pairCode": "USDCNH",
+    "baseCcy": "USD",
+    "quoteCcy": "CNH"
+  },
+  {
+    "pairCode": "USDINR",
+    "baseCcy": "USD",
+    "quoteCcy": "INR"
+  },
+  {
+    "pairCode": "USDBRL",
+    "baseCcy": "USD",
+    "quoteCcy": "BRL"
+  },
+  {
+    "pairCode": "USDKRW",
+    "baseCcy": "USD",
+    "quoteCcy": "KRW"
+  },
+  {
+    "pairCode": "USDPLN",
+    "baseCcy": "USD",
+    "quoteCcy": "PLN"
+  }
+]

@@ -47,8 +47,8 @@
 | E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | BLOCKED (source needed) | | |
 | E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | BLOCKED (depends on F7.1) | | |
 | E8 Business inputs | F8.1 Pair settlement attributes | SYNTHETIC values for 28 pairs (46 SPOT/TOM rows) loaded through `INIT_SETTLEMENT_POLICIES`. Business values replace the file when supplied | DESIGN §9.3 | DONE as SYNTHETIC (verified: 46 rows) | 2026-11-22 | 2026-11-22 |
-| E8 Business inputs | F8.2 Open business questions | Seven questions in functional view §6 | — | BLOCKED (business input) | | |
-| E9 Downstream validation | F9.1 Dependent services validate pair codes | qualify and route-exec check `pair_code` against the master (committed file or owner API) | DESIGN §9.4 | DEFERRED (follows F8.1 for those services) | | |
+| E8 Business inputs | F8.2 Open business questions | Seven questions in functional view §6 answered with ASSUMPTIONS (section 7) so the build can proceed | — | ASSUMED (confirm with business) | 2026-11-22 | 2026-11-22 |
+| E9 Downstream validation | F9.1 Dependent services validate pair codes | qualify knocks out unknown pairs (UNKNOWN_PAIR); route-exec rejects unknown pairs with 400. Both read a committed copy of the pair master | DESIGN §9.4 | DONE (compiles, existing tests pass) | 2026-11-22 | 2026-11-22 |
 
 ---
 
@@ -187,3 +187,32 @@
 | 6 | Pair-code validation in qualify and route-exec (F9.1) | Follows item 3 for those services' data | Start after item 3 |
 | 7 | Button tested in a browser | Not done; the button was built and its API path verified | A click-through in the admin portal |
 | 8 | Admin layout is flat | DESIGN §2 defines rules for new code | None; a restructure would be a separate change |
+
+---
+
+## 7. Assumptions for the open business questions (F8.2)
+
+These answers are the repo owner's delegated decisions, so the build can continue. Each one must be confirmed or replaced by the business. Nothing here is a business sign-off.
+
+| # | Question (functional view §6) | Assumption used in the build | Where it is used |
+|---|---|---|---|
+| 1 | Which pairs and tiers are in scope for the first release? | All 28 pairs in the spec §1; tiers as the spec defines them | Pair master, settlement seed |
+| 2 | Who sets markups and how often do they change? | The pricing desk, through maker-checker. Not part of initial data | Quote spread schedules |
+| 3 | What is the slippage limit for a failed or partly filled trade? | **Placeholder: 5 bps.** Not yet in the code | Route-exec failover budget (to add) |
+| 4 | Which currencies are restricted, and which dealer handles each? | USD/INR and USD/BRL restricted; NY dealing desk owns both | Settlement seed `restrictedFlag` |
+| 5 | Who can override a credit limit, and does it need a second approver? | An admin, with a second approver (four eyes) | Credit override (existing admin endpoint) |
+| 6 | Which banks are live liquidity providers per pair, and who maintains their ratings? | The 12 LPs in the Synthetic Data Catalog §2; ratings maintained by the risk desk | LP book and rankings (later dataset) |
+| 7 | Are the event dates and severities confirmed? | No. FOMC 2021–2027 from the Federal Reserve calendar; FOMC 2006–2020 from the Hugging Face scrape of the Fed site where loaded; NFP and ECB labelled SYNTHETIC | Calendar seed |
+
+## 8. Calendar data, final state
+
+| Event | Source | Labelling |
+|---|---|---|
+| FOMC 2021–2027 | Federal Reserve FOMC calendar (pasted page) | Real dates; 2027 marked [TENTATIVE] |
+| FOMC 2006–2020 | Hugging Face `vtasca/fomc-statements-minutes`, a scrape of the Fed site | Real dates once the CSV is read; otherwise SYNTHETIC |
+| NFP, all years | Generated: first Friday of each month | [SYNTHETIC] |
+| ECB, all years | Generated: fixed week-of-year slots | [SYNTHETIC] |
+| Settlement policies | Generated for 28 pairs | SYNTHETIC file name `settlement-policies.synthetic.json` |
+
+Replacing synthetic data with business or published data is a file change: regenerate or edit the committed JSON, then run the setup again on a fresh environment.
+

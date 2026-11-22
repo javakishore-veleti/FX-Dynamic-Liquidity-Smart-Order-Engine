@@ -3,6 +3,9 @@ package com.jk.apps.banking.fx.sor.quote.business.facade;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
+import com.jk.apps.banking.fx.sor.quote.entity.CalendarEvent;
+import com.jk.apps.banking.fx.sor.quote.repository.CalendarEventRepository;
+import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -26,17 +29,33 @@ public class EconomicCalendarFacade {
     private static final Logger log = LoggerFactory.getLogger(EconomicCalendarFacade.class);
 
     private final ObjectMapper objectMapper;
+    private final CalendarEventRepository repository;
     private final Clock clock;
     private volatile List<CalendarWindow> windows = List.of();
 
     @Autowired
-    public EconomicCalendarFacade(ObjectMapper objectMapper) {
-        this(objectMapper, Clock.systemUTC());
+    public EconomicCalendarFacade(ObjectMapper objectMapper, CalendarEventRepository repository) {
+        this(objectMapper, repository, Clock.systemUTC());
     }
 
-    EconomicCalendarFacade(ObjectMapper objectMapper, Clock clock) {
+    EconomicCalendarFacade(ObjectMapper objectMapper, CalendarEventRepository repository, Clock clock) {
         this.objectMapper = objectMapper;
+        this.repository = repository;
         this.clock = clock;
+    }
+
+    /** Restores the cache from fx_quote_db at startup. Reads only; nothing is seeded here. */
+    @PostConstruct
+    void restoreFromDatabase() {
+        if (repository == null) {
+            return;
+        }
+        List<CalendarWindow> restored = new ArrayList<>();
+        for (CalendarEvent e : repository.findAll()) {
+            restored.add(new CalendarWindow(e.getSource(), e.getSeverity(), e.getStartAt(), e.getEndAt(), e.getLabel()));
+        }
+        restored.sort(Comparator.comparing(CalendarWindow::start));
+        windows = List.copyOf(restored);
     }
 
     /**
@@ -92,6 +111,10 @@ public class EconomicCalendarFacade {
                 request.getStart(),
                 request.getEnd(),
                 request.getLabel() == null || request.getLabel().isBlank() ? source : request.getLabel());
+        if (repository != null) {
+            repository.save(new CalendarEvent(next.source(), next.severity(), next.start(), next.end(),
+                    next.label(), "ADMIN", clock.instant()));
+        }
         List<CalendarWindow> copy = new ArrayList<>(windows);
         copy.removeIf(w -> w.source().equals(source) && w.start().equals(next.start()));
         copy.add(next);
@@ -114,6 +137,9 @@ public class EconomicCalendarFacade {
         if (!removed) {
             throw new org.springframework.web.server.ResponseStatusException(
                     org.springframework.http.HttpStatus.NOT_FOUND, "calendar event not found");
+        }
+        if (repository != null) {
+            repository.deleteById(CalendarEvent.idOf(src, start));
         }
         windows = List.copyOf(copy);
     }

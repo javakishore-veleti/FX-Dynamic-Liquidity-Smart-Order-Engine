@@ -10,7 +10,7 @@ class EconomicCalendarFacadeTest {
 
     @Test
     void loadsPublishedCalendarWindows() {
-        EconomicCalendarFacade facade = new EconomicCalendarFacade(new ObjectMapper());
+        EconomicCalendarFacade facade = new EconomicCalendarFacade(new ObjectMapper(), null, java.time.Clock.systemUTC());
         facade.loadCalendar();
         assertFalse(facade.listEvents().isEmpty());
         assertTrue(facade.listEvents().stream()

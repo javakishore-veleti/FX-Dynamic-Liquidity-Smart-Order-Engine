@@ -1,0 +1,63 @@
+databaseChangeLog:
+  - changeSet:
+      id: quote-007-economic-calendar-events
+      author: fx-sor
+      comment: Economic calendar windows (owned by fx-quote-service). Loaded by INIT_ECONOMIC_CALENDAR and by admin upserts.
+      changes:
+        - createTable:
+            tableName: economic_calendar_events
+            columns:
+              - column:
+                  name: event_id
+                  type: varchar(120)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_economic_calendar_events
+                    nullable: false
+              - column:
+                  name: source
+                  type: varchar(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: severity
+                  type: numeric(6,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: start_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_at
+                  type: timestamp with time zone
+                  constraints:
+                    nullable: false
+              - column:
+                  name: label
+                  type: varchar(200)
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_by
+                  type: varchar(100)
+                  defaultValue: SYSTEM
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_by
+                  type: varchar(100)
+                  defaultValue: SYSTEM
+                  constraints:
+                    nullable: false

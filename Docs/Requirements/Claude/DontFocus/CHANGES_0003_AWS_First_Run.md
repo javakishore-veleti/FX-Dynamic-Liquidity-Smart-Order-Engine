@@ -2,7 +2,7 @@
 
 **Change ID:** CHANGES_0003
 **Date opened:** 2026-11-22
-**Moved from:** [CHANGES_0002_AWS_GH_Actions.md](CHANGES_0002_AWS_GH_Actions.md) §2 E7 and §3 F7.1, F7.2
+**Moved from:** [CHANGES_0002_AWS_GH_Actions.md](../CHANGES_0002_AWS_GH_Actions.md) §2 E7 and §3 F7.1, F7.2
 **Status key:** `DONE` · `TODO` · `BLOCKED` (on an external input only) · `DEFERRED`
 
 The first AWS run is no longer a blocker for the coding work in CHANGES_0002. Coding is complete there; this file tracks running it.

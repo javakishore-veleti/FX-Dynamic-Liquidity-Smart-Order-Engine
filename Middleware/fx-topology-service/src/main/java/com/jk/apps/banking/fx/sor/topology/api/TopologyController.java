@@ -23,9 +23,12 @@ import java.time.Instant;
 public class TopologyController {
 
     private final TopologyQueryService topologyQueryService;
+    private final com.jk.apps.banking.fx.sor.topology.service.RootSourceQuery rootSourceQuery;
 
-    public TopologyController(TopologyQueryService topologyQueryService) {
+    public TopologyController(TopologyQueryService topologyQueryService,
+                              com.jk.apps.banking.fx.sor.topology.service.RootSourceQuery rootSourceQuery) {
         this.topologyQueryService = topologyQueryService;
+        this.rootSourceQuery = rootSourceQuery;
     }
 
     @GetMapping("/graph/network")
@@ -41,6 +44,13 @@ public class TopologyController {
     public java.util.List<com.jk.apps.banking.fx.sor.topology.api.dto.NetworkEdgeDto> networkAt(
             @RequestParam(name = "bucket") String bucket) {
         return topologyQueryService.networkAt(bucket);
+    }
+
+    /** Root-source analysis: GET /api/v1/topology/root-source?thresholdMs=200 */
+    @GetMapping("/root-source")
+    public java.util.List<com.jk.apps.banking.fx.sor.topology.service.RootSource.Candidate> rootSource(
+            @RequestParam(name = "thresholdMs", defaultValue = "200") double thresholdMs) {
+        return rootSourceQuery.rank(thresholdMs);
     }
 
     @GetMapping("/graph/merged")

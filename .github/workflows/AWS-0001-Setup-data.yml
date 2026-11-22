@@ -24,4 +24,4 @@ jobs:
           SUBNET_A=$(out fx-topology-network SubnetA)
           SUBNET_B=$(out fx-topology-network SubnetB)
           DB_SG=$(out fx-topology-network DbSecurityGroupId)
-          aws cloudformation deploy --stack-name fx-topology-data --template-file CICD/AWS/cfn/02-data.yaml --parameter-overrides SubnetA=$SUBNET_A SubnetB=$SUBNET_B DbSecurityGroupId=$DB_SG --no-fail-on-empty-changeset
+          aws cloudformation deploy --stack-name fx-topology-data --template-file CICD/AWS/cfn/02-data.yaml --parameter-overrides SubnetA="$SUBNET_A" SubnetB="$SUBNET_B" DbSecurityGroupId="$DB_SG" --no-fail-on-empty-changeset

@@ -143,3 +143,68 @@
 - No `AWS-0001-*` or `AWS-0100-*` workflow has been triggered. Each creates billable AWS resources, and the GitHub secrets are not yet set. Trigger `AWS-0100-Setup-All` once the owner approves.
 - YAML parsing and `cfn-lint` pass. `actionlint` is not installed here, so workflow expression and step syntax are unverified beyond the parser.
 
+---
+
+## 6. Coding status (complete, nothing run)
+
+All GitHub Actions and CloudFormation coding for the AWS deployment is written. Nothing has been triggered in GitHub or AWS.
+
+### 6.1 Workflow inventory
+
+| File | Type | Calls / depends on | Secrets used | Inputs | Validation |
+|---|---|---|---|---|---|
+| `AWS-0100-Setup-All.yml` | Orchestrator (manual) | network → data → ecr → app → compute | All (inherit) | `use_existing_vpc` | actionlint clean |
+| `AWS-0100-Destroy-All.yml` | Orchestrator (manual) | compute → data → ecr → network | All (inherit) | `confirm` = `DESTROY` | actionlint clean |
+| `AWS-0001-Setup-network.yml` | Setup, reusable | — | AWS keys and region; `VPC_ID`, `REUSE_PUBLIC_SUBNET_A`, `REUSE_PUBLIC_SUBNET_B` when reusing | `use_existing_vpc` | actionlint clean |
+| `AWS-0001-Setup-data.yml` | Setup, reusable | Reads network outputs | AWS keys and region | — | actionlint clean |
+| `AWS-0001-Setup-ecr.yml` | Setup, reusable | — | AWS keys and region | — | actionlint clean |
+| `AWS-0001-Setup-app.yml` | Setup, reusable | Reads registry output; Maven and Docker | AWS keys and region | — | actionlint clean; Maven package verified locally |
+| `AWS-0001-Setup-compute.yml` | Setup, reusable | Reads network, data, and registry outputs | AWS keys and region | — | actionlint clean |
+| `AWS-0001-Destroy-compute.yml` | Destroy, reusable | — | AWS keys and region | `confirm` | actionlint clean |
+| `AWS-0001-Destroy-data.yml` | Destroy, reusable | — | AWS keys and region | `confirm` | actionlint clean |
+| `AWS-0001-Destroy-ecr.yml` | Destroy, reusable | — | AWS keys and region | `confirm` | actionlint clean |
+| `AWS-0001-Destroy-network.yml` | Destroy, reusable | — | AWS keys and region | `confirm` | actionlint clean |
+
+### 6.2 Templates
+
+| File | Stack | Validation |
+|---|---|---|
+| `CICD/AWS/cfn/01-network.yaml` | `fx-topology-network` | cfn-lint clean |
+| `CICD/AWS/cfn/02-data.yaml` | `fx-topology-data` | cfn-lint clean |
+| `CICD/AWS/cfn/03-ecr.yaml` | `fx-topology-ecr` | cfn-lint clean |
+| `CICD/AWS/cfn/04-compute.yaml` | `fx-topology-compute` | cfn-lint clean |
+| `CICD/AWS/README.md` | — | Secrets and run order |
+
+### 6.3 Validation performed (no AWS, no GitHub run)
+
+| Check | Tool | Result |
+|---|---|---|
+| Workflow syntax, expressions, shell | actionlint (installed locally) | Clean. Shellcheck style items fixed by quoting variables |
+| Templates | cfn-lint | Clean for all four |
+| YAML parse | Python | All 11 workflows parse |
+| Image build input | Maven package, local | Jar produced at `target/fx-topology-service-*.jar`, the path the Dockerfile copies |
+| Secrets scan | grep | No keys or account ids in `CICD/AWS` or `.github` |
+
+### 6.4 Coding decisions taken
+
+| Decision | Reason |
+|---|---|
+| Postgres version left to the RDS default | cfn-lint flags pinned versions as deprecated |
+| Network stack has no VPC resources in reuse mode | Security groups still go into the reused VPC; destroy does not delete the VPC |
+| Orchestrator passes `use_existing_vpc` only to the network job | Only that workflow declares the input |
+| Destroy workflows check `confirm` in their own first step | Each destroy is safe to run by hand, not only through the orchestrator |
+| Image tagged with commit sha and `latest` | Traceable builds; compute uses `latest` |
+
+### 6.5 Remaining (owner action only)
+
+| Item | Owner action |
+|---|---|
+| F7.1 First run in AWS | Approve cost; create the secrets in §1 |
+| F7.2 Clean teardown | Run `AWS-0100-Destroy-All` after F7.1 |
+
+### 6.6 Progress log
+
+| Date | Change | Commit |
+|---|---|---|
+| 2026-11-22 | Coding complete: 11 workflows and 4 templates, validated with actionlint, cfn-lint, YAML parse, and a local Maven package. Nothing run in AWS or GitHub | (this commit) |
+

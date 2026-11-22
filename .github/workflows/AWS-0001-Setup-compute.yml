@@ -29,5 +29,5 @@ jobs:
           APP_SG=$(out fx-topology-network AppSecurityGroupId)
           DB_ENDPOINT=$(out fx-topology-data DbEndpoint)
           DB_SECRET=$(out fx-topology-data DbSecretArn)
-          aws cloudformation deploy --stack-name fx-topology-compute --template-file CICD/AWS/cfn/04-compute.yaml --capabilities CAPABILITY_IAM --parameter-overrides VpcId=$VPC SubnetA=$SUBNET_A SubnetB=$SUBNET_B AlbSecurityGroupId=$ALB_SG AppSecurityGroupId=$APP_SG ImageUri="$REPO:latest" DbEndpoint=$DB_ENDPOINT DbSecretArn="$DB_SECRET" --no-fail-on-empty-changeset
+          aws cloudformation deploy --stack-name fx-topology-compute --template-file CICD/AWS/cfn/04-compute.yaml --capabilities CAPABILITY_IAM --parameter-overrides VpcId="$VPC" SubnetA="$SUBNET_A" SubnetB="$SUBNET_B" AlbSecurityGroupId="$ALB_SG" AppSecurityGroupId="$APP_SG" ImageUri="$REPO:latest" DbEndpoint="$DB_ENDPOINT" DbSecretArn="$DB_SECRET" --no-fail-on-empty-changeset
           echo "Service address: http://$(out fx-topology-compute LoadBalancerDns)/actuator/health"

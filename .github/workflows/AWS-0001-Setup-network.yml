@@ -40,4 +40,6 @@ jobs:
           else
             PARAMS="VpcId="
           fi
+          # PARAMS is a list of key=value pairs that must split into arguments
+          # shellcheck disable=SC2086
           aws cloudformation deploy --stack-name fx-topology-network --template-file CICD/AWS/cfn/01-network.yaml --parameter-overrides $PARAMS --no-fail-on-empty-changeset

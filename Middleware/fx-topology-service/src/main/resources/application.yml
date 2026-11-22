@@ -39,6 +39,7 @@ fx:
   features:
     redis-enabled: false
     kafka-enabled: false
+    grpc-enabled: ${FX_GRPC_ENABLED:false}
     liquibase-on-startup: ${LIQUIBASE_ON_STARTUP:true}
 
 app:
@@ -132,6 +133,14 @@ spring:
       group-id: fx-topology
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+grpc:
+  server:
+    port: 9085
+  client:
+    topology:
+      address: static://localhost:9085
+      negotiation-type: plaintext
+
 fx:
   topology:
     flow-topic: fx.topology.flow-hop.v1

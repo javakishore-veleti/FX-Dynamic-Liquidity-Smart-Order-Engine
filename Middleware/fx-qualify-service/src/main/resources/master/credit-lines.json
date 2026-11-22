@@ -1,0 +1,20 @@
+[
+  {
+    "clientId": "CORP_88",
+    "lpId": "LP_CITI",
+    "maxCreditUsd": 25000000,
+    "nopLimitUsd": 2500000
+  },
+  {
+    "clientId": "CORP_88",
+    "lpId": "LP_JPM",
+    "maxCreditUsd": 25000000,
+    "nopLimitUsd": 2500000
+  },
+  {
+    "clientId": "CORP_88",
+    "lpId": "LP_GS",
+    "maxCreditUsd": 25000000,
+    "nopLimitUsd": 2500000
+  }
+]

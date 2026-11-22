@@ -1,5 +1,13 @@
 package com.jk.apps.banking.fx.sor.qual.business.facade;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.time.Instant;
+import org.springframework.core.io.ClassPathResource;
+
 import com.jk.apps.banking.fx.sor.qual.cache.CreditLine;
 import com.jk.apps.banking.fx.sor.qual.cache.CreditStore;
 import java.math.BigDecimal;
@@ -16,9 +24,30 @@ import org.springframework.web.server.ResponseStatusException;
 public class CreditLineAdminFacade {
 
     private final CreditStore creditStore;
+    private final ObjectMapper mapper;
 
-    public CreditLineAdminFacade(CreditStore creditStore) {
+    private record SeedRow(String clientId, String lpId, BigDecimal maxCreditUsd, BigDecimal nopLimitUsd) {
+    }
+
+    public CreditLineAdminFacade(CreditStore creditStore, ObjectMapper mapper) {
         this.creditStore = creditStore;
+        this.mapper = mapper;
+    }
+
+    /** Loads the committed credit-line seed. Idempotent. Called only by the admin Initial Data workflow. */
+    public int loadCommitted() {
+        List<SeedRow> rows;
+        try (InputStream in = new ClassPathResource("master/credit-lines.json").getInputStream()) {
+            rows = mapper.readValue(in, new TypeReference<List<SeedRow>>() {
+            });
+        } catch (IOException ex) {
+            throw new IllegalStateException("cannot read master/credit-lines.json", ex);
+        }
+        long reset = Instant.now().plusSeconds(86_400).getEpochSecond();
+        for (SeedRow r : rows) {
+            creditStore.put(new CreditLine(r.clientId(), r.lpId(), r.maxCreditUsd(), r.nopLimitUsd(), BigDecimal.ZERO, reset));
+        }
+        return rows.size();
     }
 
     public List<CreditLine> listAll() {

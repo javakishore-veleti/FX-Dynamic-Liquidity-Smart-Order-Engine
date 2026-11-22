@@ -44,6 +44,12 @@ public class ReferenceDataController {
         return java.util.Map.of("loaded", settlementPolicyAdminFacade.loadCommitted());
     }
 
+    /** Called by the admin Initial Data workflow. Loads the committed credit-line seed. */
+    @PostMapping("/credit-lines/load")
+    public java.util.Map<String, Object> loadCreditLines() {
+        return java.util.Map.of("loaded", creditLineAdminFacade.loadCommitted());
+    }
+
     @PutMapping("/settlement-policies")
     public SettlementPolicyDto upsertPolicy(@RequestBody SettlementPolicyDto body) {
         return settlementPolicyAdminFacade.upsert(body);

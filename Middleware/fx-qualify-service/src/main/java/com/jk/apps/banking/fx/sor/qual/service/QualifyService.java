@@ -15,7 +15,6 @@ import com.jk.apps.banking.fx.sor.qual.entity.SettlementCutoffPolicy;
 import com.jk.apps.banking.fx.sor.qual.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.qual.metrics.ServiceMetrics;
 import com.jk.apps.banking.fx.sor.qual.repository.SettlementCutoffPolicyRepository;
-import jakarta.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Instant;
@@ -57,20 +56,6 @@ public class QualifyService {
         this.creditStore = creditStore;
         this.metrics = metrics;
         this.domainEvents = domainEvents;
-    }
-
-    @PostConstruct
-    void seedCreditLines() {
-        long reset = Instant.now().plusSeconds(86_400).getEpochSecond();
-        for (String lp : LPS) {
-            creditStore.put(new CreditLine(
-                    DEFAULT_CLIENT,
-                    lp,
-                    new BigDecimal("25000000"),
-                    new BigDecimal("2500000"),
-                    BigDecimal.ZERO,
-                    reset));
-        }
     }
 
     public QualifyOrderResponse qualify(QualifyOrderRequest request) {

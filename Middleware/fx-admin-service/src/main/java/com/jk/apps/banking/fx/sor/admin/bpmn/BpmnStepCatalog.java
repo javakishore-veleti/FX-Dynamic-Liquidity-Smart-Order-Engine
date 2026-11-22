@@ -38,6 +38,10 @@ public final class BpmnStepCatalog {
             new Step("task_init_load_settlement", "Load settlement policies into qualify", TaskType.SERVICE),
             new Step("task_init_verify_settlement", "Verify settlement policy count in qualify", TaskType.SERVICE));
 
+    private static final List<Step> INIT_CREDIT_LINES = List.of(
+            new Step("task_init_load_credit", "Load credit lines into qualify", TaskType.SERVICE),
+            new Step("task_init_verify_credit", "Verify loaded credit lines present in qualify", TaskType.SERVICE));
+
     private static final Map<String, List<Step>> BY_KEY = Map.of(
             Fr01BpmnDefinition.PROCESS_KEY,
             FR01_ADMIN,
@@ -50,6 +54,8 @@ public final class BpmnStepCatalog {
             INIT_CURRENCY_PAIRS,
             InitDataCatalog.SETTLEMENT_WORKFLOW,
             INIT_SETTLEMENT_POLICIES,
+            InitDataCatalog.CREDIT_WORKFLOW,
+            INIT_CREDIT_LINES,
             InitDataCatalog.CALENDAR_WORKFLOW,
             INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",

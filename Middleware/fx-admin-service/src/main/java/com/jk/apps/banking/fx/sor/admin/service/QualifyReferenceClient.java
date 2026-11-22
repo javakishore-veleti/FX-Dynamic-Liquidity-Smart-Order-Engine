@@ -34,6 +34,14 @@ public class QualifyReferenceClient {
                 });
     }
 
+    public Map<String, Object> loadCreditLines() {
+        return qualifyRestClient.post()
+                .uri("/api/v1/fx/reference/credit-lines/load")
+                .retrieve()
+                .body(new ParameterizedTypeReference<>() {
+                });
+    }
+
     public Map<String, Object> upsertSettlementPolicy(Map<String, Object> body) {
         return qualifyRestClient.put()
                 .uri("/api/v1/fx/reference/settlement-policies")

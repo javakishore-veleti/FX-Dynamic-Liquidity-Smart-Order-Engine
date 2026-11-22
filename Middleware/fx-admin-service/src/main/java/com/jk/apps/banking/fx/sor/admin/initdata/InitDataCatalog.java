@@ -10,6 +10,7 @@ public final class InitDataCatalog {
     public static final String PURPOSE = "INITIAL_DATA_SETUP";
     public static final String PAIRS_WORKFLOW = "INIT_CURRENCY_PAIRS";
     public static final String SETTLEMENT_WORKFLOW = "INIT_SETTLEMENT_POLICIES";
+    public static final String CREDIT_WORKFLOW = "INIT_CREDIT_LINES";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
@@ -30,6 +31,13 @@ public final class InitDataCatalog {
                     "fx-quote-service",
                     PAIRS_WORKFLOW,
                     "fx-quote-service master/currency-pairs.json"),
+            new Dataset(
+                    "CREDIT_LINES",
+                    "Credit Lines",
+                    "Per-client, per-bank credit limits and NOP caps. Starter seed for one client and three banks. Owner: qualify.",
+                    "fx-qualify-service",
+                    CREDIT_WORKFLOW,
+                    "fx-qualify-service master/credit-lines.json"),
             new Dataset(
                     "SETTLEMENT_POLICIES",
                     "Settlement Policies",

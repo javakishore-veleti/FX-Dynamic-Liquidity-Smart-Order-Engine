@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_CREDIT">
+  <process id="INIT_CREDIT_LINES" name="Initial Data - Credit Lines" isExecutable="true">
+    <startEvent id="start_credit" name="Start"/>
+    <sequenceFlow id="f_credit_1" sourceRef="start_credit" targetRef="task_init_load_credit"/>
+    <serviceTask id="task_init_load_credit" name="Load credit lines into qualify"/>
+    <sequenceFlow id="f_credit_2" sourceRef="task_init_load_credit" targetRef="task_init_verify_credit"/>
+    <serviceTask id="task_init_verify_credit" name="Verify credit lines in qualify"/>
+    <sequenceFlow id="f_credit_3" sourceRef="task_init_verify_credit" targetRef="end_credit"/>
+    <endEvent id="end_credit" name="Done"/>
+  </process>
+</definitions>

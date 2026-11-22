@@ -236,7 +236,7 @@ Replacing synthetic data with business or published data is a file change: regen
 ### Still open (real gaps, not hidden)
 1. **NFP and ECB dates are SYNTHETIC.** Replace with published schedules by editing the committed calendar file.
 2. **Settlement values are SYNTHETIC.** Replace with business values in the committed file.
-3. **Slippage limit is a placeholder (5 bps)** and is not yet enforced in route-exec.
+3. **Slippage limit is a placeholder (5 bps).** Route-exec's default budget is now the named constant `DEFAULT_MAX_SLIPPAGE_BPS = 5.0000`. Confirm the value with the business.
 4. CLOSED: credit-line startup seed moved to `master/credit-lines.json` and the `INIT_CREDIT_LINES` workflow (verified: 3 loaded, 3 found, repeat 409).
 5. **Remaining datasets (F4.11):** credit lines, LP top-of-book, LP rankings. Each needs its own file and loader.
 6. **Browser click-through** of the Run setup button has not been done. The API path is verified.
@@ -258,3 +258,17 @@ New downloads go to `FMOC-Meeings/YYYY-MM-DD-HH-MM-SS/`, one folder per download
 | 2026-11-22 | LP top-of-book verified end to end: 0 → 3 rows, verify 3 of 3, repeat 409 | `aacde79` |
 | 2026-11-22 | LP rankings: committed starter in route-exec (`master/lp-rankings.json`), `POST /reference/lp-rankings/load`, admin `INIT_LP_RANKINGS` workflow (changeset 010) | `37832ef` |
 | 2026-11-22 | LP rankings: hidden startup rankings removed from route-exec. Verified end to end: 0 → 3, verify 3 of 3, repeat 409 | `955f9aa` |
+| 2026-11-22 | Slippage default set to the 5 bps placeholder (named constant). Build fixed in `1dce291` after a misplaced constant was pushed in `bfbc836` | `1dce291` |
+| 2026-11-22 | Final check after restart: all six setups COMPLETED with verified tasks; markups 0 at startup; UNKNOWN_PAIR at qualify; HTTP 400 at route-exec | — |
+
+### Final verification (2026-11-22)
+
+| Dataset | Owner | Setup result | Repeat run |
+|---|---|---|---|
+| Currency pairs (28) | quote | COMPLETED, verified | 409 |
+| Settlement policies (46, SYNTHETIC) | qualify | COMPLETED, verified | 409 |
+| Credit lines (3) | qualify | COMPLETED, verified | 409 |
+| LP top-of-book (3) | quote | COMPLETED, verified | 409 |
+| LP rankings (3) | route-exec | COMPLETED, verified | 409 |
+| Economic calendar (737, FOMC real, NFP/ECB SYNTHETIC) | quote | COMPLETED, verified | 409 |
+

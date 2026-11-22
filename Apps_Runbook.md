@@ -2,7 +2,7 @@
 
 ## Contents
 
-1. [Stop](#1-stop) — Portals · Middleware · LLM Gateway · AIOps · Containers
+1. [Stop](#1-stop) — Portals · Middleware · Python · LLM Gateway · AIOps · Containers
 2. [Start](#2-start) — Containers · LLM Gateway · AIOps · Middleware · Portals · Python dual-stack
 3. [Status](#3-status) — Containers · LLM Gateway · AIOps · Middleware · Portals
 4. [External Liquibase](#4-external-liquibase)
@@ -29,19 +29,25 @@ npm run local:portals:all:stop
 npm run local:middleware:all:stop
 ```
 
-### 1.3 LLM Gateway
+### 1.3 Python dual-stack
+
+```bash
+npm run local:python:all:stop
+```
+
+### 1.4 LLM Gateway
 
 ```bash
 npm run local:llm-gateway:stop
 ```
 
-### 1.4 AIOps
+### 1.5 AIOps
 
 ```bash
 npm run local:aiops:stop
 ```
 
-### 1.5 Containers
+### 1.6 Containers
 
 ```bash
 npm run local:containers:all:stop
@@ -99,7 +105,7 @@ npm run local:portals:all:start
 
 ### 2.6 Python dual-stack (optional)
 
-Requires [`uv`](https://docs.astral.sh/uv/) on `PATH`. Each start script runs `uv init` (only if `pyproject.toml` is missing) then `uv sync` before `uv run`, so new/changed deps install cleanly.
+Requires [`uv`](https://docs.astral.sh/uv/) on `PATH`. Start scripts run `uv init` (if needed) + `uv sync`, then launch **in the background** (pid/log under `.local-run/python/`) and return when the port is ready — same pattern as middleware/portals.
 
 Sync all three projects without starting:
 
@@ -107,11 +113,20 @@ Sync all three projects without starting:
 npm run local:python:uv:sync
 ```
 
-Default (SQLite):
+Default (SQLite) — background:
 
 ```bash
+npm run local:python:all:start
+# or individually:
 npm run local:topology-mcp:python
 npm run local:agent-orchestrator:python
+```
+
+Status / stop:
+
+```bash
+npm run local:python:all:status
+npm run local:python:all:stop
 ```
 
 #### 2.6.1 Python with Postgres (optional)
@@ -155,6 +170,12 @@ npm run local:middleware:all:status
 
 ```bash
 npm run local:portals:all:status
+```
+
+### 3.6 Python dual-stack
+
+```bash
+npm run local:python:all:status
 ```
 
 ---

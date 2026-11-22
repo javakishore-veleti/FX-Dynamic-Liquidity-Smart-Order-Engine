@@ -272,3 +272,22 @@ New downloads go to `FMOC-Meeings/YYYY-MM-DD-HH-MM-SS/`, one folder per download
 | LP rankings (3) | route-exec | COMPLETED, verified | 409 |
 | Economic calendar (737, FOMC real, NFP/ECB SYNTHETIC) | quote | COMPLETED, verified | 409 |
 
+## 12. Epic E10: Service topology premises (Netflix TechBlog)
+
+Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-PREMISES.md). Rules checked: DESIGN §1, §4, §7.5, §8.5 and the topology section of ARCHITECTURE.md.
+
+| Feature | Summary | Status |
+|---|---|---|
+| F10.0 Premises and gap analysis | Thirteen premises from both posts, each with current state | DONE (docs) |
+| F10.1 Intermediary resolution (P4) | Pure function, unit tested | TODO |
+| F10.2 Layer tag and merged view (P1, P8) | Union of layers with agreement counts | TODO |
+| F10.3 Enrichment at write (P9) | Tier, domain, owner applied on write | TODO |
+| F10.4 Freshness window (P13) | `last_seen` and read-time expiry | TODO |
+| F10.5 Bounded ingest (P7) | Bounded queue with counted drops | TODO |
+| F10.6 Stream ingest (P2) | Kafka consumers feeding F10.1 to F10.5 | TODO |
+| F10.7 Mutation history (P10) | Later | DEFERRED |
+
+| Date | Change | Commit |
+|---|---|---|
+| 2026-11-22 | Topology premises document and epic E10 | (this commit) |
+

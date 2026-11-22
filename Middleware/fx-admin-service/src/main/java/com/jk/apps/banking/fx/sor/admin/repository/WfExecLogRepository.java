@@ -1,6 +1,7 @@
 package com.jk.apps.banking.fx.sor.admin.repository;
 
 import com.jk.apps.banking.fx.sor.admin.entity.WfExecLog;
+import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -23,4 +24,8 @@ public interface WfExecLogRepository extends JpaRepository<WfExecLog, UUID> {
             Pageable pageable);
 
     Page<WfExecLog> findByWorkflowKey(String workflowKey, Pageable pageable);
+
+    Optional<WfExecLog> findFirstByWorkflowKeyOrderByStartedAtDesc(String workflowKey);
+
+    boolean existsByWorkflowKeyAndStatus(String workflowKey, String status);
 }

@@ -5,11 +5,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.admin.bpmn.BpmnStepCatalog;
 import com.jk.apps.banking.fx.sor.admin.bpmn.Fr01BpmnDefinition;
+import com.jk.apps.banking.fx.sor.admin.bpmn.InitialDatasetCatalog;
 import com.jk.apps.banking.fx.sor.admin.dto.BpmnProcessView;
 import com.jk.apps.banking.fx.sor.admin.entity.WfExecLog;
+import com.jk.apps.banking.fx.sor.admin.entity.WfTaskExecLog;
 import com.jk.apps.banking.fx.sor.admin.entity.WorkflowDefinition;
 import com.jk.apps.banking.fx.sor.admin.repository.WfExecLogRepository;
+import com.jk.apps.banking.fx.sor.admin.repository.WfTaskExecLogRepository;
 import com.jk.apps.banking.fx.sor.admin.repository.WorkflowDefinitionRepository;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -33,16 +39,19 @@ public class BpmnWorkflowService {
 
     private final WorkflowDefinitionRepository workflowRepository;
     private final WfExecLogRepository execLogRepository;
+    private final WfTaskExecLogRepository taskExecLogRepository;
     private final QuoteScheduleClient quoteScheduleClient;
     private final ObjectMapper objectMapper;
 
     public BpmnWorkflowService(
             WorkflowDefinitionRepository workflowRepository,
             WfExecLogRepository execLogRepository,
+            WfTaskExecLogRepository taskExecLogRepository,
             QuoteScheduleClient quoteScheduleClient,
             ObjectMapper objectMapper) {
         this.workflowRepository = workflowRepository;
         this.execLogRepository = execLogRepository;
+        this.taskExecLogRepository = taskExecLogRepository;
         this.quoteScheduleClient = quoteScheduleClient;
         this.objectMapper = objectMapper;
     }
@@ -85,7 +94,11 @@ public class BpmnWorkflowService {
         vars.putIfAbsent("clientTier", "TIER_2");
         vars.putIfAbsent("ccyPair", "EURUSD");
         vars.putIfAbsent("confirmMacro", false);
-        validateStartCriteria(workflowKey, vars, triggeredBy);
+        if (InitialDatasetCatalog.isInitialDataWorkflow(workflowKey)) {
+            validateInitialDataStart(vars, triggeredBy);
+        } else {
+            validateStartCriteria(workflowKey, vars, triggeredBy);
+        }
 
         List<Map<String, Object>> taskRows = new ArrayList<>();
         for (BpmnStepCatalog.Step step : steps) {
@@ -133,6 +146,16 @@ public class BpmnWorkflowService {
     @Transactional(readOnly = true)
     public BpmnProcessView getProcess(UUID wfExecId) {
         return toView(require(wfExecId));
+    }
+
+    private void validateInitialDataStart(Map<String, Object> vars, String triggeredBy) {
+        String reason = String.valueOf(vars.getOrDefault("reason", "")).trim();
+        if (reason.length() < 8) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "business reason required (min 8 chars)");
+        }
+        if (triggeredBy == null || triggeredBy.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "triggeredBy required");
+        }
     }
 
     private void validateStartCriteria(String workflowKey, Map<String, Object> vars, String triggeredBy) {
@@ -203,6 +226,7 @@ public class BpmnWorkflowService {
                     return toView(log);
                 }
 
+                Map<String, Object> taskInput = new LinkedHashMap<>(variables);
                 try {
                     task.put("status", "RUNNING");
                     task.put("startedAt", Instant.now().toString());
@@ -210,11 +234,13 @@ public class BpmnWorkflowService {
                     task.put("detail", detail);
                     task.put("status", "COMPLETED");
                     task.put("completedAt", Instant.now().toString());
+                    recordTask(log, idx, task, taskInput, null);
                     userAction = false; // subsequent SERVICE steps auto-run
                 } catch (Exception ex) {
                     task.put("status", "FAILED");
                     task.put("detail", ex.getMessage());
                     task.put("completedAt", Instant.now().toString());
+                    recordTask(log, idx, task, taskInput, ex.getMessage());
                     summary.put("variables", variables);
                     summary.put("tasks", tasks);
                     summary.put("currentTaskId", task.get("taskId"));
@@ -268,6 +294,37 @@ public class BpmnWorkflowService {
         log.setDurationMs(Math.max(0, now.toEpochMilli() - log.getStartedAt().toEpochMilli()));
         execLogRepository.save(log);
         return toView(log);
+    }
+
+    private String loadInitialCalendar(Map<String, Object> variables) {
+        List<Map<String, Object>> events = readSeed(InitialDatasetCatalog.ECONOMIC_CALENDAR_RESOURCE);
+        int upserted = 0;
+        for (Map<String, Object> event : events) {
+            quoteScheduleClient.upsertEconomicCalendar(event);
+            upserted++;
+        }
+        variables.put("calendarRowsLoaded", upserted);
+        return toJson(Map.of("source", InitialDatasetCatalog.ECONOMIC_CALENDAR_RESOURCE, "rowsUpserted", upserted));
+    }
+
+    private String verifyInitialCalendar(Map<String, Object> variables) {
+        int expected = ((Number) variables.getOrDefault("calendarRowsLoaded", 0)).intValue();
+        int found = quoteScheduleClient.listEconomicCalendar().size();
+        if (found < expected) {
+            throw new IllegalStateException(
+                    "calendar verify failed: expected at least " + expected + " rows, quote has " + found);
+        }
+        variables.put("calendarRowsVerified", found);
+        return toJson(Map.of("expectedAtLeast", expected, "foundInQuote", found));
+    }
+
+    private List<Map<String, Object>> readSeed(String resource) {
+        try (InputStream in = new ClassPathResource(resource).getInputStream()) {
+            return objectMapper.readValue(in, new TypeReference<>() {
+            });
+        } catch (IOException ex) {
+            throw new IllegalStateException("cannot read seed resource " + resource, ex);
+        }
     }
 
     private String executeStep(String workflowKey, String taskId, Map<String, Object> variables) {
@@ -355,8 +412,60 @@ public class BpmnWorkflowService {
                 variables.put("routeExecute", routed);
                 yield toJson(routed);
             }
+            case "task_init_load_calendar" -> loadInitialCalendar(variables);
+            case "task_init_verify_calendar" -> verifyInitialCalendar(variables);
             default -> "noop";
         };
+    }
+
+    /** Writes one wf_task_exec_log row per executed task: input snapshot, output or error, timings, audit. */
+    private void recordTask(
+            WfExecLog log, int seq, Map<String, Object> task, Map<String, Object> input, String error) {
+        Instant now = Instant.now();
+        String actor = log.getTriggeredBy();
+        Instant started = parseInstant(task.get("startedAt"));
+        Instant completed = parseInstant(task.get("completedAt"));
+
+        WfTaskExecLog row = new WfTaskExecLog();
+        row.setTaskExecId(UUID.randomUUID());
+        row.setWfExecId(log.getWfExecId());
+        row.setTaskSeq(seq);
+        row.setTaskId(String.valueOf(task.get("taskId")));
+        row.setTaskName(String.valueOf(task.get("name")));
+        row.setTaskType(String.valueOf(task.get("type")));
+        row.setStatus(String.valueOf(task.get("status")));
+        row.setInputJson(toJson(input));
+        row.setOutputJson(error == null ? asJsonOutput(task.get("detail")) : null);
+        row.setErrorDetails(error);
+        row.setStartedAt(started);
+        row.setCompletedAt(completed);
+        if (started != null && completed != null) {
+            row.setDurationMs(Math.max(0, completed.toEpochMilli() - started.toEpochMilli()));
+        }
+        row.setCreatedAt(now);
+        row.setCreatedBy(actor);
+        row.setUpdatedAt(now);
+        row.setUpdatedBy(actor);
+        taskExecLogRepository.save(row);
+    }
+
+    private String asJsonOutput(Object detail) {
+        String text = String.valueOf(detail);
+        if (text.startsWith("{") || text.startsWith("[")) {
+            return text;
+        }
+        return toJson(Map.of("message", text));
+    }
+
+    private Instant parseInstant(Object value) {
+        if (value == null) {
+            return null;
+        }
+        try {
+            return Instant.parse(String.valueOf(value));
+        } catch (Exception ex) {
+            return null;
+        }
     }
 
     private void persistRunning(WfExecLog log, Map<String, Object> summary, int batchesCompleted) {

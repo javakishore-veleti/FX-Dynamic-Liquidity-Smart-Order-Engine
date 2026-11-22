@@ -25,6 +25,10 @@ public final class BpmnStepCatalog {
             new Step("task_publish_hint", "Publish regime-shifted + last-look hint", TaskType.SERVICE),
             new Step("task_apply_route_penalty", "Apply last-look penalty (route-exec)", TaskType.SERVICE));
 
+    private static final List<Step> INIT_ECONOMIC_CALENDAR = List.of(
+            new Step("task_init_load_calendar", "Load economic calendar rows into quote", TaskType.SERVICE),
+            new Step("task_init_verify_calendar", "Verify calendar rows present in quote", TaskType.SERVICE));
+
     private static final Map<String, List<Step>> BY_KEY = Map.of(
             Fr01BpmnDefinition.PROCESS_KEY,
             FR01_ADMIN,
@@ -33,6 +37,8 @@ public final class BpmnStepCatalog {
                     new Step("task_regime_context", "Fetch regime context from quote", TaskType.SERVICE),
                     new Step("task_indicative", "Request indicative quote", TaskType.SERVICE),
                     new Step("task_route_execute", "Route-execute with last-look penalty", TaskType.SERVICE)),
+            InitialDatasetCatalog.ECONOMIC_CALENDAR_WORKFLOW,
+            INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",
             List.of(
                     new Step("task_regime_context", "Fetch retail-tier regime context", TaskType.SERVICE),

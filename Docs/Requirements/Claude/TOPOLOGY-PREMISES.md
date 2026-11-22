@@ -36,21 +36,21 @@ The repo owner supplied the text of both posts. Fetching the second URL directly
 
 | ID | Status | Evidence |
 |---|---|---|
-| P1 | PARTIAL | Tables `topology_network_edges`, `topology_ipc_edges`, `topology_trace_outliers` (changeset 001). They share one database, not separate partitions. Queries by layer exist (`/graph/network`, `/graph/ipc`, `/traces/outliers`). No merged union endpoint. |
-| P2 | MISSING | Only seed data (`002-topology-seed-demo.yaml`). The Kafka toggle exists (`kafka-enabled`) but no ingestion consumer for flow or IPC events was found. |
-| P3 | PARTIAL | REST, not gRPC. Depth and window parameters. No tier or domain filter and no pagination found. MCP server exists in `fx-topology-mcp-server`. |
-| P4 | MISSING | No intermediary concept (no matches for "intermediar"). The column `egress_lp_gateway` is an LP gateway, a different concept. |
-| P5 | MISSING | No staged pipeline. |
-| P6 | MISSING | No hashing or membership code for topology. |
-| P7 | MISSING | No reactive streams or bounded ingest queue. |
-| P8 | MISSING | No source-agreement logic. |
-| P9 | MISSING | No enrichment step. Tier and domain fields exist in some files but are not applied on write. |
-| P10 | PARTIAL | `topology_snapshots` table and `diff` endpoint (`/api/v1/topology/diff`) exist. No mutation history, no re-aggregation. |
-| P11 | PARTIAL | `POST /api/v1/topology/blast-radius` exists. No health overlay, no root-source ranking. |
-| P12 | ADOPTED | Process rule. Recorded in DESIGN §7.5. |
-| P13 | MISSING | No `last_seen` expiry. |
+| P1 | DONE — three layers built: network (flow-hop ingest), IPC (call ingest), trace (span ingest); merged view with agreement counts | Tables `topology_network_edges`, `topology_ipc_edges`, `topology_trace_outliers` (changeset 001). They share one database, not separate partitions. Queries by layer exist (`/graph/network`, `/graph/ipc`, `/traces/outliers`). No merged union endpoint. |
+| P2 | DONE — streaming ingest from Kafka topics, verified end to end locally | Only seed data (`002-topology-seed-demo.yaml`). The Kafka toggle exists (`kafka-enabled`) but no ingestion consumer for flow or IPC events was found. |
+| P3 | PARTIAL — REST API with depth, freshness and merged filters; no gRPC, no pagination | REST, not gRPC. Depth and window parameters. No tier or domain filter and no pagination found. MCP server exists in `fx-topology-mcp-server`. |
+| P4 | DONE — intermediary resolution, six unit tests; used by flow-hop ingest | No intermediary concept (no matches for "intermediar"). The column `egress_lp_gateway` is an LP gateway, a different concept. |
+| P5 | PARTIAL — staged path built: local queue (stage 1), ownership shuffle by key (stage 2), resolve and write (stage 3). Skew measurement pending | No staged pipeline. |
+| P6 | DONE — consistent hash ring with virtual nodes and ingest ownership; config-driven membership | No hashing or membership code for topology. |
+| P7 | DONE — bounded queue; the Kafka consumer blocks when full; refusals counted | No reactive streams or bounded ingest queue. |
+| P8 | PARTIAL — every edge carries its layer; merged view shows agreement counts | No source-agreement logic. |
+| P9 | DONE — service catalog enriches each edge on write (tier, domain, owner) | No enrichment step. Tier and domain fields exist in some files but are not applied on write. |
+| P10 | PARTIAL — 5-minute bucketed history and time-travel query; no property-level mutation log | `topology_snapshots` table and `diff` endpoint (`/api/v1/topology/diff`) exist. No mutation history, no re-aggregation. |
+| P11 | DONE — health overlay (circuit state and latency threshold) and root-source ranking with endpoint | `POST /api/v1/topology/blast-radius` exists. No health overlay, no root-source ranking. |
+| P12 | ADOPTED — process rule in DESIGN §7.5 | Process rule. Recorded in DESIGN §7.5. |
+| P13 | DONE — freshness at ingest (stale hops dropped and counted) and on read | No `last_seen` expiry. |
 
-**Summary:** the repo has the data model and read APIs for the three layers, and a blast-radius query. It does not ingest, resolve, enrich, or expire edges. Everything the topology answers today comes from seed data.
+**Summary (2026-11-22):** all three layers have ingest paths and a merged view. Edges are resolved, enriched, expired, partitioned across instances, and checked for root causes. Remaining: a measured skew test (P5), gRPC and pagination (P3), and a property-level mutation log (P10).
 
 ---
 

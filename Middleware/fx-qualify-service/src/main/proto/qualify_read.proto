@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+// Read-only qualify API (settlement policies and credit lines). REST and gRPC kept in step.
+package fx.qualify.v1;
+
+option java_multiple_files = true;
+option java_package = "com.jk.apps.banking.fx.sor.qual.grpc.v1";
+option java_outer_classname = "QualifyReadProto";
+
+service QualifyRead {
+  rpc ListSettlementPolicies(Empty) returns (SettlementPolicyList);
+  rpc ListCreditLines(Empty) returns (CreditLineList);
+}
+
+message Empty {}
+
+message SettlementPolicy {
+  string ccy_pair = 1;
+  string tenor = 2;
+  bool cls_eligible = 3;
+  string cutoff_time_utc = 4;
+  string min_clip_usd = 5;
+  string max_clip_usd = 6;
+  bool restricted_flag = 7;
+}
+
+message SettlementPolicyList {
+  repeated SettlementPolicy policies = 1;
+}
+
+message CreditLine {
+  string client_id = 1;
+  string lp_id = 2;
+  string max_credit_usd = 3;
+  string utilized_usd = 4;
+  string reserved_usd = 5;
+}
+
+message CreditLineList {
+  repeated CreditLine lines = 1;
+}

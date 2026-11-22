@@ -281,7 +281,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | F10.0 Premises and gap analysis | Thirteen premises from both posts, each with current state | DONE (docs) |
 | F10.1 Intermediary resolution (P4) | `IntermediaryResolver`: pure function, six unit tests (single LB, pass-through, chain of two, sum across paths, dead end, empty) | DONE (tests pass) |
 | F10.2 Layer tag and merged view (P1, P8) | `LayerMerge` wired to `GET /api/v1/topology/graph/merged` (optional `freshMinutes`). Verified after restart: merged union with agreement counts | DONE (endpoint verified locally) |
-| F10.3 Enrichment at write (P9) | `EdgeEnrich`: tiers, domain, UNKNOWN when metadata missing; unit tested | DONE (tests pass) |
+| F10.3 Enrichment at write (P9) | Service catalog `master/service-catalog.json` (10 services: TIER_0 pricing, execution, risk; TIER_1 control and LP gateways; TIER_2 observability). Written on each network edge (`src_tier`, `dst_tier`, `domain`, changeset 002). Unit tested; topology restarted and healthy | DONE (verified locally) |
 | F10.4 Freshness window (P13) | `Freshness`: edges fade past the window; unit tested | DONE (tests pass) |
 | F10.5 Bounded ingest (P7) | `IngestQueue`: bounded, refusals counted, not silent; unit tested | DONE (tests pass) |
 | F10.6 Stream ingest (P2) | `FlowHopIngest` + `FlowHopListener`: topic `fx.topology.flow-hop.v1`, JSON `{src,dst,flows}`, bounded queue (blocks when full), 5-minute drain resolves and writes `topology_network_edges`. Unit tested (3). **Not yet run against Kafka.** Listener is off unless `fx.features.kafka-enabled=true` | DONE (unit); Kafka end-to-end NOT RUN |
@@ -303,4 +303,5 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 5. **P10 mutation history and re-aggregation:** deferred (F10.7).
 6. **IPC and trace ingest:** only flow-hop ingest exists. IPC and trace layers still have seed data only.
 | 2026-11-22 | F10.2 wired: merged endpoint verified after restart. Enrichment (F10.3) and freshness on the ingest path are still open: no metadata source yet | (this commit) |
+| 2026-11-22 | F10.3 wired: service catalog, enrichment on each edge write, schema changeset 002, tests. Topology healthy after restart | (this commit) |
 

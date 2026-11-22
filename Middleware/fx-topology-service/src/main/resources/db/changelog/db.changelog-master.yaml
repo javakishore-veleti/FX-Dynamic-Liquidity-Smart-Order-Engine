@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changes/001-topology-tables.yaml
   - include:
       file: db/changelog/changes/002-topology-seed-demo.yaml
+  - include:
+      file: db/changelog/changes/002-network-edge-enrichment.yaml

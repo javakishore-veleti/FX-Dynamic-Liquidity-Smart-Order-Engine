@@ -121,4 +121,20 @@ public class TopologyNetworkEdge {
     public void setObservedAt(Instant observedAt) {
         this.observedAt = observedAt;
     }
+
+    @Column(name = "src_tier", length = 16)
+    private String srcTier;
+
+    @Column(name = "dst_tier", length = 16)
+    private String dstTier;
+
+    @Column(name = "domain", length = 32)
+    private String domain;
+
+    public String getSrcTier() { return srcTier; }
+    public void setSrcTier(String srcTier) { this.srcTier = srcTier; }
+    public String getDstTier() { return dstTier; }
+    public void setDstTier(String dstTier) { this.dstTier = dstTier; }
+    public String getDomain() { return domain; }
+    public void setDomain(String domain) { this.domain = domain; }
 }

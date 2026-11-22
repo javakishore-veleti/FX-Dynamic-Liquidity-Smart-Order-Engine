@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: topology-002-network-edge-enrichment
+      author: fx-sor
+      comment: Tier and domain on each network edge, set at write time from the service catalog (premise P9).
+      changes:
+        - addColumn:
+            tableName: topology_network_edges
+            columns:
+              - column: {name: src_tier, type: varchar(16)}
+              - column: {name: dst_tier, type: varchar(16)}
+              - column: {name: domain, type: varchar(32)}

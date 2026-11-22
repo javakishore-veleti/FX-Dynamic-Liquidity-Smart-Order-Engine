@@ -1,0 +1,12 @@
+[
+  {"service": "fx-quote-service", "tier": "TIER_0", "domain": "PRICING", "owner": "pricing-desk"},
+  {"service": "fx-qualify-service", "tier": "TIER_0", "domain": "RISK", "owner": "risk-desk"},
+  {"service": "fx-route-exec-service", "tier": "TIER_0", "domain": "EXECUTION", "owner": "execution-desk"},
+  {"service": "fx-admin-service", "tier": "TIER_1", "domain": "CONTROL", "owner": "platform-team"},
+  {"service": "fx-agent-orchestrator-service", "tier": "TIER_2", "domain": "OBSERVABILITY", "owner": "platform-team"},
+  {"service": "fx-topology-service", "tier": "TIER_2", "domain": "OBSERVABILITY", "owner": "platform-team"},
+  {"service": "fx-topology-mcp-server", "tier": "TIER_2", "domain": "OBSERVABILITY", "owner": "platform-team"},
+  {"service": "lp-gateway-citi", "tier": "TIER_1", "domain": "LP_GATEWAY", "owner": "lp-connectivity"},
+  {"service": "lp-gateway-jpm", "tier": "TIER_1", "domain": "LP_GATEWAY", "owner": "lp-connectivity"},
+  {"service": "lp-gateway-gs", "tier": "TIER_1", "domain": "LP_GATEWAY", "owner": "lp-connectivity"}
+]

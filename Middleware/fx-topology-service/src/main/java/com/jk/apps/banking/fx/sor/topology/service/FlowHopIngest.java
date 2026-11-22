@@ -36,18 +36,22 @@ public class FlowHopIngest {
     private final TopologyNetworkEdgeRepository repository;
     private final IntermediaryResolver resolver;
     private final IngestQueue<FlowHop> queue;
+    private final EdgeEnrich enrich;
 
     @Autowired
     public FlowHopIngest(
             ObjectMapper mapper,
             TopologyNetworkEdgeRepository repository,
+            EdgeEnrich enrich,
             @Value("${fx.topology.intermediaries:}") List<String> intermediaries) {
-        this(mapper, repository, Set.copyOf(intermediaries), 10_000);
+        this(mapper, repository, enrich, Set.copyOf(intermediaries), 10_000);
     }
 
-    FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, Set<String> intermediaries, int capacity) {
+    FlowHopIngest(ObjectMapper mapper, TopologyNetworkEdgeRepository repository, EdgeEnrich enrich,
+                  Set<String> intermediaries, int capacity) {
         this.mapper = mapper;
         this.repository = repository;
+        this.enrich = enrich;
         this.resolver = new IntermediaryResolver(intermediaries);
         this.queue = new IngestQueue<>(capacity);
     }
@@ -97,6 +101,10 @@ public class FlowHopIngest {
             row.setSocketRetransmits(0);
             row.setFlowCount(e.flows());
             row.setObservedAt(now);
+            EdgeEnrich.Enriched meta = enrich.enrich(e.src(), e.dst());
+            row.setSrcTier(meta.srcTier());
+            row.setDstTier(meta.dstTier());
+            row.setDomain(meta.domain());
             repository.save(row);
         }
         return edges.size();

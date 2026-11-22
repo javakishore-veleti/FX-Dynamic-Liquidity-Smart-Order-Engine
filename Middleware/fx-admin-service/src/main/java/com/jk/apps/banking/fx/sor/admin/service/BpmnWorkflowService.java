@@ -97,7 +97,7 @@ public class BpmnWorkflowService {
         vars.putIfAbsent("clientTier", "TIER_2");
         vars.putIfAbsent("ccyPair", "EURUSD");
         vars.putIfAbsent("confirmMacro", false);
-        if (InitDataCatalog.isInitialDataWorkflow(workflowKey)) {
+        if (InitDataCatalog.PURPOSE.equals(def.getPurpose())) {
             validateInitialDataStart(vars, triggeredBy);
         } else {
             validateStartCriteria(workflowKey, vars, triggeredBy);

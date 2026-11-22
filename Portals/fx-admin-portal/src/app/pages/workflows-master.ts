@@ -12,6 +12,7 @@ type WorkflowDef = {
   portalScope: string;
   status: string;
   frId: string;
+  purpose: string;
 };
 
 @Component({
@@ -56,7 +57,7 @@ type WorkflowDef = {
                 <td class="small">{{ row.bpmnResource }}</td>
                 <td><span class="badge badge-fx">{{ row.status }}</span></td>
                 <td class="text-end">
-                  @if (isSeed(row.workflowKey)) {
+                  @if (isSeed(row)) {
                     <button class="btn btn-fx btn-sm me-2"
                             [disabled]="seedBusy() === row.workflowKey"
                             (click)="runSeed(row.workflowKey)">
@@ -89,9 +90,9 @@ export class WorkflowsMasterPage implements OnInit {
   readonly seedBusy = signal<string | null>(null);
   readonly seedMessage = signal<Record<string, { ok: boolean; text: string }>>({});
 
-  /** Seed workflows are the INIT_* rows. Each runs once from this button and takes no typed input. */
-  isSeed(workflowKey: string): boolean {
-    return workflowKey.startsWith('INIT_');
+  /** Seed workflows are filtered by purpose. Each runs once from this button and takes no typed input. */
+  isSeed(row: WorkflowDef): boolean {
+    return row.purpose === 'INITIAL_DATA_SETUP';
   }
 
   runSeed(workflowKey: string): void {

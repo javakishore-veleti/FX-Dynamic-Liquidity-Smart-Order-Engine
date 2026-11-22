@@ -37,6 +37,10 @@ public class WorkflowDefinition {
     @Column(name = "fr_id", length = 20)
     private String frId;
 
+    /** FUNCTIONAL (default) or INITIAL_DATA_SETUP. Filters seed workflows; never derived from the key. */
+    @Column(name = "purpose", length = 40, nullable = false)
+    private String purpose = "FUNCTIONAL";
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -94,6 +98,14 @@ public class WorkflowDefinition {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getPurpose() {
+        return purpose;
+    }
+
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
 
     public String getFrId() {

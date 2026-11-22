@@ -6,6 +6,8 @@ import java.util.Optional;
 /** Initial Data datasets. Each dataset is loaded once, by its setup workflow, from a button click. */
 public final class InitDataCatalog {
 
+    /** workflows.purpose value that marks a seed workflow. */
+    public static final String PURPOSE = "INITIAL_DATA_SETUP";
     public static final String PAIRS_WORKFLOW = "INIT_CURRENCY_PAIRS";
     public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
     public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";

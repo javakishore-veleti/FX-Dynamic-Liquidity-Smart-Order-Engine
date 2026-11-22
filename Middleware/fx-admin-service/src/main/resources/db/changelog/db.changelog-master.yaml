@@ -9,3 +9,5 @@ databaseChangeLog:
       file: db/changelog/changes/004-initial-data-workflows.yaml
   - include:
       file: db/changelog/changes/005-currency-pairs-workflow.yaml
+  - include:
+      file: db/changelog/changes/006-workflows-purpose.yaml

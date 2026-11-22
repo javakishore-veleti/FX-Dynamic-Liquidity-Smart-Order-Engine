@@ -1,0 +1,22 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-006-workflows-purpose
+      author: fx-sor
+      comment: Add purpose to workflows. Initial Data setup workflows are filtered by purpose, not by key prefix.
+      changes:
+        - addColumn:
+            tableName: workflows
+            columns:
+              - column:
+                  name: purpose
+                  type: varchar(40)
+                  defaultValue: FUNCTIONAL
+                  constraints:
+                    nullable: false
+        - update:
+            tableName: workflows
+            columns:
+              - column:
+                  name: purpose
+                  value: INITIAL_DATA_SETUP
+            where: workflow_key in ('INIT_CURRENCY_PAIRS', 'INIT_ECONOMIC_CALENDAR')

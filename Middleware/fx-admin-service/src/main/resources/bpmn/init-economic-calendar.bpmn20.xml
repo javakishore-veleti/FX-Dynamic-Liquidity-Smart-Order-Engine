@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_CAL">
+  <process id="INIT_ECONOMIC_CALENDAR" name="Initial Data - Economic Calendar" isExecutable="true">
+    <startEvent id="start_cal" name="Start"/>
+    <sequenceFlow id="f_cal_1" sourceRef="start_cal" targetRef="task_init_load_calendar"/>
+    <serviceTask id="task_init_load_calendar" name="Load economic calendar rows into quote"/>
+    <sequenceFlow id="f_cal_2" sourceRef="task_init_load_calendar" targetRef="task_init_verify_calendar"/>
+    <serviceTask id="task_init_verify_calendar" name="Verify calendar rows present in quote"/>
+    <sequenceFlow id="f_cal_3" sourceRef="task_init_verify_calendar" targetRef="end_cal"/>
+    <endEvent id="end_cal" name="Done"/>
+  </process>
+</definitions>

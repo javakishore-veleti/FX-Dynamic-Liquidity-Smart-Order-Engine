@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/initial-data"
+             id="Definitions_INIT_PAIRS">
+  <process id="INIT_CURRENCY_PAIRS" name="Initial Data - Currency Pairs" isExecutable="true">
+    <startEvent id="start_pairs" name="Start"/>
+    <sequenceFlow id="f_pairs_1" sourceRef="start_pairs" targetRef="task_init_load_pairs"/>
+    <serviceTask id="task_init_load_pairs" name="Load currency pair master into quote"/>
+    <sequenceFlow id="f_pairs_2" sourceRef="task_init_load_pairs" targetRef="task_init_verify_pairs"/>
+    <serviceTask id="task_init_verify_pairs" name="Verify currency pair count in quote"/>
+    <sequenceFlow id="f_pairs_3" sourceRef="task_init_verify_pairs" targetRef="end_pairs"/>
+    <endEvent id="end_pairs" name="Done"/>
+  </process>
+</definitions>

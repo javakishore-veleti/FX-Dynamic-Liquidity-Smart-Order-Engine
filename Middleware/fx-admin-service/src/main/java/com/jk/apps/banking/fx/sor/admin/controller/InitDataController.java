@@ -26,14 +26,13 @@ public class InitDataController {
         return initDataFacade.listDatasets();
     }
 
-    /** Button click: runs the dataset's setup workflow once. Body: {"reason": "...", "triggeredBy": "..."}. */
+    /** Runs the dataset's setup workflow once. Seed loads take no typed input; body may carry triggeredBy only. */
     @PostMapping("/{datasetKey}/setup")
     public InitDataView setup(
             @PathVariable("datasetKey") String datasetKey,
             @RequestBody(required = false) Map<String, Object> body) {
         Map<String, Object> vars = body == null ? Map.of() : body;
-        String reason = vars.get("reason") == null ? "" : String.valueOf(vars.get("reason"));
         String triggeredBy = vars.get("triggeredBy") == null ? "ADMIN_PORTAL" : String.valueOf(vars.get("triggeredBy"));
-        return initDataFacade.setup(datasetKey, reason, triggeredBy);
+        return initDataFacade.setup(datasetKey, triggeredBy);
     }
 }

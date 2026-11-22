@@ -152,10 +152,6 @@ public class BpmnWorkflowService {
     }
 
     private void validateInitialDataStart(Map<String, Object> vars, String triggeredBy) {
-        String reason = String.valueOf(vars.getOrDefault("reason", "")).trim();
-        if (reason.length() < 8) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "business reason required (min 8 chars)");
-        }
         if (triggeredBy == null || triggeredBy.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "triggeredBy required");
         }

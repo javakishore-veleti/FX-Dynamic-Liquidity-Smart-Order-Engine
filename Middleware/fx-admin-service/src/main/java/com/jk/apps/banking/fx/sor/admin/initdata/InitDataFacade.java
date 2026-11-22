@@ -45,7 +45,7 @@ public class InitDataFacade {
     }
 
     @Transactional
-    public InitDataView setup(String datasetKey, String reason, String triggeredBy) {
+    public InitDataView setup(String datasetKey, String triggeredBy) {
         Dataset dataset = InitDataCatalog.byKey(datasetKey)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "unknown dataset " + datasetKey));
         if (execLogRepository.existsByWorkflowKeyAndStatus(dataset.workflowKey(), COMPLETED)) {
@@ -55,7 +55,6 @@ public class InitDataFacade {
             throw new ResponseStatusException(HttpStatus.CONFLICT, dataset.title() + " setup is already running");
         }
         Map<String, Object> variables = new LinkedHashMap<>();
-        variables.put("reason", reason == null ? "" : reason);
         variables.put("triggeredBy", triggeredBy);
         bpmnWorkflowService.start(dataset.workflowKey(), variables, triggeredBy);
         return toView(dataset);

@@ -7,6 +7,8 @@ import { PolicyStudioPage } from './pages/policy-studio';
 import { SyntheticPage } from './pages/synthetic';
 import { AgentsPage } from './pages/agents';
 import { SreDashboardsPage } from './pages/sre-dashboards';
+import { WorkflowsMasterPage } from './pages/workflows-master';
+import { WorkflowsExecutionsPage } from './pages/workflows-executions';
 
 export const routes: Routes = [
   {
@@ -18,6 +20,9 @@ export const routes: Routes = [
       { path: 'topology', component: TopologyPage },
       { path: 'incident-rca', component: IncidentRcaPage },
       { path: 'policy-studio', component: PolicyStudioPage },
+      { path: 'workflows', pathMatch: 'full', redirectTo: 'workflows/master' },
+      { path: 'workflows/master', component: WorkflowsMasterPage },
+      { path: 'workflows/executions', component: WorkflowsExecutionsPage },
       { path: 'synthetic', component: SyntheticPage },
       { path: 'agents', component: AgentsPage },
       { path: 'sre-dashboards', component: SreDashboardsPage },

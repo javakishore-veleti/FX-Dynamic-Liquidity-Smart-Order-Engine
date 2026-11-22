@@ -15,6 +15,8 @@ public class RouteExecuteResponse {
     private BigDecimal slippageBps;
     private List<ChildSplitDto> childSplits = new ArrayList<>();
     private boolean idempotentReplay;
+    private String sessionRegime;
+    private BigDecimal lastLookPenaltyWeight;
 
     public UUID getOrderId() {
         return orderId;
@@ -78,5 +80,21 @@ public class RouteExecuteResponse {
 
     public void setIdempotentReplay(boolean idempotentReplay) {
         this.idempotentReplay = idempotentReplay;
+    }
+
+    public String getSessionRegime() {
+        return sessionRegime;
+    }
+
+    public void setSessionRegime(String sessionRegime) {
+        this.sessionRegime = sessionRegime;
+    }
+
+    public BigDecimal getLastLookPenaltyWeight() {
+        return lastLookPenaltyWeight;
+    }
+
+    public void setLastLookPenaltyWeight(BigDecimal lastLookPenaltyWeight) {
+        this.lastLookPenaltyWeight = lastLookPenaltyWeight;
     }
 }

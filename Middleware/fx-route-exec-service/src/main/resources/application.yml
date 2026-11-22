@@ -36,6 +36,8 @@ server:
   address: ${SERVER_ADDRESS:0.0.0.0}
 
 fx:
+  quote:
+    base-url: ${FX_QUOTE_BASE_URL:http://127.0.0.1:8081}
   features:
     redis-enabled: false
     kafka-enabled: false
@@ -128,6 +130,11 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: fx-route-exec-fr01
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: latest
 fx:
   features:
     kafka-enabled: true

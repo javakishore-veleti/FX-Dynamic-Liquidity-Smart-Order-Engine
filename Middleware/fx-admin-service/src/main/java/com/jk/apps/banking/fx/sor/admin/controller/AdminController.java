@@ -1,5 +1,6 @@
 package com.jk.apps.banking.fx.sor.admin.controller;
 
+import com.jk.apps.banking.fx.sor.admin.dto.BpmnProcessView;
 import com.jk.apps.banking.fx.sor.admin.dto.CacheInvalidateRequest;
 import com.jk.apps.banking.fx.sor.admin.dto.CreditOverrideRequest;
 import com.jk.apps.banking.fx.sor.admin.dto.LoadSimRequest;
@@ -7,7 +8,11 @@ import com.jk.apps.banking.fx.sor.admin.dto.SyntheticGenerateRequest;
 import com.jk.apps.banking.fx.sor.admin.dto.VenueHaltRequest;
 import com.jk.apps.banking.fx.sor.admin.dto.WorkflowAcceptedResponse;
 import com.jk.apps.banking.fx.sor.admin.dto.WorkflowStatusResponse;
+import com.jk.apps.banking.fx.sor.admin.entity.WorkflowDefinition;
 import com.jk.apps.banking.fx.sor.admin.service.AdminWorkflowService;
+import com.jk.apps.banking.fx.sor.admin.service.BpmnWorkflowService;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -29,9 +34,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminController {
 
     private final AdminWorkflowService adminWorkflowService;
+    private final BpmnWorkflowService bpmnWorkflowService;
 
-    public AdminController(AdminWorkflowService adminWorkflowService) {
+    public AdminController(AdminWorkflowService adminWorkflowService, BpmnWorkflowService bpmnWorkflowService) {
         this.adminWorkflowService = adminWorkflowService;
+        this.bpmnWorkflowService = bpmnWorkflowService;
     }
 
     @PostMapping("/synthetic/datasets/generate")
@@ -50,6 +57,39 @@ public class AdminController {
         return ResponseEntity.status(HttpStatus.ACCEPTED).body(body);
     }
 
+    /** Master BPMN workflow catalog (table: workflows). */
+    @GetMapping("/workflow-definitions")
+    public List<WorkflowDefinition> listWorkflowDefinitions(
+            @RequestParam(name = "portalScope", required = false) String portalScope) {
+        return bpmnWorkflowService.listMaster(portalScope);
+    }
+
+    @GetMapping("/workflow-definitions/{workflowKey}")
+    public WorkflowDefinition getWorkflowDefinition(@PathVariable("workflowKey") String workflowKey) {
+        return bpmnWorkflowService.getMaster(workflowKey);
+    }
+
+    /** Start a BPMN process — always creates a wf_exec_log row. */
+    @PostMapping("/bpmn/{workflowKey}/start")
+    public BpmnProcessView startBpmn(
+            @PathVariable("workflowKey") String workflowKey,
+            @RequestBody(required = false) Map<String, Object> body) {
+        Map<String, Object> vars = body == null ? Map.of() : body;
+        String triggeredBy = vars.get("triggeredBy") == null ? "ADMIN_PORTAL" : String.valueOf(vars.get("triggeredBy"));
+        return bpmnWorkflowService.start(workflowKey, vars, triggeredBy);
+    }
+
+    @GetMapping("/bpmn/executions/{wfExecId}")
+    public BpmnProcessView getBpmnExecution(@PathVariable("wfExecId") UUID wfExecId) {
+        return bpmnWorkflowService.getProcess(wfExecId);
+    }
+
+    @PostMapping("/bpmn/executions/{wfExecId}/complete-task")
+    public BpmnProcessView completeBpmnTask(
+            @PathVariable("wfExecId") UUID wfExecId, @RequestBody(required = false) Map<String, Object> body) {
+        return bpmnWorkflowService.completeCurrentTask(wfExecId, body == null ? Map.of() : body);
+    }
+
     @GetMapping("/workflows/{wfExecId}")
     public WorkflowStatusResponse getWorkflow(@PathVariable("wfExecId") UUID wfExecId) {
         return adminWorkflowService.getWorkflow(wfExecId);
@@ -59,9 +99,20 @@ public class AdminController {
     public Page<WorkflowStatusResponse> listWorkflows(
             @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "workflowType", required = false) String workflowType,
+            @RequestParam(name = "workflowKey", required = false) String workflowKey,
             @RequestParam(name = "triggeredBy", required = false) String triggeredBy,
             @RequestParam(name = "page", defaultValue = "0") int page,
             @RequestParam(name = "size", defaultValue = "20") int size) {
+        if (workflowKey != null && !workflowKey.isBlank()) {
+            return bpmnWorkflowService
+                    .listExecutions(
+                            status,
+                            workflowType,
+                            workflowKey,
+                            triggeredBy,
+                            PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "startedAt")))
+                    .map(adminWorkflowService::toStatusPublic);
+        }
         return adminWorkflowService.listWorkflows(
                 status,
                 workflowType,
@@ -98,34 +149,43 @@ public class AdminController {
         return adminWorkflowService.haltVenue(lpId, request == null ? new VenueHaltRequest() : request);
     }
 
-    /** FR-01 — Policy Studio proxies to quote (zero-sharing via HTTP). */
     @GetMapping("/spread-schedules")
-    public java.util.List<java.util.Map<String, Object>> listSpreadSchedules() {
+    public List<Map<String, Object>> listSpreadSchedules() {
         return adminWorkflowService.listSpreadSchedules();
     }
 
     @PostMapping("/spread-schedules/draft")
-    public java.util.Map<String, Object> draftSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+    public Map<String, Object> draftSpreadSchedule(@RequestBody Map<String, Object> body) {
         return adminWorkflowService.draftSpreadSchedule(body);
     }
 
     @PostMapping("/spread-schedules/submit")
-    public java.util.Map<String, Object> submitSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+    public Map<String, Object> submitSpreadSchedule(@RequestBody Map<String, Object> body) {
         return adminWorkflowService.submitSpreadSchedule(body);
     }
 
     @PostMapping("/spread-schedules/approve")
-    public java.util.Map<String, Object> approveSpreadSchedule(@RequestBody java.util.Map<String, Object> body) {
+    public Map<String, Object> approveSpreadSchedule(@RequestBody Map<String, Object> body) {
         return adminWorkflowService.approveSpreadSchedule(body);
     }
 
     @PostMapping("/macro-flag")
-    public java.util.Map<String, Object> setMacroFlag(@RequestBody(required = false) java.util.Map<String, Object> body) {
-        return adminWorkflowService.setMacroFlag(body == null ? java.util.Map.of() : body);
+    public Map<String, Object> setMacroFlag(@RequestBody(required = false) Map<String, Object> body) {
+        return adminWorkflowService.setMacroFlag(body == null ? Map.of() : body);
     }
 
     @DeleteMapping("/macro-flag")
-    public java.util.Map<String, Object> clearMacroFlag() {
+    public Map<String, Object> clearMacroFlag() {
         return adminWorkflowService.clearMacroFlag();
+    }
+
+    @GetMapping("/macro-flag")
+    public Map<String, Object> getMacroFlag() {
+        return adminWorkflowService.getMacroFlag();
+    }
+
+    @GetMapping("/economic-calendar")
+    public List<Map<String, Object>> economicCalendar() {
+        return adminWorkflowService.listEconomicCalendar();
     }
 }

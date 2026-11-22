@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { API } from '../api';
 
+type BpmnTask = { taskId: string; name: string; type: string; status: string };
+type BpmnView = { wfExecId: string; processKey: string; status: string; tasks: BpmnTask[] };
+
 @Component({
   selector: 'app-convert',
   imports: [FormsModule],
@@ -11,10 +14,13 @@ import { API } from '../api';
       <div>
         <h1 class="h3 mb-1">All-In Rate Visualizer · FR-01</h1>
         <p class="mb-0" style="color: var(--fx-ink-soft)">
-          Live retail-tier markup from quote {{ api.quote }}
+          Live retail-tier markup from quote {{ api.quote }} · BPMN on admin {{ api.admin }}
         </p>
       </div>
-      <button class="btn btn-fx btn-sm" (click)="refresh()">Refresh</button>
+      <div class="d-flex gap-2">
+        <button class="btn btn-fx-outline btn-sm" (click)="refresh()">Refresh</button>
+        <button class="btn btn-fx btn-sm" (click)="runBpmn()">Run convert BPMN</button>
+      </div>
     </div>
 
     @if (error()) {
@@ -68,6 +74,21 @@ import { API } from '../api';
         </div>
       </div>
     </div>
+
+    @if (bpmn(); as proc) {
+      <div class="fx-card mt-3">
+        <h2 class="h5 mb-2">BPMN task view · {{ proc.processKey }}</h2>
+        <p class="small mb-3">wfExecId <code>{{ proc.wfExecId }}</code> · {{ proc.status }}</p>
+        <ol class="list-group list-group-numbered">
+          @for (t of proc.tasks; track t.taskId) {
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{{ t.name }}</span>
+              <span class="badge badge-fx">{{ t.status }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    }
   `,
 })
 export class ConvertPage implements OnInit {
@@ -77,6 +98,7 @@ export class ConvertPage implements OnInit {
   tier = 'TIER_3';
   readonly quote = signal<any | null>(null);
   readonly regime = signal<any | null>(null);
+  readonly bpmn = signal<BpmnView | null>(null);
   readonly error = signal<string | null>(null);
 
   ngOnInit(): void {
@@ -105,6 +127,24 @@ export class ConvertPage implements OnInit {
       .subscribe({
         next: (q) => this.quote.set(q),
         error: (err) => this.error.set(`Indicative failed: ${err.message || err.status}`),
+      });
+  }
+
+  runBpmn(): void {
+    this.http
+      .post<BpmnView>(`${API.admin}/api/v1/admin/bpmn/FR01_RETAIL_CONVERT/start`, {
+        triggeredBy: 'RETAIL_PORTAL',
+        clientTier: this.tier,
+        ccyPair: 'EURUSD',
+        clientId: 'RETAIL-1',
+        notional: this.amount,
+      })
+      .subscribe({
+        next: (view) => {
+          this.bpmn.set(view);
+          this.refresh();
+        },
+        error: (err) => this.error.set(`BPMN failed: ${err.message || err.status}`),
       });
   }
 }

@@ -102,6 +102,19 @@ public class AdminWorkflowService {
         return result;
     }
 
+    public Map<String, Object> getMacroFlag() {
+        return quoteScheduleClient.getMacroFlag();
+    }
+
+    public List<Map<String, Object>> listEconomicCalendar() {
+        return quoteScheduleClient.listEconomicCalendar();
+    }
+
+    /** Exposed for BPMN execution list mapping. */
+    public WorkflowStatusResponse toStatusPublic(WfExecLog log) {
+        return toStatus(log);
+    }
+
     public WorkflowAcceptedResponse generateSynthetic(SyntheticGenerateRequest request) {
         int numBatches = request.getNumBatches() == null ? 10 : request.getNumBatches();
         int batchSize = request.getBatchSize() == null ? 1000 : request.getBatchSize();
@@ -426,6 +439,7 @@ public class AdminWorkflowService {
         WorkflowStatusResponse response = new WorkflowStatusResponse();
         response.setWfExecId(log.getWfExecId());
         response.setWorkflowType(log.getWorkflowType());
+        response.setWorkflowKey(log.getWorkflowKey());
         response.setStatus(log.getStatus());
         response.setStartedAt(log.getStartedAt());
         response.setCompletedAt(log.getCompletedAt());

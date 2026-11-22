@@ -21,4 +21,6 @@ public interface WfExecLogRepository extends JpaRepository<WfExecLog, UUID> {
             @Param("workflowType") String workflowType,
             @Param("triggeredBy") String triggeredBy,
             Pageable pageable);
+
+    Page<WfExecLog> findByWorkflowKey(String workflowKey, Pageable pageable);
 }

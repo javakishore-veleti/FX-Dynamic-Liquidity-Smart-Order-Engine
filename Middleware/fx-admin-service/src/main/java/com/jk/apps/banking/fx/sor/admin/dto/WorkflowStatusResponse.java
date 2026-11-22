@@ -7,6 +7,7 @@ public class WorkflowStatusResponse {
 
     private UUID wfExecId;
     private String workflowType;
+    private String workflowKey;
     private String status;
     private Instant startedAt;
     private Instant completedAt;
@@ -29,6 +30,14 @@ public class WorkflowStatusResponse {
 
     public void setWorkflowType(String workflowType) {
         this.workflowType = workflowType;
+    }
+
+    public String getWorkflowKey() {
+        return workflowKey;
+    }
+
+    public void setWorkflowKey(String workflowKey) {
+        this.workflowKey = workflowKey;
     }
 
     public String getStatus() {

@@ -1,0 +1,117 @@
+databaseChangeLog:
+  - changeSet:
+      id: admin-002-workflows-master
+      author: fx-sor
+      comment: Master BPMN workflow catalog — one row per process definition
+      changes:
+        - createTable:
+            tableName: workflows
+            columns:
+              - column:
+                  name: workflow_key
+                  type: varchar(80)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_workflows
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(200)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: description
+                  type: clob
+              - column:
+                  name: bpmn_resource
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: varchar(20)
+                  defaultValue: "1.0"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: portal_scope
+                  type: varchar(40)
+                  defaultValue: ADMIN
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar(20)
+                  defaultValue: ACTIVE
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fr_id
+                  type: varchar(20)
+              - column:
+                  name: created_at
+                  type: timestamp with time zone
+                  defaultValueComputed: CURRENT_TIMESTAMP
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: admin-002b-seed-fr01-workflow
+      author: fx-sor
+      comment: Seed FR-01 Session & Regime Guardrails BPMN definition
+      changes:
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: FR01_SESSION_REGIME_GUARDRAILS }
+              - column: { name: name, value: "FR-01 Session & Regime Guardrails" }
+              - column:
+                  name: description
+                  value: "Detect session/macro regime, desk-confirm MACRO_NEWS, tighten markup, publish last-look hint, apply route-exec penalty"
+              - column: { name: bpmn_resource, value: bpmn/fr01-session-regime-guardrails.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: ADMIN }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: FR-01 }
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: FR01_CORPORATE_QUOTE_ROUTE }
+              - column: { name: name, value: "FR-01 Corporate Quote → Route" }
+              - column:
+                  name: description
+                  value: "Corporate blotter indicative + regime context + route-execute with last-look penalty"
+              - column: { name: bpmn_resource, value: bpmn/fr01-corporate-quote-route.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: CORPORATE }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: FR-01 }
+        - insert:
+            tableName: workflows
+            columns:
+              - column: { name: workflow_key, value: FR01_RETAIL_CONVERT }
+              - column: { name: name, value: "FR-01 Retail Convert" }
+              - column:
+                  name: description
+                  value: "Retail convert all-in markup under session/macro regime + optional route"
+              - column: { name: bpmn_resource, value: bpmn/fr01-retail-convert.bpmn20.xml }
+              - column: { name: version, value: "1.0" }
+              - column: { name: portal_scope, value: RETAIL }
+              - column: { name: status, value: ACTIVE }
+              - column: { name: fr_id, value: FR-01 }
+  - changeSet:
+      id: admin-002c-wf-exec-log-workflow-key
+      author: fx-sor
+      comment: Link each execution to master workflows.workflow_key
+      changes:
+        - addColumn:
+            tableName: wf_exec_log
+            columns:
+              - column:
+                  name: workflow_key
+                  type: varchar(80)
+        - createIndex:
+            tableName: wf_exec_log
+            indexName: idx_wf_exec_log_workflow_key
+            columns:
+              - column:
+                  name: workflow_key

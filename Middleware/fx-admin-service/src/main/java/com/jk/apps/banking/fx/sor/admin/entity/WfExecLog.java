@@ -19,6 +19,10 @@ public class WfExecLog {
     @Column(name = "workflow_type", length = 50, nullable = false)
     private String workflowType;
 
+    /** FK-style link to master {@code workflows.workflow_key} for BPMN definitions. */
+    @Column(name = "workflow_key", length = 80)
+    private String workflowKey;
+
     @Lob
     @Column(name = "dataset_types")
     private String datasetTypes;
@@ -79,6 +83,14 @@ public class WfExecLog {
 
     public void setWorkflowType(String workflowType) {
         this.workflowType = workflowType;
+    }
+
+    public String getWorkflowKey() {
+        return workflowKey;
+    }
+
+    public void setWorkflowKey(String workflowKey) {
+        this.workflowKey = workflowKey;
     }
 
     public String getDatasetTypes() {

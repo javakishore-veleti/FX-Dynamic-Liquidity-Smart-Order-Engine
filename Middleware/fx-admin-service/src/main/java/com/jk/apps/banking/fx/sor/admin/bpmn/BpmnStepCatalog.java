@@ -1,0 +1,48 @@
+package com.jk.apps.banking.fx.sor.admin.bpmn;
+
+import java.util.List;
+import java.util.Map;
+
+/** Step catalogs keyed by workflows.workflow_key (master list). */
+public final class BpmnStepCatalog {
+
+    public enum TaskType {
+        SERVICE,
+        USER,
+        GATEWAY
+    }
+
+    public record Step(String taskId, String name, TaskType type) {
+    }
+
+    private static final List<Step> FR01_ADMIN = List.of(
+            new Step("task_detect_session", "Detect session regime (clock)", TaskType.SERVICE),
+            new Step("task_scan_calendar", "Scan economic calendar (FOMC/NFP/ECB)", TaskType.SERVICE),
+            new Step("gateway_macro", "Macro window active?", TaskType.GATEWAY),
+            new Step("task_confirm_macro", "Desk confirm arm MACRO_NEWS_HIGH", TaskType.USER),
+            new Step("task_arm_macro", "Arm macro flag on quote", TaskType.SERVICE),
+            new Step("task_resolve_markup", "Resolve markup × news_multiplier", TaskType.SERVICE),
+            new Step("task_publish_hint", "Publish regime-shifted + last-look hint", TaskType.SERVICE),
+            new Step("task_apply_route_penalty", "Apply last-look penalty (route-exec)", TaskType.SERVICE));
+
+    private static final Map<String, List<Step>> BY_KEY = Map.of(
+            Fr01BpmnDefinition.PROCESS_KEY,
+            FR01_ADMIN,
+            "FR01_CORPORATE_QUOTE_ROUTE",
+            List.of(
+                    new Step("task_regime_context", "Fetch regime context from quote", TaskType.SERVICE),
+                    new Step("task_indicative", "Request indicative quote", TaskType.SERVICE),
+                    new Step("task_route_execute", "Route-execute with last-look penalty", TaskType.SERVICE)),
+            "FR01_RETAIL_CONVERT",
+            List.of(
+                    new Step("task_regime_context", "Fetch retail-tier regime context", TaskType.SERVICE),
+                    new Step("task_indicative", "All-in indicative convert quote", TaskType.SERVICE),
+                    new Step("task_route_execute", "Optional route-execute (retail notional)", TaskType.SERVICE)));
+
+    private BpmnStepCatalog() {
+    }
+
+    public static List<Step> stepsFor(String workflowKey) {
+        return BY_KEY.getOrDefault(workflowKey, List.of());
+    }
+}

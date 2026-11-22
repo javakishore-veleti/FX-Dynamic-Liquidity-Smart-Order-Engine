@@ -1,5 +1,6 @@
 package com.jk.apps.banking.fx.sor.quote.controller;
 
+import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteRequest;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.MacroFlagRequest;
@@ -126,5 +127,11 @@ public class QuoteController {
     @GetMapping("/macro-flag")
     public MacroFlagResponse getMacroFlag() {
         return quoteService.macroStatus();
+    }
+
+    /** Published FOMC/NFP/ECB windows — visible in Admin Policy Studio / BPMN scan task. */
+    @GetMapping("/economic-calendar")
+    public List<EconomicCalendarEventDto> economicCalendar() {
+        return quoteService.economicCalendar();
     }
 }

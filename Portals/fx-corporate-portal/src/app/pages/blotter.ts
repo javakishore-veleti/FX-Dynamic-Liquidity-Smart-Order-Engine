@@ -21,6 +21,14 @@ type RegimeContext = {
   sampleMarkupBps: number;
 };
 
+type BpmnTask = { taskId: string; name: string; type: string; status: string; detail?: string };
+type BpmnView = {
+  wfExecId: string;
+  processKey: string;
+  status: string;
+  tasks: BpmnTask[];
+};
+
 @Component({
   selector: 'app-blotter',
   imports: [FormsModule],
@@ -29,7 +37,7 @@ type RegimeContext = {
       <div>
         <h1 class="h3 mb-1">Multi-LP Depth Blotter · FR-01</h1>
         <p class="mb-0" style="color: var(--fx-ink-soft)">
-          Live indicative from quote {{ api.quote }} · session markup applied
+          Live indicative from quote {{ api.quote }} · BPMN runs logged on admin {{ api.admin }}
         </p>
       </div>
       <div class="d-flex gap-2 align-items-center">
@@ -40,9 +48,9 @@ type RegimeContext = {
         </select>
         <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="pair">
           <option>EURUSD</option>
-          <option>EUR/USD</option>
         </select>
-        <button class="btn btn-fx btn-sm" (click)="refresh()">Refresh quote</button>
+        <button class="btn btn-fx-outline btn-sm" (click)="refresh()">Refresh quote</button>
+        <button class="btn btn-fx btn-sm" (click)="runBpmn()">Run quote→route BPMN</button>
       </div>
     </div>
 
@@ -76,7 +84,7 @@ type RegimeContext = {
       </div>
     </div>
 
-    <div class="fx-card">
+    <div class="fx-card mb-3">
       <h2 class="h5 mb-3">Rates snapshot</h2>
       @if (rates()) {
         <div class="d-flex flex-wrap gap-4">
@@ -90,6 +98,21 @@ type RegimeContext = {
         <p class="mb-0" style="color: var(--fx-ink-soft)">Click Refresh quote to pull live FR-01 pricing.</p>
       }
     </div>
+
+    @if (bpmn(); as proc) {
+      <div class="fx-card">
+        <h2 class="h5 mb-2">BPMN task view · {{ proc.processKey }}</h2>
+        <p class="small mb-3">wfExecId <code>{{ proc.wfExecId }}</code> · status {{ proc.status }}</p>
+        <ol class="list-group list-group-numbered">
+          @for (t of proc.tasks; track t.taskId) {
+            <li class="list-group-item d-flex justify-content-between">
+              <span>{{ t.name }}</span>
+              <span class="badge badge-fx">{{ t.status }}</span>
+            </li>
+          }
+        </ol>
+      </div>
+    }
   `,
 })
 export class BlotterPage implements OnInit {
@@ -106,6 +129,7 @@ export class BlotterPage implements OnInit {
     activeLpCount: number;
     sessionRegime: string;
   } | null>(null);
+  readonly bpmn = signal<BpmnView | null>(null);
   readonly error = signal<string | null>(null);
 
   ngOnInit(): void {
@@ -139,6 +163,25 @@ export class BlotterPage implements OnInit {
       .subscribe({
         next: (q) => this.quote.set(q),
         error: (err) => this.error.set(`Indicative failed: ${err.message || err.status}`),
+      });
+  }
+
+  runBpmn(): void {
+    this.error.set(null);
+    this.http
+      .post<BpmnView>(`${API.admin}/api/v1/admin/bpmn/FR01_CORPORATE_QUOTE_ROUTE/start`, {
+        triggeredBy: 'CORPORATE_PORTAL',
+        clientTier: this.tier,
+        ccyPair: this.pair.replace('/', ''),
+        clientId: 'CORP-100',
+        notional: 2500000,
+      })
+      .subscribe({
+        next: (view) => {
+          this.bpmn.set(view);
+          this.refresh();
+        },
+        error: (err) => this.error.set(`BPMN failed: ${err.message || err.status}`),
       });
   }
 }

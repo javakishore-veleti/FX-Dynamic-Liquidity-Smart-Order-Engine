@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/fr01"
+             id="Definitions_FR01_RETAIL">
+  <process id="FR01_RETAIL_CONVERT" name="FR-01 Retail Convert" isExecutable="true">
+    <startEvent id="start_retail" name="Start"/>
+    <sequenceFlow id="r1" sourceRef="start_retail" targetRef="task_regime_context"/>
+    <serviceTask id="task_regime_context" name="Fetch retail-tier regime context"/>
+    <sequenceFlow id="r2" sourceRef="task_regime_context" targetRef="task_indicative"/>
+    <serviceTask id="task_indicative" name="All-in indicative convert quote"/>
+    <sequenceFlow id="r3" sourceRef="task_indicative" targetRef="task_route_execute"/>
+    <serviceTask id="task_route_execute" name="Optional route-execute (retail notional)"/>
+    <sequenceFlow id="r4" sourceRef="task_route_execute" targetRef="end_retail"/>
+    <endEvent id="end_retail" name="Done"/>
+  </process>
+</definitions>

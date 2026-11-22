@@ -11,6 +11,7 @@ public class MacroFlagResponse {
     private BigDecimal severity;
     private Instant expiresAt;
     private BigDecimal lastLookPenaltyWeight;
+    private String armedBy;
 
     public boolean isActive() {
         return active;
@@ -58,5 +59,13 @@ public class MacroFlagResponse {
 
     public void setLastLookPenaltyWeight(BigDecimal lastLookPenaltyWeight) {
         this.lastLookPenaltyWeight = lastLookPenaltyWeight;
+    }
+
+    public String getArmedBy() {
+        return armedBy;
+    }
+
+    public void setArmedBy(String armedBy) {
+        this.armedBy = armedBy;
     }
 }

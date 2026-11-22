@@ -18,8 +18,14 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedHeaders("*");
     }
 
-    @Bean
+    @Bean(name = "quoteRestClient")
     public RestClient quoteRestClient(@Value("${fx.quote.base-url:http://127.0.0.1:8081}") String quoteBaseUrl) {
         return RestClient.builder().baseUrl(quoteBaseUrl).build();
+    }
+
+    @Bean(name = "routeExecRestClient")
+    public RestClient routeExecRestClient(
+            @Value("${fx.route-exec.base-url:http://127.0.0.1:8083}") String routeExecBaseUrl) {
+        return RestClient.builder().baseUrl(routeExecBaseUrl).build();
     }
 }

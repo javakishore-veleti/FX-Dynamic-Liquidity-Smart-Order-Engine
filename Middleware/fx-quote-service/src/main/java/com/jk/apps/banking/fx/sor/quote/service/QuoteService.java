@@ -1,8 +1,10 @@
 package com.jk.apps.banking.fx.sor.quote.service;
 
+import com.jk.apps.banking.fx.sor.quote.business.facade.EconomicCalendarFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.MacroRegimeFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.QuotePricingFacade;
 import com.jk.apps.banking.fx.sor.quote.business.facade.SpreadScheduleAdminFacade;
+import com.jk.apps.banking.fx.sor.quote.dto.EconomicCalendarEventDto;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteRequest;
 import com.jk.apps.banking.fx.sor.quote.dto.IndicativeQuoteResponse;
 import com.jk.apps.banking.fx.sor.quote.dto.MacroFlagRequest;
@@ -24,14 +26,17 @@ public class QuoteService {
     private final QuotePricingFacade pricingFacade;
     private final MacroRegimeFacade macroRegimeFacade;
     private final SpreadScheduleAdminFacade scheduleAdminFacade;
+    private final EconomicCalendarFacade economicCalendarFacade;
 
     public QuoteService(
             QuotePricingFacade pricingFacade,
             MacroRegimeFacade macroRegimeFacade,
-            SpreadScheduleAdminFacade scheduleAdminFacade) {
+            SpreadScheduleAdminFacade scheduleAdminFacade,
+            EconomicCalendarFacade economicCalendarFacade) {
         this.pricingFacade = pricingFacade;
         this.macroRegimeFacade = macroRegimeFacade;
         this.scheduleAdminFacade = scheduleAdminFacade;
+        this.economicCalendarFacade = economicCalendarFacade;
     }
 
     public IndicativeQuoteResponse indicative(IndicativeQuoteRequest request) {
@@ -53,8 +58,15 @@ public class QuoteService {
     public MacroFlagResponse ingestMacro(MacroFlagRequest request) {
         MacroFlagRequest body = request == null ? new MacroFlagRequest() : request;
         long ttl = body.getTtlSeconds() == null ? 3600L : body.getTtlSeconds();
-        macroRegimeFacade.ingest(body.getSource(), body.getSeverity(), ttl);
+        String armedBy = body.getArmedBy() == null || body.getArmedBy().isBlank()
+                ? MacroRegimeFacade.ARMED_BY_MANUAL
+                : body.getArmedBy();
+        macroRegimeFacade.ingest(body.getSource(), body.getSeverity(), ttl, armedBy);
         return macroStatus();
+    }
+
+    public List<EconomicCalendarEventDto> economicCalendar() {
+        return economicCalendarFacade.listEvents();
     }
 
     public MacroFlagResponse clearMacro() {
@@ -71,6 +83,7 @@ public class QuoteService {
             response.setSource(flag.get().source());
             response.setSeverity(flag.get().severity());
             response.setExpiresAt(flag.get().expiresAt());
+            response.setArmedBy(flag.get().armedBy());
         } else {
             response.setRegime(pricingFacade.resolveActiveRegime());
         }

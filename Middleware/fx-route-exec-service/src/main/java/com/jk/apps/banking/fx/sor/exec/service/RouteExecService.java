@@ -10,8 +10,10 @@ import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteRequest;
 import com.jk.apps.banking.fx.sor.exec.dto.RouteExecuteResponse;
 import com.jk.apps.banking.fx.sor.exec.entity.ChildVenueSplit;
 import com.jk.apps.banking.fx.sor.exec.entity.FxExecutionOrder;
+import com.jk.apps.banking.fx.sor.exec.client.QuoteRegimeClient;
 import com.jk.apps.banking.fx.sor.exec.eventing.DomainEventPublisher;
 import com.jk.apps.banking.fx.sor.exec.metrics.ServiceMetrics;
+import com.jk.apps.banking.fx.sor.exec.regime.LastLookPenaltyHintCache;
 import com.jk.apps.banking.fx.sor.exec.repository.ChildVenueSplitRepository;
 import com.jk.apps.banking.fx.sor.exec.repository.FxExecutionOrderRepository;
 import java.math.BigDecimal;
@@ -44,18 +46,24 @@ public class RouteExecService {
     private final IdempotencyStore idempotencyStore;
     private final ServiceMetrics metrics;
     private final DomainEventPublisher domainEvents;
+    private final QuoteRegimeClient quoteRegimeClient;
+    private final LastLookPenaltyHintCache lastLookPenaltyHintCache;
 
     public RouteExecService(
             FxExecutionOrderRepository orderRepository,
             ChildVenueSplitRepository splitRepository,
             IdempotencyStore idempotencyStore,
             ServiceMetrics metrics,
-            DomainEventPublisher domainEvents) {
+            DomainEventPublisher domainEvents,
+            QuoteRegimeClient quoteRegimeClient,
+            LastLookPenaltyHintCache lastLookPenaltyHintCache) {
         this.orderRepository = orderRepository;
         this.splitRepository = splitRepository;
         this.idempotencyStore = idempotencyStore;
         this.metrics = metrics;
         this.domainEvents = domainEvents;
+        this.quoteRegimeClient = quoteRegimeClient;
+        this.lastLookPenaltyHintCache = lastLookPenaltyHintCache;
     }
 
     @Transactional
@@ -86,11 +94,35 @@ public class RouteExecService {
         BigDecimal adj = mid.multiply(slippage).divide(new BigDecimal("10000"), 8, RoundingMode.HALF_UP);
         BigDecimal rate = "SELL".equals(side) ? mid.subtract(adj) : mid.add(adj);
 
-        // FR-01: elevate last-look hold / prefer faster LPs when regime penalty > 1
-        BigDecimal penalty = request.getLastLookPenaltyWeight() == null
-                ? BigDecimal.ONE
-                : request.getLastLookPenaltyWeight();
-        String sessionRegime = request.getSessionRegime() == null ? "LONDON_NY_OVERLAP" : request.getSessionRegime();
+        // FR-01: resolve regime — request fields > Kafka hint cache > quote HTTP
+        BigDecimal penalty = request.getLastLookPenaltyWeight();
+        String sessionRegime = request.getSessionRegime();
+        if (penalty == null || sessionRegime == null || sessionRegime.isBlank()) {
+            var hint = lastLookPenaltyHintCache.current();
+            if (hint.isPresent() && (penalty == null || sessionRegime == null || sessionRegime.isBlank())) {
+                if (sessionRegime == null || sessionRegime.isBlank()) {
+                    sessionRegime = hint.get().sessionRegime();
+                }
+                if (penalty == null) {
+                    penalty = hint.get().lastLookPenaltyWeight();
+                }
+            }
+        }
+        if (penalty == null || sessionRegime == null || sessionRegime.isBlank()) {
+            QuoteRegimeClient.RegimeHint fromQuote = quoteRegimeClient.fetch("TIER_2", pair);
+            if (sessionRegime == null || sessionRegime.isBlank()) {
+                sessionRegime = fromQuote.sessionRegime();
+            }
+            if (penalty == null) {
+                penalty = fromQuote.lastLookPenaltyWeight();
+            }
+        }
+        if (penalty == null) {
+            penalty = BigDecimal.ONE;
+        }
+        if (sessionRegime == null || sessionRegime.isBlank()) {
+            sessionRegime = "LONDON_NY_OVERLAP";
+        }
         boolean stressedRegime = penalty.compareTo(BigDecimal.ONE) > 0
                 || "NY_ROLLOVER".equals(sessionRegime)
                 || "MACRO_NEWS_HIGH".equals(sessionRegime);
@@ -125,7 +157,10 @@ public class RouteExecService {
         metrics.auditEventsPublished().increment();
         emitOrderRoutedProvenance(order, splits, internalize, sessionRegime, penalty);
 
-        return toExecuteResponse(order, splits, false);
+        RouteExecuteResponse response = toExecuteResponse(order, splits, false);
+        response.setSessionRegime(sessionRegime);
+        response.setLastLookPenaltyWeight(penalty);
+        return response;
     }
 
     @Transactional

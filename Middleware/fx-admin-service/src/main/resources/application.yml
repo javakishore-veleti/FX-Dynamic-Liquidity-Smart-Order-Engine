@@ -38,6 +38,8 @@ server:
 fx:
   quote:
     base-url: ${FX_QUOTE_BASE_URL:http://127.0.0.1:8081}
+  route-exec:
+    base-url: ${FX_ROUTE_EXEC_BASE_URL:http://127.0.0.1:8083}
   features:
     redis-enabled: false
     kafka-enabled: false

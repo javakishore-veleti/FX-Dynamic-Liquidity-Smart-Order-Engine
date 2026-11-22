@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             targetNamespace="https://fx-sor/fr01"
+             id="Definitions_FR01">
+  <process id="FR01_SESSION_REGIME_GUARDRAILS" name="FR-01 Session &amp; Regime Guardrails" isExecutable="true">
+    <startEvent id="start_fr01" name="Start FR-01"/>
+    <sequenceFlow id="f1" sourceRef="start_fr01" targetRef="task_detect_session"/>
+
+    <serviceTask id="task_detect_session" name="Detect session regime (clock)"/>
+    <sequenceFlow id="f2" sourceRef="task_detect_session" targetRef="task_scan_calendar"/>
+
+    <serviceTask id="task_scan_calendar" name="Scan economic calendar (FOMC/NFP/ECB)"/>
+    <sequenceFlow id="f3" sourceRef="task_scan_calendar" targetRef="gateway_macro"/>
+
+    <exclusiveGateway id="gateway_macro" name="Macro window active?"/>
+    <sequenceFlow id="f4_yes" name="yes" sourceRef="gateway_macro" targetRef="task_confirm_macro"/>
+    <sequenceFlow id="f4_no" name="no" sourceRef="gateway_macro" targetRef="task_resolve_markup"/>
+
+    <userTask id="task_confirm_macro" name="Desk confirm arm MACRO_NEWS_HIGH"/>
+    <sequenceFlow id="f5" sourceRef="task_confirm_macro" targetRef="task_arm_macro"/>
+
+    <serviceTask id="task_arm_macro" name="Arm macro flag on quote"/>
+    <sequenceFlow id="f6" sourceRef="task_arm_macro" targetRef="task_resolve_markup"/>
+
+    <serviceTask id="task_resolve_markup" name="Resolve markup × news_multiplier"/>
+    <sequenceFlow id="f7" sourceRef="task_resolve_markup" targetRef="task_publish_hint"/>
+
+    <serviceTask id="task_publish_hint" name="Publish regime-shifted + last-look hint"/>
+    <sequenceFlow id="f8" sourceRef="task_publish_hint" targetRef="task_apply_route_penalty"/>
+
+    <serviceTask id="task_apply_route_penalty" name="Apply last-look penalty (route-exec)"/>
+    <sequenceFlow id="f9" sourceRef="task_apply_route_penalty" targetRef="end_fr01"/>
+
+    <endEvent id="end_fr01" name="FR-01 complete"/>
+  </process>
+</definitions>

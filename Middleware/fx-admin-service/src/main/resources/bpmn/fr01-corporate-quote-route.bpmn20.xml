@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+             targetNamespace="https://fx-sor/fr01"
+             id="Definitions_FR01_CORP">
+  <process id="FR01_CORPORATE_QUOTE_ROUTE" name="FR-01 Corporate Quote → Route" isExecutable="true">
+    <startEvent id="start_corp" name="Start"/>
+    <sequenceFlow id="c1" sourceRef="start_corp" targetRef="task_regime_context"/>
+    <serviceTask id="task_regime_context" name="Fetch regime context from quote"/>
+    <sequenceFlow id="c2" sourceRef="task_regime_context" targetRef="task_indicative"/>
+    <serviceTask id="task_indicative" name="Request indicative quote"/>
+    <sequenceFlow id="c3" sourceRef="task_indicative" targetRef="task_route_execute"/>
+    <serviceTask id="task_route_execute" name="Route-execute with last-look penalty"/>
+    <sequenceFlow id="c4" sourceRef="task_route_execute" targetRef="end_corp"/>
+    <endEvent id="end_corp" name="Done"/>
+  </process>
+</definitions>

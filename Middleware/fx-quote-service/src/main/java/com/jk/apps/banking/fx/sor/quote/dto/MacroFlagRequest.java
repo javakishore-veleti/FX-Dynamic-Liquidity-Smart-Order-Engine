@@ -7,6 +7,7 @@ public class MacroFlagRequest {
     private String source;
     private BigDecimal severity;
     private Long ttlSeconds;
+    private String armedBy;
 
     public String getSource() {
         return source;
@@ -30,5 +31,13 @@ public class MacroFlagRequest {
 
     public void setTtlSeconds(Long ttlSeconds) {
         this.ttlSeconds = ttlSeconds;
+    }
+
+    public String getArmedBy() {
+        return armedBy;
+    }
+
+    public void setArmedBy(String armedBy) {
+        this.armedBy = armedBy;
     }
 }

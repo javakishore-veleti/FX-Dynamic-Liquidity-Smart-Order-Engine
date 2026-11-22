@@ -36,6 +36,8 @@ server:
   address: ${SERVER_ADDRESS:0.0.0.0}
 
 fx:
+  quote:
+    base-url: ${FX_QUOTE_BASE_URL:http://127.0.0.1:8081}
   features:
     redis-enabled: false
     kafka-enabled: false

@@ -8,4 +8,5 @@ export const API = {
   quote: `http://${host}:8081`,
   qualify: `http://${host}:8082`,
   routeExec: `http://${host}:8083`,
+  admin: `http://${host}:8084`,
 } as const;

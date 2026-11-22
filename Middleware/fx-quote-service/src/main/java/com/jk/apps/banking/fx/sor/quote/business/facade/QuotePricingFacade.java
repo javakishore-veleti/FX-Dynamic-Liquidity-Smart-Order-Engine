@@ -61,23 +61,6 @@ public class QuotePricingFacade {
         this.domainEvents = domainEvents;
     }
 
-    @PostConstruct
-    void seedReferenceBook() {
-        long now = Instant.now().toEpochMilli();
-        quoteBookCache.put(new LpQuote(
-                "EURUSD", "LP_CITI",
-                new BigDecimal("1.08480"), new BigDecimal("1.08500"),
-                new BigDecimal("5000000"), now, DEFAULT_TTL_MS));
-        quoteBookCache.put(new LpQuote(
-                "EURUSD", "LP_JPM",
-                new BigDecimal("1.08475"), new BigDecimal("1.08505"),
-                new BigDecimal("7500000"), now, DEFAULT_TTL_MS));
-        quoteBookCache.put(new LpQuote(
-                "EURUSD", "LP_GS",
-                new BigDecimal("1.08470"), new BigDecimal("1.08510"),
-                new BigDecimal("4000000"), now, DEFAULT_TTL_MS));
-    }
-
     public IndicativeQuoteResponse priceIndicative(IndicativeQuoteRequest request) {
         metrics.quotesIndicativeRequests().increment();
         String ccyPair = normalizePair(request.getCcyPair());
@@ -232,10 +215,6 @@ public class QuotePricingFacade {
 
     private List<LpQuote> freshQuotes(String ccyPair, long now) {
         List<LpQuote> quotes = quoteBookCache.getByCcyPair(ccyPair);
-        if (quotes.isEmpty() && "EURUSD".equals(ccyPair)) {
-            seedReferenceBook();
-            quotes = quoteBookCache.getByCcyPair(ccyPair);
-        }
         List<LpQuote> fresh = quotes.stream()
                 .filter(q -> !q.isStale(now))
                 .collect(Collectors.toCollection(ArrayList::new));

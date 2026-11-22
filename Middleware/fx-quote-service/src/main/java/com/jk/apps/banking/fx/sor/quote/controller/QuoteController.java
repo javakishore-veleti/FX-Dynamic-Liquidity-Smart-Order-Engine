@@ -132,6 +132,12 @@ public class QuoteController {
         return quoteService.listLpBook();
     }
 
+    /** Called by the admin Initial Data workflow. Loads the committed LP book starter. */
+    @PostMapping("/lp-book/load")
+    public Map<String, Object> loadLpBook() {
+        return Map.of("loaded", quoteService.loadLpBook());
+    }
+
     @PutMapping("/lp-book")
     public LpQuote upsertLpBook(@RequestBody LpQuote body) {
         return quoteService.upsertLpBook(body);

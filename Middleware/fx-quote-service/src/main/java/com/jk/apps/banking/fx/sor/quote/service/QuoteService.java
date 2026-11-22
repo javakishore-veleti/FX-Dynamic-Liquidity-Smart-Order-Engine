@@ -83,6 +83,10 @@ public class QuoteService {
         economicCalendarFacade.delete(source, start);
     }
 
+    public int loadLpBook() {
+        return lpBookAdminFacade.loadCommitted();
+    }
+
     public List<LpQuote> listLpBook() {
         return lpBookAdminFacade.listAll();
     }

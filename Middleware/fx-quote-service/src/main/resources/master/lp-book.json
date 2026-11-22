@@ -1,0 +1,23 @@
+[
+  {
+    "ccyPair": "EURUSD",
+    "lpId": "LP_CITI",
+    "bid": "1.08480",
+    "ask": "1.08500",
+    "availableSizeUsd": "5000000"
+  },
+  {
+    "ccyPair": "EURUSD",
+    "lpId": "LP_JPM",
+    "bid": "1.08475",
+    "ask": "1.08505",
+    "availableSizeUsd": "7500000"
+  },
+  {
+    "ccyPair": "EURUSD",
+    "lpId": "LP_GS",
+    "bid": "1.08470",
+    "ask": "1.08510",
+    "availableSizeUsd": "4000000"
+  }
+]

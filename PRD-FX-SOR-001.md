@@ -22,11 +22,13 @@ The **FX Dynamic Liquidity & Smart Order Routing (SOR) Engine** is an institutio
 
 The platform is structured as a **Maven Reactor Monorepo** where the root pom.xml acts strictly as an aggregator and dependency version BOM, and each microservice module is a **100% self-contained Spring Boot 3.4+ (Java 21\) application** with zero shared Java codebases.
 
-| Maven Module | Package Root | Core Functional Scope | Target Peak Load |
-| :---- | :---- | :---- | :---- |
-| **fx-sor-pricing-service** | com.jk.apps.banking.fx.sor.pricing | Pre-trade streaming quote aggregation, session spread guards, and L1/L2 rate-card caching | Up to 700,000 RPS (Edge \+ Pod Cache) |
-| **fx-sor-precheck-service** | com.jk.apps.banking.fx.sor.precheck | Deterministic knock-out qualification, bilateral credit & Net Open Position (NOP) checks, client tier validation | Up to 200,000 RPS |
-| **fx-sor-engine-service** | com.jk.apps.banking.fx.sor.engine | 5-step OrderRoutingFacade pipeline, Drools composite LP scoring, internalization check, multi-LP sweep & waterfall failover | Up to 100,000 RPS |
+| Maven Module (PRD name) | Repo module (this monorepo) | Package Root | Core Functional Scope | Target Peak Load |
+| :---- | :---- | :---- | :---- | :---- |
+| **fx-sor-pricing-service** | **fx-quote-service** | com.jk.apps.banking.fx.sor.quote | Pre-trade streaming quote aggregation, session spread guards, and L1/L2 rate-card caching | Up to 700,000 RPS (Edge \+ Pod Cache) |
+| **fx-sor-precheck-service** | **fx-qualify-service** | com.jk.apps.banking.fx.sor.qual | Deterministic knock-out qualification, bilateral credit & Net Open Position (NOP) checks, client tier validation | Up to 200,000 RPS |
+| **fx-sor-engine-service** | **fx-route-exec-service** | com.jk.apps.banking.fx.sor.exec | 5-step OrderRoutingFacade pipeline, Drools composite LP scoring, internalization check, multi-LP sweep & waterfall failover | Up to 100,000 RPS |
+
+**Name map:** pricing → `quote` · precheck → `qualify` · engine → `route-exec`.
 
 ## **3\. Neal Ford Closed-Layer Architecture & 5-Step Routing Pipeline**
 
@@ -49,6 +51,45 @@ Each microservice enforces strict top-down layer isolation so external transport
 > * **FR-03 Multi-LP Sweep & Waterfall Failover:** Split institutional block orders across top-ranked LPs to minimize market impact; cascade rejected remainders automatically within the order slippage budget.  
 > * **FR-04 Dealing Desk Escalation:** Route fat-finger alerts, restricted emerging-market currencies, or zero-liquidity exceptions to NY/London dealing desks with full diagnostic context.  
 > * **FR-05 Policy Authoring Lifecycle:** All Drools/DMN rule updates require four-eyes Maker-Checker approval and historical shadow-mode replay validation before hot-reloading into live pods.
+
+## **4.1 PRD → Repo Microservice / Component Map**
+
+Use this functional map when deciding **which service to touch** for each PRD objective.  
+**Name map:** pricing → `fx-quote-service` · precheck → `fx-qualify-service` · engine → `fx-route-exec-service`.
+
+### Strategic pillars → services & components
+
+| Pillar | Primary services | Functional components (this repo) | How it shows up |
+| :---- | :---- | :---- | :---- |
+| **Margin Preservation** | `fx-quote-service`, `fx-route-exec-service` | `QuoteService` + `ClientTierSpreadSchedule` / markup by session; `QuoteBookCache` (L1/Redis); `RouteExecService` LP ranking & all-in selection | Tight wholesale LP chosen over static map; spread captured on indicative + route |
+| **Execution Certainty** | `fx-qualify-service`, `fx-route-exec-service` | `QualifyService` knock-outs; `CreditStore` reserve; `RouteExecService.failover`; Kafka `fx.exec.last-look-failover.v1` | Bad LPs dropped; last-look remainder cascades; STP-oriented path |
+| **Low-Latency Decisioning** | `fx-quote-service`, `fx-qualify-service`, `fx-route-exec-service` | Controllers + in-memory/Redis caches; `ServiceMetrics` (Micrometer); Virtual Threads in Spring Boot 3.4 / Java 21 | Hot path stays local cache + short pipeline; measure via Prometheus/Grafana |
+| **Policy Agility** | `fx-admin-service` (+ agents assist) | `AdminWorkflowService` / policy & credit/venue ops; maker-checker intent via admin APIs; `PolicyAuthoringAgentWorkflow` (NL→rule assist) | Hot-reload / approve path without full redeploy (admin + rule lifecycle) |
+| **Regulatory Provenance** | `fx-route-exec-service` | `RouteExecService.trace`; entities `FxExecutionOrder` / `ChildVenueSplit`; Kafka `fx.exec.order-routed-provenance.v1` | Immutable why-this-LP record for FX Global Code / MiFID-style evidence |
+
+**Supporting (not hot-path money):** `fx-topology-service` / MCP / `fx-agent-orchestrator-service` for RCA, toxicity, and best-ex explain — they consume traces; they do not replace SOR.
+
+### FR-01 … FR-05 → services & components
+
+| FR | Owning microservice(s) | Components / APIs | Notes |
+| :---- | :---- | :---- | :---- |
+| **FR-01 Session & Regime Guardrails** | `fx-quote-service` (primary); agent assist | `QuoteService.currentSessionRegime()` / `resolveMarkup`; entity `ClientTierSpreadSchedule`; event `fx.quote.regime-shifted.v1`; `MacroGuardAgentWorkflow` | Tightens spreads / penalties by Tokyo–London–NY / news regimes |
+| **FR-02 Atomic Credit & NOP** | `fx-qualify-service` (primary); `fx-admin-service` override | `CreditStore` / `RedisCreditStore` / `InMemoryCreditStore`; `QualifyService.tryReserve`; `GET .../credit/utilization/{clientId}`; admin `creditOverride` | Reserve before dispatch; Redis Lua when `load-redis` profile on |
+| **FR-03 Multi-LP Sweep & Failover** | `fx-route-exec-service` | `RouteExecService` route-execute (modes / child splits); `POST .../orders/{orderId}/failover`; `ChildVenueSplit`; Kafka last-look failover topic | Split blocks; cascade rejects inside slippage budget |
+| **FR-04 Dealing Desk Escalation** | `fx-qualify-service` (primary); admin halt | Knock-out path with `RESTRICTED_CCY` → `escalatedToDesk`; `emitVenueKnockout`; admin `POST .../venues/{lpId}/halt` | Fat-finger / restricted / zero-liquidity → desk context |
+| **FR-05 Policy Authoring Lifecycle** | `fx-admin-service` (primary); agent assist | Admin workflows / maker-checker style ops; cache invalidate; synthetic/shadow tooling; `PolicyAuthoringAgentWorkflow` | Four-eyes + shadow replay before live Drools/DMN promote |
+
+### One-line ownership
+
+| Requirement | Owner |
+| :---- | :---- |
+| **FR-01** | `fx-quote-service` |
+| **FR-02** | `fx-qualify-service` (+ admin override) |
+| **FR-03** | `fx-route-exec-service` |
+| **FR-04** | `fx-qualify-service` (+ admin halt) |
+| **FR-05** | `fx-admin-service` (+ policy agent) |
+
+Pillars live mainly on: **quote + qualify + route-exec**; provenance on **route-exec**; policy on **admin**.
 
 ## **5\. High-Throughput Runtime & Kubernetes Capacity Architecture (1M RPS)**
 

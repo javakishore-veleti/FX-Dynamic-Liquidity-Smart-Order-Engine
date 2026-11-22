@@ -1,5 +1,19 @@
 # **FX Dynamic Liquidity & Smart Order Routing Engine**
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
+[![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://openjdk.org/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.4-green.svg)](https://spring.io/projects/spring-boot)
+[![Angular](https://img.shields.io/badge/Angular-Portals-DD0031.svg)](Portals/)
+[![FastAPI](https://img.shields.io/badge/FastAPI-Agents-009688.svg)](Agentic-Python/)
+[![Architecture](https://img.shields.io/badge/Architecture-Microservices_SOR-0A66C2.svg)](#4-enterprise-architecture-blueprint)
+[![Domain](https://img.shields.io/badge/Domain-Institutional_FX-6f42c1.svg)](#bookmark=id.akvjtn4rwvrb)
+[![Best Execution](https://img.shields.io/badge/Best_Execution-TCA_Ready-success.svg)](#what-is-smart-order-routing-sor--knowledge-base)
+[![Stars](https://img.shields.io/github/stars/javakishore-veleti/FX-Dynamic-Liquidity-Smart-Order-Engine?style=social)](https://github.com/javakishore-veleti/FX-Dynamic-Liquidity-Smart-Order-Engine)
+[![Forks](https://img.shields.io/github/forks/javakishore-veleti/FX-Dynamic-Liquidity-Smart-Order-Engine?style=social)](https://github.com/javakishore-veleti/FX-Dynamic-Liquidity-Smart-Order-Engine/network/members)
+
+**Business focus:** Protect eFX franchise margin for a Tier-1 commercial & investment bank by cutting spread leakage, last-look churn, and credit/NOP rejects across New York, London, and Singapore desks.  
+**Architecture focus:** Policy-driven quote → qualify → route-exec pipeline (Spring Boot microservices), Angular client portals, FastAPI agent/MCP services, Kafka provenance, and observability for audit-ready best execution.
+
 **Target Namespace:** com.jk.apps.banking.fx.sor  
 **Architecture Style:** Dynamic Liquidity Provider & Smart Order Routing (SOR)  
 **Domain:** Institutional & Commercial Foreign Exchange (FX) / Liquidity Execution  

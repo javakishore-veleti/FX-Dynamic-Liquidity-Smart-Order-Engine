@@ -85,10 +85,10 @@ public class RouteExecService {
                 .orElse(LpRankingConfigFacade.DEFAULT_RULE_VERSION);
     }
 
-    @Transactional
     /** Placeholder slippage budget (business assumption F8.2 #3, 5 bps). Confirm with the business. */
     static final BigDecimal DEFAULT_MAX_SLIPPAGE_BPS = new BigDecimal("5.0000");
 
+    @Transactional
     public RouteExecuteResponse routeExecute(RouteExecuteRequest request) {
         metrics.ordersRouteExecute().increment();
         String clientOrderId = request.getClientOrderId();

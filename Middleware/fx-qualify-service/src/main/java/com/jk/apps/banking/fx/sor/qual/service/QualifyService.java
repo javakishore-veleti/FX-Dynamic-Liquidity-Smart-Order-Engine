@@ -1,6 +1,7 @@
 package com.jk.apps.banking.fx.sor.qual.service;
 
 import com.jk.apps.banking.fx.sor.qual.cache.CreditLine;
+import com.jk.apps.banking.fx.sor.qual.business.facade.PairMasterFacade;
 import com.jk.apps.banking.fx.sor.qual.cache.CreditStore;
 import com.jk.apps.banking.fx.sor.qual.dto.CreditUtilizationResponse;
 import com.jk.apps.banking.fx.sor.qual.dto.EligibleLp;
@@ -43,11 +44,15 @@ public class QualifyService {
     private final ServiceMetrics metrics;
     private final DomainEventPublisher domainEvents;
 
+    private final PairMasterFacade pairMaster;
+
     public QualifyService(
             SettlementCutoffPolicyRepository policyRepository,
             CreditStore creditStore,
             ServiceMetrics metrics,
-            DomainEventPublisher domainEvents) {
+            DomainEventPublisher domainEvents,
+            PairMasterFacade pairMaster) {
+        this.pairMaster = pairMaster;
         this.policyRepository = policyRepository;
         this.creditStore = creditStore;
         this.metrics = metrics;
@@ -77,6 +82,17 @@ public class QualifyService {
 
         QualifyOrderResponse response = new QualifyOrderResponse();
         response.setClientOrderId(request.getClientOrderId());
+
+        if (!pairMaster.isKnown(pair)) {
+            for (String lp : LPS) {
+                response.getKnockouts().add(new KnockoutReason(lp, "UNKNOWN_PAIR",
+                        "Pair " + pair + " is not in the currency pair master"));
+                metrics.venuesKnockedOut().increment();
+                emitVenueKnockout(request.getClientOrderId(), clientId, pair, "UNKNOWN_PAIR", false);
+            }
+            response.setQualified(false);
+            return response;
+        }
 
         Optional<SettlementCutoffPolicy> policyOpt = policyRepository.findByCcyPairAndTenor(pair, tenor);
         if (policyOpt.isEmpty()) {

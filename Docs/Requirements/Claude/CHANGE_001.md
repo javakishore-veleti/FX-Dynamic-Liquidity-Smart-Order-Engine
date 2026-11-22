@@ -293,3 +293,5 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | 2026-11-22 | F10.1: intermediary resolver with six unit tests; first attempt resolved intermediaries in one batch and failed the chain test, fixed by resolving one intermediary at a time | (this commit) |
 | 2026-11-22 | F10.2 to F10.5: layer merge, enrichment, freshness, bounded ingest, each with unit tests | (this commit) |
 | 2026-11-22 | F10.6: stream ingest with backpressure and drain to network edges; unit tests pass; Kafka end-to-end not run | (this commit) |
+| 2026-11-22 | F10.6 fix: `FlowHopIngest` had two constructors and Spring could not pick one, so the topology service failed to start. Unit tests did not start Spring, so they missed it. Fixed with `@Autowired`; service boots, health 200, network graph 200 | (this commit) |
+

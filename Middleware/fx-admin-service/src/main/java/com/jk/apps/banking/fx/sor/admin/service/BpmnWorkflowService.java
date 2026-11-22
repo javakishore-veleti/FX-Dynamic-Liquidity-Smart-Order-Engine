@@ -5,16 +5,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jk.apps.banking.fx.sor.admin.bpmn.BpmnStepCatalog;
 import com.jk.apps.banking.fx.sor.admin.bpmn.Fr01BpmnDefinition;
-import com.jk.apps.banking.fx.sor.admin.bpmn.InitialDatasetCatalog;
+import com.jk.apps.banking.fx.sor.admin.initdata.InitDataCatalog;
 import com.jk.apps.banking.fx.sor.admin.dto.BpmnProcessView;
 import com.jk.apps.banking.fx.sor.admin.entity.WfExecLog;
 import com.jk.apps.banking.fx.sor.admin.entity.WfTaskExecLog;
 import com.jk.apps.banking.fx.sor.admin.entity.WorkflowDefinition;
 import com.jk.apps.banking.fx.sor.admin.repository.WfExecLogRepository;
 import com.jk.apps.banking.fx.sor.admin.repository.WfTaskExecLogRepository;
+import com.jk.apps.banking.fx.sor.admin.wf.WfTask;
 import com.jk.apps.banking.fx.sor.admin.repository.WorkflowDefinitionRepository;
-import java.io.IOException;
-import java.io.InputStream;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,7 +21,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import org.springframework.core.io.ClassPathResource;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -42,18 +42,21 @@ public class BpmnWorkflowService {
     private final WfTaskExecLogRepository taskExecLogRepository;
     private final QuoteScheduleClient quoteScheduleClient;
     private final ObjectMapper objectMapper;
+    private final Map<String, WfTask> taskRegistry;
 
     public BpmnWorkflowService(
             WorkflowDefinitionRepository workflowRepository,
             WfExecLogRepository execLogRepository,
             WfTaskExecLogRepository taskExecLogRepository,
             QuoteScheduleClient quoteScheduleClient,
-            ObjectMapper objectMapper) {
+            ObjectMapper objectMapper,
+            List<WfTask> wfTasks) {
         this.workflowRepository = workflowRepository;
         this.execLogRepository = execLogRepository;
         this.taskExecLogRepository = taskExecLogRepository;
         this.quoteScheduleClient = quoteScheduleClient;
         this.objectMapper = objectMapper;
+        this.taskRegistry = wfTasks.stream().collect(Collectors.toMap(WfTask::id, Function.identity()));
     }
 
     public List<WorkflowDefinition> listMaster(String portalScope) {
@@ -94,7 +97,7 @@ public class BpmnWorkflowService {
         vars.putIfAbsent("clientTier", "TIER_2");
         vars.putIfAbsent("ccyPair", "EURUSD");
         vars.putIfAbsent("confirmMacro", false);
-        if (InitialDatasetCatalog.isInitialDataWorkflow(workflowKey)) {
+        if (InitDataCatalog.isInitialDataWorkflow(workflowKey)) {
             validateInitialDataStart(vars, triggeredBy);
         } else {
             validateStartCriteria(workflowKey, vars, triggeredBy);
@@ -296,37 +299,6 @@ public class BpmnWorkflowService {
         return toView(log);
     }
 
-    private String loadInitialCalendar(Map<String, Object> variables) {
-        List<Map<String, Object>> events = readSeed(InitialDatasetCatalog.ECONOMIC_CALENDAR_RESOURCE);
-        int upserted = 0;
-        for (Map<String, Object> event : events) {
-            quoteScheduleClient.upsertEconomicCalendar(event);
-            upserted++;
-        }
-        variables.put("calendarRowsLoaded", upserted);
-        return toJson(Map.of("source", InitialDatasetCatalog.ECONOMIC_CALENDAR_RESOURCE, "rowsUpserted", upserted));
-    }
-
-    private String verifyInitialCalendar(Map<String, Object> variables) {
-        int expected = ((Number) variables.getOrDefault("calendarRowsLoaded", 0)).intValue();
-        int found = quoteScheduleClient.listEconomicCalendar().size();
-        if (found < expected) {
-            throw new IllegalStateException(
-                    "calendar verify failed: expected at least " + expected + " rows, quote has " + found);
-        }
-        variables.put("calendarRowsVerified", found);
-        return toJson(Map.of("expectedAtLeast", expected, "foundInQuote", found));
-    }
-
-    private List<Map<String, Object>> readSeed(String resource) {
-        try (InputStream in = new ClassPathResource(resource).getInputStream()) {
-            return objectMapper.readValue(in, new TypeReference<>() {
-            });
-        } catch (IOException ex) {
-            throw new IllegalStateException("cannot read seed resource " + resource, ex);
-        }
-    }
-
     private String executeStep(String workflowKey, String taskId, Map<String, Object> variables) {
         String tier = String.valueOf(variables.getOrDefault("clientTier", "TIER_2"));
         String pair = String.valueOf(variables.getOrDefault("ccyPair", "EURUSD"));
@@ -412,9 +384,9 @@ public class BpmnWorkflowService {
                 variables.put("routeExecute", routed);
                 yield toJson(routed);
             }
-            case "task_init_load_calendar" -> loadInitialCalendar(variables);
-            case "task_init_verify_calendar" -> verifyInitialCalendar(variables);
-            default -> "noop";
+            default -> taskRegistry.containsKey(taskId)
+                    ? taskRegistry.get(taskId).run(variables)
+                    : "noop";
         };
     }
 

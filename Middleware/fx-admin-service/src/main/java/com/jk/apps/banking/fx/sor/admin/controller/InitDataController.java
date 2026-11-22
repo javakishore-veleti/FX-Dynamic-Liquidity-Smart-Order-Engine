@@ -1,7 +1,7 @@
 package com.jk.apps.banking.fx.sor.admin.controller;
 
-import com.jk.apps.banking.fx.sor.admin.dto.InitialDatasetView;
-import com.jk.apps.banking.fx.sor.admin.service.InitialDataFacade;
+import com.jk.apps.banking.fx.sor.admin.initdata.InitDataFacade;
+import com.jk.apps.banking.fx.sor.admin.initdata.InitDataView;
 import java.util.List;
 import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,27 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/admin/initial-data")
-public class InitialDataController {
+public class InitDataController {
 
-    private final InitialDataFacade initialDataFacade;
+    private final InitDataFacade initDataFacade;
 
-    public InitialDataController(InitialDataFacade initialDataFacade) {
-        this.initialDataFacade = initialDataFacade;
+    public InitDataController(InitDataFacade initDataFacade) {
+        this.initDataFacade = initDataFacade;
     }
 
     @GetMapping
-    public List<InitialDatasetView> listDatasets() {
-        return initialDataFacade.listDatasets();
+    public List<InitDataView> listDatasets() {
+        return initDataFacade.listDatasets();
     }
 
     /** Button click: runs the dataset's setup workflow once. Body: {"reason": "...", "triggeredBy": "..."}. */
     @PostMapping("/{datasetKey}/setup")
-    public InitialDatasetView setup(
+    public InitDataView setup(
             @PathVariable("datasetKey") String datasetKey,
             @RequestBody(required = false) Map<String, Object> body) {
         Map<String, Object> vars = body == null ? Map.of() : body;
         String reason = vars.get("reason") == null ? "" : String.valueOf(vars.get("reason"));
         String triggeredBy = vars.get("triggeredBy") == null ? "ADMIN_PORTAL" : String.valueOf(vars.get("triggeredBy"));
-        return initialDataFacade.setup(datasetKey, reason, triggeredBy);
+        return initDataFacade.setup(datasetKey, reason, triggeredBy);
     }
 }

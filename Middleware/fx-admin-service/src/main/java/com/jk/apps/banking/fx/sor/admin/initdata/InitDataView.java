@@ -1,11 +1,11 @@
-package com.jk.apps.banking.fx.sor.admin.dto;
+package com.jk.apps.banking.fx.sor.admin.initdata;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
 /** One Initial Data accordion: dataset metadata, setup status, and the latest run's task rows. */
-public record InitialDatasetView(
+public record InitDataView(
         String datasetKey,
         String title,
         String description,
@@ -16,10 +16,10 @@ public record InitialDatasetView(
         UUID wfExecId,
         Instant startedAt,
         Instant completedAt,
-        List<TaskRowView> tasks) {
+        List<TaskRow> tasks) {
 
     /** One wf_task_exec_log row, as shown in the flow view. */
-    public record TaskRowView(
+    public record TaskRow(
             int seq,
             String taskId,
             String name,

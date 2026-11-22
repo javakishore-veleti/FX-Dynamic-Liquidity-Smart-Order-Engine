@@ -16,3 +16,7 @@ Do not use `Docs/Archive/` — it holds superseded drafts.
 
 ## Commits
 - Use the repo owner's git identity. Do not add `Co-Authored-By` or tool attribution lines.
+
+## Design and architecture rules
+- Before any story or feature, read `DESIGN.md` (rules) and `ARCHITECTURE.md` (layout).
+- Track every feature in `Docs/Requirements/Claude/CHANGE_001.md` with the rules it was checked against.

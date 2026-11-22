@@ -1,5 +1,6 @@
 package com.jk.apps.banking.fx.sor.admin.bpmn;
 
+import com.jk.apps.banking.fx.sor.admin.initdata.InitDataCatalog;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +38,7 @@ public final class BpmnStepCatalog {
                     new Step("task_regime_context", "Fetch regime context from quote", TaskType.SERVICE),
                     new Step("task_indicative", "Request indicative quote", TaskType.SERVICE),
                     new Step("task_route_execute", "Route-execute with last-look penalty", TaskType.SERVICE)),
-            InitialDatasetCatalog.ECONOMIC_CALENDAR_WORKFLOW,
+            InitDataCatalog.CALENDAR_WORKFLOW,
             INIT_ECONOMIC_CALENDAR,
             "FR01_RETAIL_CONVERT",
             List.of(

@@ -1,13 +1,13 @@
-package com.jk.apps.banking.fx.sor.admin.bpmn;
+package com.jk.apps.banking.fx.sor.admin.initdata;
 
 import java.util.List;
 import java.util.Optional;
 
 /** Initial Data datasets. Each dataset is loaded once, by its setup workflow, from a button click. */
-public final class InitialDatasetCatalog {
+public final class InitDataCatalog {
 
-    public static final String ECONOMIC_CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
-    public static final String ECONOMIC_CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
+    public static final String CALENDAR_WORKFLOW = "INIT_ECONOMIC_CALENDAR";
+    public static final String CALENDAR_RESOURCE = "initial-data/economic-calendar.json";
 
     public record Dataset(
             String key,
@@ -24,10 +24,10 @@ public final class InitialDatasetCatalog {
                     "Economic Calendar",
                     "FOMC, NFP and ECB announcement windows used by FR-01 macro guardrails",
                     "fx-quote-service",
-                    ECONOMIC_CALENDAR_WORKFLOW,
-                    ECONOMIC_CALENDAR_RESOURCE));
+                    CALENDAR_WORKFLOW,
+                    CALENDAR_RESOURCE));
 
-    private InitialDatasetCatalog() {
+    private InitDataCatalog() {
     }
 
     public static List<Dataset> all() {

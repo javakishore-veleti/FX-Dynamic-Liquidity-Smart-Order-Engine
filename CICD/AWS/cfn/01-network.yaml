@@ -1,0 +1,147 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  fx-topology network. Creates a VPC and two public subnets, unless VpcId is given
+  (reuse mode). Security groups are always created in the VPC in use.
+
+Parameters:
+  VpcId:
+    Type: String
+    Default: ""
+    Description: Existing VPC to reuse. Leave empty to create a new VPC.
+  PublicSubnetA:
+    Type: String
+    Default: ""
+    Description: Existing public subnet in AZ A (reuse mode only).
+  PublicSubnetB:
+    Type: String
+    Default: ""
+    Description: Existing public subnet in a second AZ (reuse mode only).
+  VpcCidr:
+    Type: String
+    Default: 10.20.0.0/16
+  ProjectName:
+    Type: String
+    Default: fx-topology
+
+Conditions:
+  CreateVpc: !Equals [!Ref VpcId, ""]
+
+Resources:
+  Vpc:
+    Type: AWS::EC2::VPC
+    Condition: CreateVpc
+    Properties:
+      CidrBlock: !Ref VpcCidr
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-vpc"}]
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Condition: CreateVpc
+    Properties:
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-igw"}]
+
+  IgwAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Condition: CreateVpc
+    Properties:
+      VpcId: !Ref Vpc
+      InternetGatewayId: !Ref InternetGateway
+
+  SubnetA:
+    Type: AWS::EC2::Subnet
+    Condition: CreateVpc
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.20.0.0/24
+      AvailabilityZone: !Select [0, !GetAZs ""]
+      MapPublicIpOnLaunch: true
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-public-a"}]
+
+  SubnetB:
+    Type: AWS::EC2::Subnet
+    Condition: CreateVpc
+    Properties:
+      VpcId: !Ref Vpc
+      CidrBlock: 10.20.1.0/24
+      AvailabilityZone: !Select [1, !GetAZs ""]
+      MapPublicIpOnLaunch: true
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-public-b"}]
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Condition: CreateVpc
+    Properties:
+      VpcId: !Ref Vpc
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-public-rt"}]
+
+  PublicDefaultRoute:
+    Type: AWS::EC2::Route
+    Condition: CreateVpc
+    DependsOn: IgwAttachment
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGateway
+
+  SubnetARouteAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Condition: CreateVpc
+    Properties:
+      SubnetId: !Ref SubnetA
+      RouteTableId: !Ref PublicRouteTable
+
+  SubnetBRouteAssoc:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Condition: CreateVpc
+    Properties:
+      SubnetId: !Ref SubnetB
+      RouteTableId: !Ref PublicRouteTable
+
+  AlbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Public HTTP to the load balancer
+      VpcId: !If [CreateVpc, !Ref Vpc, !Ref VpcId]
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 80, ToPort: 80, CidrIp: 0.0.0.0/0}
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-alb-sg"}]
+
+  AppSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Topology tasks, reachable only from the load balancer
+      VpcId: !If [CreateVpc, !Ref Vpc, !Ref VpcId]
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 8085, ToPort: 8085, SourceSecurityGroupId: !Ref AlbSecurityGroup}
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-app-sg"}]
+
+  DbSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Postgres, reachable only from topology tasks
+      VpcId: !If [CreateVpc, !Ref Vpc, !Ref VpcId]
+      SecurityGroupIngress:
+        - {IpProtocol: tcp, FromPort: 5432, ToPort: 5432, SourceSecurityGroupId: !Ref AppSecurityGroup}
+      Tags: [{Key: Name, Value: !Sub "${ProjectName}-db-sg"}]
+
+Outputs:
+  VpcId:
+    Value: !If [CreateVpc, !Ref Vpc, !Ref VpcId]
+    Export: {Name: !Sub "${ProjectName}-vpc-id"}
+  SubnetA:
+    Value: !If [CreateVpc, !Ref SubnetA, !Ref PublicSubnetA]
+    Export: {Name: !Sub "${ProjectName}-subnet-a"}
+  SubnetB:
+    Value: !If [CreateVpc, !Ref SubnetB, !Ref PublicSubnetB]
+    Export: {Name: !Sub "${ProjectName}-subnet-b"}
+  AlbSecurityGroupId:
+    Value: !Ref AlbSecurityGroup
+    Export: {Name: !Sub "${ProjectName}-alb-sg-id"}
+  AppSecurityGroupId:
+    Value: !Ref AppSecurityGroup
+    Export: {Name: !Sub "${ProjectName}-app-sg-id"}
+  DbSecurityGroupId:
+    Value: !Ref DbSecurityGroup
+    Export: {Name: !Sub "${ProjectName}-db-sg-id"}

@@ -21,12 +21,12 @@ type RegimeContext = {
   sampleMarkupBps: number;
 };
 
-type BpmnTask = { taskId: string; name: string; type: string; status: string; detail?: string };
-type BpmnView = {
+type ProcessTask = { taskId: string; name: string; type: string; status: string; detail?: string };
+type ProcessView = {
   wfExecId: string;
   processKey: string;
   status: string;
-  tasks: BpmnTask[];
+  tasks: ProcessTask[];
 };
 
 @Component({
@@ -37,25 +37,17 @@ type BpmnView = {
       <div>
         <h1 class="h3 mb-1">Multi-LP Depth Blotter · FR-01</h1>
         <p class="mb-0" style="color: var(--fx-ink-soft)">
-          Live indicative from quote {{ api.quote }} · BPMN runs logged on admin {{ api.admin }}
+          Live indicative from quote {{ api.quote }} · quote→route with start criteria
         </p>
       </div>
-      <div class="d-flex gap-2 align-items-center">
-        <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="tier">
-          <option>TIER_1</option>
-          <option>TIER_2</option>
-          <option>TIER_3</option>
-        </select>
-        <select class="form-select form-select-sm" style="width: auto" [(ngModel)]="pair">
-          <option>EURUSD</option>
-        </select>
-        <button class="btn btn-fx-outline btn-sm" (click)="refresh()">Refresh quote</button>
-        <button class="btn btn-fx btn-sm" (click)="runBpmn()">Run quote→route BPMN</button>
-      </div>
+      <button class="btn btn-fx-outline btn-sm" (click)="refresh()">Refresh quote</button>
     </div>
 
     @if (error()) {
       <div class="alert alert-warning">{{ error() }}</div>
+    }
+    @if (banner()) {
+      <div class="alert alert-success">{{ banner() }}</div>
     }
 
     <div class="row g-3 mb-3">
@@ -99,10 +91,57 @@ type BpmnView = {
       }
     </div>
 
-    @if (bpmn(); as proc) {
+    <div class="fx-card mb-3">
+      <h2 class="h5 mb-3">Quote → route · start criteria</h2>
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Client tier</label>
+          <select class="form-select" [(ngModel)]="tier" (ngModelChange)="refresh()">
+            <option>TIER_1</option>
+            <option>TIER_2</option>
+            <option>TIER_3</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold">CCY pair</label>
+          <select class="form-select" [(ngModel)]="pair" (ngModelChange)="refresh()">
+            <option>EURUSD</option>
+            <option>USDJPY</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Notional (USD)</label>
+          <input type="number" class="form-control" [(ngModel)]="notional" min="100000" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label fw-bold">Client id</label>
+          <input class="form-control" [(ngModel)]="clientId" />
+        </div>
+        <div class="col-md-8">
+          <label class="form-label fw-bold">Business reason</label>
+          <input class="form-control" [(ngModel)]="reason" placeholder="e.g. Block RFQ · London overlap sweep" />
+        </div>
+        <div class="col-md-4 d-flex align-items-end">
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="corpAck" [(ngModel)]="ack" />
+            <label class="form-check-label" for="corpAck">Authorize quote→route for these criteria</label>
+          </div>
+        </div>
+        <div class="col-12">
+          <button class="btn btn-fx" [disabled]="!canStart()" (click)="runQuoteRoute()">
+            Validate &amp; run quote → route
+          </button>
+          @if (!canStart()) {
+            <span class="ms-3 small" style="color: var(--fx-ink-soft)">{{ blockedReason() }}</span>
+          }
+        </div>
+      </div>
+    </div>
+
+    @if (processRun(); as proc) {
       <div class="fx-card">
-        <h2 class="h5 mb-2">BPMN task view · {{ proc.processKey }}</h2>
-        <p class="small mb-3">wfExecId <code>{{ proc.wfExecId }}</code> · status {{ proc.status }}</p>
+        <h2 class="h5 mb-2">Quote → route steps</h2>
+        <p class="small mb-3">Run <code>{{ proc.wfExecId }}</code> · {{ proc.status }}</p>
         <ol class="list-group list-group-numbered">
           @for (t of proc.tasks; track t.taskId) {
             <li class="list-group-item d-flex justify-content-between">
@@ -120,6 +159,10 @@ export class BlotterPage implements OnInit {
   readonly api = API;
   pair = 'EURUSD';
   tier = 'TIER_2';
+  notional = 2_500_000;
+  clientId = 'CORP-100';
+  reason = '';
+  ack = false;
   readonly quote = signal<Indicative | null>(null);
   readonly regime = signal<RegimeContext | null>(null);
   readonly rates = signal<{
@@ -129,11 +172,24 @@ export class BlotterPage implements OnInit {
     activeLpCount: number;
     sessionRegime: string;
   } | null>(null);
-  readonly bpmn = signal<BpmnView | null>(null);
+  readonly processRun = signal<ProcessView | null>(null);
   readonly error = signal<string | null>(null);
+  readonly banner = signal<string | null>(null);
 
   ngOnInit(): void {
     this.refresh();
+  }
+
+  canStart(): boolean {
+    return this.blockedReason() === null;
+  }
+
+  blockedReason(): string | null {
+    if (!this.clientId.trim()) return 'Client id required';
+    if (!this.notional || this.notional < 100_000) return 'Notional must be ≥ 100,000';
+    if (!this.reason || this.reason.trim().length < 12) return 'Business reason required (min 12 chars)';
+    if (!this.ack) return 'Authorization required';
+    return null;
   }
 
   refresh(): void {
@@ -153,11 +209,11 @@ export class BlotterPage implements OnInit {
     });
     this.http
       .post<Indicative>(`${API.quote}/api/v1/fx/quotes/indicative`, {
-        clientId: 'CORP-100',
+        clientId: this.clientId,
         clientTier: this.tier,
         ccyPair: pair,
         side: 'BUY',
-        notional: 1000000,
+        notional: this.notional,
         tenor: 'SPOT',
       })
       .subscribe({
@@ -166,22 +222,30 @@ export class BlotterPage implements OnInit {
       });
   }
 
-  runBpmn(): void {
+  runQuoteRoute(): void {
+    const blocked = this.blockedReason();
+    if (blocked) {
+      this.error.set(blocked);
+      return;
+    }
     this.error.set(null);
     this.http
-      .post<BpmnView>(`${API.admin}/api/v1/admin/bpmn/FR01_CORPORATE_QUOTE_ROUTE/start`, {
+      .post<ProcessView>(`${API.admin}/api/v1/admin/bpmn/FR01_CORPORATE_QUOTE_ROUTE/start`, {
         triggeredBy: 'CORPORATE_PORTAL',
         clientTier: this.tier,
         ccyPair: this.pair.replace('/', ''),
-        clientId: 'CORP-100',
-        notional: 2500000,
+        clientId: this.clientId.trim(),
+        notional: this.notional,
+        reason: this.reason.trim(),
       })
       .subscribe({
         next: (view) => {
-          this.bpmn.set(view);
+          this.processRun.set(view);
+          this.banner.set(`Quote → route started · ${view.wfExecId}`);
+          this.ack = false;
           this.refresh();
         },
-        error: (err) => this.error.set(`BPMN failed: ${err.message || err.status}`),
+        error: (err) => this.error.set(`Quote → route failed: ${err.message || err.status}`),
       });
   }
 }

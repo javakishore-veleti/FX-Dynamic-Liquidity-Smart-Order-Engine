@@ -77,7 +77,7 @@ public class BpmnWorkflowService {
         }
         List<BpmnStepCatalog.Step> steps = BpmnStepCatalog.stepsFor(workflowKey);
         if (steps.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no BPMN steps registered for " + workflowKey);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "no process steps registered for " + workflowKey);
         }
 
         Instant now = Instant.now();
@@ -85,6 +85,7 @@ public class BpmnWorkflowService {
         vars.putIfAbsent("clientTier", "TIER_2");
         vars.putIfAbsent("ccyPair", "EURUSD");
         vars.putIfAbsent("confirmMacro", false);
+        validateStartCriteria(workflowKey, vars, triggeredBy);
 
         List<Map<String, Object>> taskRows = new ArrayList<>();
         for (BpmnStepCatalog.Step step : steps) {
@@ -132,6 +133,40 @@ public class BpmnWorkflowService {
     @Transactional(readOnly = true)
     public BpmnProcessView getProcess(UUID wfExecId) {
         return toView(require(wfExecId));
+    }
+
+    private void validateStartCriteria(String workflowKey, Map<String, Object> vars, String triggeredBy) {
+        String reason = String.valueOf(vars.getOrDefault("reason", "")).trim();
+        if (reason.length() < 8) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "business reason required (min 8 chars)");
+        }
+        if (triggeredBy == null || triggeredBy.isBlank()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "triggeredBy required");
+        }
+        String clientId = String.valueOf(vars.getOrDefault("clientId", "")).trim();
+        if (clientId.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "clientId required");
+        }
+        BigDecimal notional;
+        try {
+            notional = new BigDecimal(String.valueOf(vars.getOrDefault("notional", "0")));
+        } catch (Exception ex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "notional must be numeric");
+        }
+        if (notional.compareTo(BigDecimal.ZERO) <= 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "notional must be > 0");
+        }
+        if ("FR01_RETAIL_CONVERT".equals(workflowKey) && notional.compareTo(new BigDecimal("100000")) > 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "retail convert notional must be <= 100000");
+        }
+        if (("FR01_CORPORATE_QUOTE_ROUTE".equals(workflowKey) || "FR01_SESSION_REGIME_GUARDRAILS".equals(workflowKey))
+                && notional.compareTo(new BigDecimal("100000")) < 0) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "institutional notional must be >= 100000");
+        }
+        String ccyPair = String.valueOf(vars.getOrDefault("ccyPair", "")).trim();
+        if (ccyPair.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "ccyPair required");
+        }
     }
 
     private BpmnProcessView advanceInternal(UUID wfExecId, Map<String, Object> payload, boolean userAction) {

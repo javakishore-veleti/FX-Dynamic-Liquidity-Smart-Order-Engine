@@ -43,7 +43,7 @@
 | E4 Initial Data workflows | F4.8 Initial Data API | `GET /api/v1/admin/initial-data`, `POST /api/v1/admin/initial-data/{dataset}/setup` | DESIGN §2, §3 | VERIFIED | 2026-11-21 | 2026-11-22 |
 | E4 Initial Data workflows | F4.9 Admin trigger | Run setup button on Workflows → Master List, shown for rows with purpose `INITIAL_DATA_SETUP`. Built and compiled; clicked through the API, not in a browser. The earlier Initial Data page was removed at the owner's request | DESIGN §6 | DONE (button built; API path verified) | 2026-11-22 | 2026-11-22 |
 | E4 Initial Data workflows | F4.10 Build and test | Admin and quote compile and pass tests; pair and calendar setups run end to end | DESIGN §7.5 | VERIFIED | 2026-11-21 | 2026-11-22 |
-| E4 Initial Data workflows | F4.11 Remaining datasets | Settlement policies done (synthetic). Credit lines, LP top-of-book, LP rankings remain. Owned by other services; need business confirmation of the data | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
+| E4 Initial Data workflows | F4.11 Remaining datasets | All six datasets now loaded through workflows: pairs, settlement (synthetic), credit lines, LP top-of-book, LP rankings, calendar. Business confirmation of values still open | DESIGN §2 | PARTLY DONE (settlement); rest DEFERRED | 2026-11-22 | 2026-11-22 |
 | E7 Economic calendar data | F7.1 Calendar source | Authoritative source per event type (Fed FOMC, BLS for NFP, ECB). Needs a source decision and access to the published schedules | DESIGN §9.3 | DONE (FOMC from Fed sources; NFP and ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
 | E7 Economic calendar data | F7.2 Calendar seed, 20 years back and 5 years forward | Currently the 8-event 2026 seed is loaded and verified. Full history and forward schedule depend on F7.1 | DESIGN §9.3 | DONE (737 events: FOMC real 2006–2027, 2028–2031 and NFP/ECB SYNTHETIC) | 2026-11-22 | 2026-11-22 |
 | E8 Business inputs | F8.1 Pair settlement attributes | SYNTHETIC values for 28 pairs (46 SPOT/TOM rows) loaded through `INIT_SETTLEMENT_POLICIES`. Business values replace the file when supplied | DESIGN §9.3 | DONE as SYNTHETIC (verified: 46 rows) | 2026-11-22 | 2026-11-22 |
@@ -92,7 +92,7 @@
 | T-34 | F4.9 | Run setup button on Workflows Master List for seed rows | DONE | 2026-11-22 | 2026-11-22 | `3470995` |
 | T-35 | F4.4 | `purpose` column on `workflows` (changeset 006); engine and portal filter by purpose | DONE | 2026-11-22 | 2026-11-22 | `c0afc58` |
 | T-36 | F4.7 | End-to-end calendar setup: 8 rows loaded and verified; repeat run returns 409 | DONE | 2026-11-22 | 2026-11-22 | test run only |
-| T-37 | F4.11 | Other datasets | DEFERRED | | | |
+| T-37 | F4.11 | Other datasets | DONE (all six loaded and verified) | 2026-11-22 | 2026-11-22 | `951eb93`, `955f9aa` |
 | T-38 | F7.1 | Choose calendar source per event type | DONE | 2026-11-22 | 2026-11-22 | `53356f0` |
 | T-39 | F7.2 | 20-year history and 5-year forward calendar seed, from generator and Fed sources | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `(calendar re-run)` |
 | T-40 | F8.1 | Pair settlement attributes (SYNTHETIC until business values arrive) | DONE | 2026-11-22 | 2026-11-22 | `53356f0`, `ce131da` |
@@ -312,4 +312,7 @@ Premises, current state, and build order are in [TOPOLOGY-PREMISES.md](TOPOLOGY-
 | Freshness on the ingest path and the network endpoint | Hops older than `fx.topology.freshness-minutes` (default 10) are dropped at ingest and counted. `GET /graph/network` takes `freshMinutes` (default 0, so seed data still shows) | DONE. Unit test for stale drop passes. Network endpoint verified with `freshMinutes=10` |
 | Kafka flow-hop path end to end | Run against the local Kafka container with the `load-kafka` profile. Produced one message to `fx.topology.flow-hop.v1` | DONE. Edge fx-quote-service to fx-qualify-service with flow count 42, returned by the graph endpoint |
 | IPC and trace layers hold seed data only | Deferred. No real source exists for IPC metrics or traces in this repo. Next source: OpenTelemetry spans from the FX services | DEFERRED (recorded decision) |
+
+### Status check (2026-11-22)
+Still open in this file: real NFP and ECB dates (F7.1, F7.2 synthetic), real settlement values (F8.1), business confirmation of the seven assumptions (F8.2), mutation history (F10.7, deferred), IPC and trace layers (deferred), and a browser click-through of the Run setup button (not done; verified via API only).
 

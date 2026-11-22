@@ -239,3 +239,4 @@ Later optimisation candidates (after the first deployment): Fargate Spot, a smal
 
 The database password is not a secret you set. RDS creates it and keeps it in Secrets Manager.
 
+
